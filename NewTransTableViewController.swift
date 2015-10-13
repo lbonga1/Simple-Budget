@@ -21,17 +21,41 @@ class NewTransTableViewController: UITableViewController {
         datePicker.addTarget(self, action: Selector("dataPickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
         datePicker.hidden = true
+        
+        setCurrentDate()
 
     }
     
-    
     func datePickerChanged(datePicker:UIDatePicker) {
+        setDate(datePicker.date)
+        
+//        var dateFormatter = NSDateFormatter()
+//        
+//        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+//        
+//        var strDate = dateFormatter.stringFromDate(datePicker.date)
+//        dateButton.setTitle(strDate, forState: .Normal)
+    }
+    
+    func setCurrentDate() {
+        let currentDate = NSDate()
+        setDate(currentDate)
+    }
+    
+    func setDate(newDate: NSDate) {
         var dateFormatter = NSDateFormatter()
         
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         
-        var strDate = dateFormatter.stringFromDate(datePicker.date)
+        var strDate = dateFormatter.stringFromDate(newDate)
         dateButton.setTitle(strDate, forState: .Normal)
+    
+    }
+    
+// MARK: - Actions
+    
+    @IBAction func changeDate(sender: AnyObject) {
+        datePicker.hidden = false
     }
 
 

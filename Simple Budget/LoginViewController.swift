@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
         
         if usernameField.text == checkUser && passwordField.text == checkPassword {
             let storyboard = self.storyboard
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("Budget") as! BudgetTableViewController
+            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("Budget") as! BudgetViewController
             
             self.presentViewController(controller, animated: true, completion: nil)
         }

@@ -20,7 +20,7 @@
 		1AF10AFF1BCB18F400F493D0 /* Simple_BudgetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AFE1BCB18F400F493D0 /* Simple_BudgetTests.swift */; };
 		1AF10B091BCB19EA00F493D0 /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B081BCB19EA00F493D0 /* TextFieldDelegate.swift */; };
 		1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */; };
-		1AF10B0D1BCB2EBE00F493D0 /* BudgetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B0C1BCB2EBE00F493D0 /* BudgetTableViewController.swift */; };
+		1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +51,7 @@
 		1AF10AFE1BCB18F400F493D0 /* Simple_BudgetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simple_BudgetTests.swift; sourceTree = "<group>"; };
 		1AF10B081BCB19EA00F493D0 /* TextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
 		1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateUserViewController.swift; sourceTree = "<group>"; };
-		1AF10B0C1BCB2EBE00F493D0 /* BudgetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetTableViewController.swift; sourceTree = "<group>"; };
+		1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +77,7 @@
 			children = (
 				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
 				1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */,
-				1AF10B0C1BCB2EBE00F493D0 /* BudgetTableViewController.swift */,
+				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
 				1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */,
 			);
 			name = Controller;
@@ -270,7 +270,7 @@
 			files = (
 				1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Categories.swift in Sources */,
-				1AF10B0D1BCB2EBE00F493D0 /* BudgetTableViewController.swift in Sources */,
+				1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */,
 				1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */,
 				1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */,
 				1AF10AE91BCB18F400F493D0 /* Simple_Budget.xcdatamodeld in Sources */,
