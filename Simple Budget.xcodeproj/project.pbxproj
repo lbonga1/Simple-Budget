@@ -11,6 +11,7 @@
 		1A19A3D91BCB616500A38E45 /* Subcategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3D81BCB616500A38E45 /* Subcategories.swift */; };
 		1A19A3DB1BCB617000A38E45 /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DA1BCB617000A38E45 /* Transactions.swift */; };
 		1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */; };
+		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderCell.swift */; };
 		1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */; };
 		1AF10AE91BCB18F400F493D0 /* Simple_Budget.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE71BCB18F400F493D0 /* Simple_Budget.xcdatamodeld */; };
 		1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */; };
@@ -38,6 +39,7 @@
 		1A19A3D81BCB616500A38E45 /* Subcategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subcategories.swift; sourceTree = "<group>"; };
 		1A19A3DA1BCB617000A38E45 /* Transactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transactions.swift; sourceTree = "<group>"; };
 		1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTransTableViewController.swift; path = ../NewTransTableViewController.swift; sourceTree = "<group>"; };
+		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderCell.swift; sourceTree = "<group>"; };
 		1AF10AE01BCB18F400F493D0 /* Simple Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Budget.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF10AE41BCB18F400F493D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 		1A19A3D31BCB60FC00A38E45 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1A42D4CE1BD45B7A00F85A1D /* CustomHeaderCell.swift */,
 				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
 				1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */,
 				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
@@ -268,6 +271,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A42D4CF1BD45B7A00F85A1D /* CustomHeaderCell.swift in Sources */,
 				1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Categories.swift in Sources */,
 				1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */,
