@@ -8,8 +8,12 @@
 
 import Foundation
 
-struct Keys {
-    static let date = "date"
-    static let title = "title"
-    static let amount = "amount"
+class Transactions: NSObject {
+    
+    struct Keys {
+        static let date = "date"
+        static let title = "title"
+        static let amount = "amount"
+    }
+    
 }

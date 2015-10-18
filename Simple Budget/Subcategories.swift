@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+class SubCategories: NSObject {
+    
+    struct Keys {
+        static let title = "title"
+        static let dollarAmount = "dollar_amount"
+        static let percentOfIncome = "percentage"
+    }
+}

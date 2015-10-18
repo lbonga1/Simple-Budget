@@ -18,30 +18,28 @@ class NewTransTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        datePicker.addTarget(self, action: Selector("dataPickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        datePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
+        // Date Picker is initially hidden
         datePicker.hidden = true
         
+        // Defaults dateButton title to current date
         setCurrentDate()
 
     }
     
+    // Changes dateButton title to user selected date
     func datePickerChanged(datePicker:UIDatePicker) {
         setDate(datePicker.date)
-        
-//        var dateFormatter = NSDateFormatter()
-//        
-//        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-//        
-//        var strDate = dateFormatter.stringFromDate(datePicker.date)
-//        dateButton.setTitle(strDate, forState: .Normal)
     }
     
+    // Retrieves current date
     func setCurrentDate() {
         let currentDate = NSDate()
         setDate(currentDate)
     }
     
+    // Creates a string from NSDate to change dateButton title
     func setDate(newDate: NSDate) {
         var dateFormatter = NSDateFormatter()
         
@@ -52,11 +50,24 @@ class NewTransTableViewController: UITableViewController {
     
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //TODO: Open categories selection if selected row is "Choose Budget Category"
+    }
+    
+    
+    
+
+    
 // MARK: - Actions
     
+    // Allows user to change the date of the transaction
     @IBAction func changeDate(sender: AnyObject) {
         datePicker.hidden = false
     }
-
+    
+    // Dismiss NewTrans view to cancel adding a new transaction
+    @IBAction func cancelAction(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 
 }
