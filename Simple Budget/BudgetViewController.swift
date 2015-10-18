@@ -20,14 +20,6 @@ class BudgetViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = addBarButtonItem
-        
-    
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     @IBAction func addNewTransaction(sender: AnyObject) {
@@ -36,6 +28,41 @@ class BudgetViewController: UIViewController {
         
         self.presentViewController(controller, animated: true, completion: nil)
     }
+    
+    func defaultCategories() -> [String: AnyObject] {
+        return  [
+            [
+                "title" : "Savings",
+                "dollarMmount" : 0.00,
+                "percentage" : 0,
+            ], [
+                "title" : "Housing",
+                "dollarAmount" : 0.00,
+                "percentage" : 0,
+            ], [
+                "title" : "Transportation",
+                "dollarAmount" : 0.00,
+                "percentage" : 0,
+            ], [
+                "title" : "Food",
+                "dollarAmount" : 0.00,
+                "percentage" : 0,
+            ], [
+                "title" : "Lifestyle",
+                "dollarAmount" : 0.00,
+                "percentage" : 0,
+            ], [
+                "title" : "Insurance & Tax",
+                "dollarAmount" : 0.00,
+                "percentage" : 0,
+            ], [
+                "title" : "Debt",
+                "dollarAmount" : 0.00,
+                "percentage" : 0,
+            ]
+        ]
+    }
+
 
     // MARK: - Table view data source
 
