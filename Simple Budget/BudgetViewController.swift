@@ -15,19 +15,31 @@ class BudgetViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var addBarButtonItem: UIBarButtonItem!
     
+    var testData: NSMutableArray = ["Test", "Test 2"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Sets the add button on the right side of the navigation toolbar.
         navigationItem.rightBarButtonItem = addBarButtonItem
     }
     
+    // Presents NewTransTableViewController to add a new transaction.
     @IBAction func addNewTransaction(sender: AnyObject) {
         let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! NewTransTableViewController
         
         self.presentViewController(controller, animated: true, completion: nil)
     }
+    
+    @IBAction func addItemAction(sender: AnyObject) {
+        self.tableView.beginUpdates()
+        self.testData.insertObject("Test 3", atIndex: self.testData.count)
+        var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        self.tableView.endUpdates()
+    }
+    
     
 //    func defaultCategories() -> [String: AnyObject] {
 //        return  [
@@ -65,46 +77,62 @@ class BudgetViewController: UIViewController {
     
 }
 
-// MARK: - Table view data source
+// MARK: - Table view data source and delegate
     
-    extension BudgetViewController: UITableViewDataSource {
+    extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
+    // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // Return the number of sections.
+        
         return 1
     }
 
+    // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Return the number of rows in the section.
-        return 1
+        
+        return testData.count
     }
 
+    // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetCell", forIndexPath: indexPath) as! BudgetCell
 
-        cell.textLabel?.text = "Test"
+        cell.subcategoryTitle.text = testData[indexPath.row] as? String
+        cell.amountLabel.text = "$0.00"
 
         return cell
-        }
+     }
         
+    // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
         
         headerCell.titleLabel.text = "Test title"
+        headerCell.backgroundColor = UIColor.whiteColor()
         
         return headerCell
         
         }
         
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return 44
+    }
+     
+    // Defines the custom footer cells.
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
-        footerView.backgroundColor = UIColor.lightGrayColor()
+        let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
+        
+        footerCell.addItemButton.setTitle("Test footer", forState: .Normal)
+        footerCell.backgroundColor = UIColor.whiteColor()
             
-        return footerView
+        return footerCell
     }
         
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 20.0
+        
+        return 32
+
     }
 
     /*

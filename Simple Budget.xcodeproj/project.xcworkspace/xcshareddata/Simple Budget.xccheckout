@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>0C3F22F4-C778-4DFD-AACB-50488548ED8C</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>Simple Budget</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>05FB2E92FBF1A3D56D7DB729261ED61E8FDCC1F1</key>
 		<string>https://github.com/lbonga1/Simple-Budget.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Simple Budget.xcodeproj/project.xcworkspace</string>
+	<string>Simple Budget.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>05FB2E92FBF1A3D56D7DB729261ED61E8FDCC1F1</key>
