@@ -9,10 +9,10 @@
 import Foundation
 import CoreData
 
-// Make Transactions available to Objective-C code
-@objc(Transactions)
+// Make Transaction available to Objective-C code
+@objc(Transaction)
 
-class Transactions: NSManagedObject {
+class Transaction: NSManagedObject {
     
     struct Keys {
         static let Date = "date"
@@ -22,8 +22,8 @@ class Transactions: NSManagedObject {
     }
     
     // Promote from simple properties to Core Data attributes
-    @NSManaged var categories: Categories
-    @NSManaged var subcategories: Subcategories
+    @NSManaged var category: Category
+    @NSManaged var subcategory: Subcategory
     @NSManaged var date: NSDate
     @NSManaged var title: String
     @NSManaged var amount: Double
@@ -36,13 +36,13 @@ class Transactions: NSManagedObject {
     
     init(dictionary: [String: AnyObject], context: NSManagedObjectContext) {
         // Get the entity associated with "Transactions" type.
-        let entity =  NSEntityDescription.entityForName("Transactions", inManagedObjectContext: context)!
+        let entity =  NSEntityDescription.entityForName("Transaction", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
         // Init dictionary properties
-        date = dictionary[Transactions.Keys.Date] as! NSDate
-        title = dictionary[Transactions.Keys.Title] as! String
-        amount = dictionary[Transactions.Keys.Amount] as! Double
-        notes = dictionary[Transactions.Keys.Notes] as! String
+        date = dictionary[Transaction.Keys.Date] as! NSDate
+        title = dictionary[Transaction.Keys.Title] as! String
+        amount = dictionary[Transaction.Keys.Amount] as! Double
+        notes = dictionary[Transaction.Keys.Notes] as! String
     }
 }

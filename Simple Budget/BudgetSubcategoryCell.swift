@@ -1,5 +1,5 @@
 //
-//  SubcategoryCell.swift
+//  BudgetSubcategoryCell.swift
 //  Simple Budget
 //
 //  Created by Lauren Bongartz on 10/18/15.
@@ -8,8 +8,9 @@
 
 import UIKit
 
-class SubcategoryCell: UITableViewCell {
+class BudgetSubcategoryCell: UITableViewCell {
 
     @IBOutlet weak var subcategoryTitle: UITextField!
-    @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var amountTextField: UILabel!
+    
 }

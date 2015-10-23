@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Categories" representedClassName="Categories" syncable="YES">
+    <entity name="Category" representedClassName="Categories" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="subcategories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategories" inverseName="categories" inverseEntity="Subcategories" syncable="YES"/>
+        <relationship name="subcategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="category" inverseEntity="Subcategory" syncable="YES"/>
     </entity>
-    <entity name="Subcategories" representedClassName="Subcategories" syncable="YES">
-        <attribute name="dollarAmount" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    <entity name="Subcategory" representedClassName="Subcategories" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Categories" inverseName="subcategories" inverseEntity="Categories" syncable="YES"/>
-        <relationship name="transactions" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Transactions" inverseName="subcategories" inverseEntity="Transactions" syncable="YES"/>
+        <relationship name="category" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="subcategory" inverseEntity="Category" syncable="YES"/>
+        <relationship name="transaction" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Transaction" inverseName="subcategory" inverseEntity="Transaction" syncable="YES"/>
     </entity>
-    <entity name="Transactions" representedClassName="Transactions" syncable="YES">
+    <entity name="Transaction" representedClassName="Transactions" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="merchant" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="subcategories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subcategories" inverseName="transactions" inverseEntity="Subcategories" syncable="YES"/>
+        <relationship name="subcategory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="transaction" inverseEntity="Subcategory" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Categories" positionX="-63" positionY="-18" width="128" height="75"/>
-        <element name="Subcategories" positionX="-54" positionY="18" width="128" height="105"/>
-        <element name="Transactions" positionX="-36" positionY="45" width="128" height="120"/>
+        <element name="Category" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="Subcategory" positionX="-54" positionY="18" width="128" height="105"/>
+        <element name="Transaction" positionX="-36" positionY="45" width="128" height="120"/>
     </elements>
 </model>

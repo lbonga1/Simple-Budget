@@ -25,7 +25,6 @@ class NewTransTableViewController: UITableViewController {
         
         // Defaults dateButton title to current date
         setCurrentDate()
-
     }
     
     // Changes dateButton title to user selected date

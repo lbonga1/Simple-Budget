@@ -206,7 +206,7 @@
                                             </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpentSubcategoryCell" id="JVu-ip-YVa" customClass="SubcategoryCell" customModule="Simple_Budget" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpentSubcategoryCell" id="JVu-ip-YVa" customClass="SpenRemSubcatCell" customModule="Simple_Budget" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JVu-ip-YVa" id="vV1-TZ-H2m">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -217,7 +217,7 @@
                                                         <constraint firstAttribute="width" constant="80" id="W8v-Wh-MBh"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -285,8 +285,16 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="amountLabel" destination="OCV-OR-lqm" id="HfN-Ip-IQV"/>
+                                            <outlet property="subcategoryTitle" destination="OP0-rF-aJl" id="EMA-uG-kHD"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="KiJ-ox-rae" id="wwx-x4-zqo"/>
+                                    <outlet property="delegate" destination="KiJ-ox-rae" id="TYL-Ef-IAM"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -321,9 +329,17 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Spent" id="ew2-4C-e78"/>
                     <navigationItem key="navigationItem" id="Usg-ss-KbF"/>
+                    <connections>
+                        <outlet property="addButton" destination="4VS-tp-1A3" id="EVb-ay-x2P"/>
+                        <outlet property="tableView" destination="edt-6Y-Jcj" id="fVV-7b-cLp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vww-C7-FOt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem systemItem="add" id="4VS-tp-1A3"/>
+                <barButtonItem systemItem="add" id="4VS-tp-1A3">
+                    <connections>
+                        <action selector="addNewTransaction:" destination="KiJ-ox-rae" id="AJL-AV-dOR"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1803" y="615.75"/>
         </scene>
@@ -984,7 +1000,7 @@
                                             </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RemainingBudgetCell" id="B16-ai-a3S" customClass="SubcategoryCell" customModule="Simple_Budget" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RemSubcategoryCell" id="B16-ai-a3S" customClass="SpenRemSubcatCell" customModule="Simple_Budget" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B16-ai-a3S" id="7xE-Xb-aub">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -995,7 +1011,7 @@
                                                         <constraint firstAttribute="width" constant="80" id="dmY-5E-YJz"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -1068,6 +1084,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="oja-ve-kAv" id="Hvn-dN-OaQ"/>
+                                    <outlet property="delegate" destination="oja-ve-kAv" id="0D6-p6-N3l"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1101,9 +1121,17 @@
                         </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Remaining" id="986-Xd-eme"/>
+                    <connections>
+                        <outlet property="addButton" destination="sSS-19-XCi" id="f7W-P3-mwb"/>
+                        <outlet property="tableView" destination="6NC-sh-a2u" id="Ms0-GE-MvJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tiu-9f-LBS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem systemItem="add" id="sSS-19-XCi"/>
+                <barButtonItem systemItem="add" id="sSS-19-XCi">
+                    <connections>
+                        <action selector="addNewTransaction:" destination="oja-ve-kAv" id="0YD-Hm-vGQ"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1803" y="1300.5"/>
         </scene>
@@ -1228,7 +1256,7 @@
                                             <outlet property="titleLabel" destination="3Fs-qZ-57Y" id="339-90-1qc"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SubcategoryCell" rowHeight="44" id="8TA-HM-d8a" customClass="SubcategoryCell" customModule="Simple_Budget" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BudgetSubcategoryCell" rowHeight="44" id="8TA-HM-d8a" customClass="BudgetSubcategoryCell" customModule="Simple_Budget" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8TA-HM-d8a" id="nlB-cm-h0f">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1303,7 +1331,8 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="subcategoryTitle" destination="U4X-eH-S4D" id="0bD-fR-tQO"/>
+                                            <outlet property="amountTextField" destination="Uph-xI-2dg" id="cGP-hm-B6R"/>
+                                            <outlet property="subcategoryTitle" destination="U4X-eH-S4D" id="2vF-Hd-80K"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FooterCell" rowHeight="30" id="7Tg-oL-wzi" customClass="CustomFooterCell" customModule="Simple_Budget" customModuleProvider="target">

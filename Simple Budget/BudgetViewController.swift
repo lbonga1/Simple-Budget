@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class BudgetViewController: UIViewController {
 
@@ -24,7 +25,31 @@ class BudgetViewController: UIViewController {
         
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
+        
+        // Fetched Results Controller
+        fetchedResultsController.performFetch(nil)
+        fetchedResultsController.delegate = self
     }
+    
+// MARK: - Core Data Convenience
+    
+    // Shared context
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    
+    // Fetched results controller
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+            managedObjectContext: self.sharedContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        
+        return fetchedResultsController
+        }()
     
 // MARK: - Actions
     
@@ -43,7 +68,7 @@ class BudgetViewController: UIViewController {
         
         self.tableView.beginUpdates()
         // Defines the new cell to be added
-        let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("SubcategoryCell") as! SubcategoryCell
+        let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell") as! BudgetSubcategoryCell
         
         // Adds new cell to the array
         self.testData.insertObject(newCell!, atIndex: self.testData.count)
@@ -76,44 +101,71 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
+        var dictionary = [String : String]()
+        dictionary[Subcategory.Keys.Title] = "test"
+        dictionary[Subcategory.Keys.Amount] = "test"
+        
+        // Init the Subcategory object
+        let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
+        
+        // Add subcategory to fetched objects
+        fetchedResultsController.performFetch(nil)
+        
+        // Save to Core Data
+        dispatch_async(dispatch_get_main_queue()) {
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
+        
     }
     
 // MARK: - Additional Methods
     // Defines intitial categories and subcategories
-    func defaultCategories() -> [[String: AnyObject]] {
-        return  [
-            [
-                "title": "Savings & Funds",
-                "subcategories": ["Emergency Fund"]
-            ], [
-                "title": "Housing",
-                "subcategories": ["Mortgage", "Electricity", "Natural Gas/Propane"]
-            ], [
-                "title": "Transportation",
-                "subcategories": ["Auto Gas & Oil"]
-            ], [
-                "title": "Food",
-                "subcategories": ["Groceries", "Restaurants"]
-            ], [
-                "title": "Lifestyle",
-                "subcategories": ["Entertainment", "Clothing"]
-            ], [
-                "title": "Insurance & Tax",
-                "subcategories": ["Health Insurance", "Life Insurance", "Auto Insurance"]
-            ]
-        ]
-    }
+//    func defaultCategories() -> [[String: AnyObject]] {
+//        return  [
+//            [
+//                "title": "Savings & Funds",
+//                "subcategories": ["Emergency Fund"]
+//            ], [
+//                "title": "Housing",
+//                "subcategories": ["Mortgage", "Electricity", "Natural Gas/Propane"]
+//            ], [
+//                "title": "Transportation",
+//                "subcategories": ["Auto Gas & Oil"]
+//            ], [
+//                "title": "Food",
+//                "subcategories": ["Groceries", "Restaurants"]
+//            ], [
+//                "title": "Lifestyle",
+//                "subcategories": ["Entertainment", "Clothing"]
+//            ], [
+//                "title": "Insurance & Tax",
+//                "subcategories": ["Health Insurance", "Life Insurance", "Auto Insurance"]
+//            ]
+//        ]
+//    }
+    
+//    func displaySavedCategories() {
+//        if let categories = fetchedResultsController.fetchedObjects as? [Categories] {
+//            for category in categories {
+//                
+//            }
+//        }
+//    }
     
 }
 
 // MARK: - Table view data source and delegate
     
-    extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
+extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        return 1
+        if fetchedResultsController.fetchedObjects != nil {
+            return fetchedResultsController.fetchedObjects!.count
+        } else {
+            return 1
+        }
     }
 
     // Returns the number of rows in each section.
@@ -124,9 +176,10 @@ class BudgetViewController: UIViewController {
 
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SubcategoryCell", forIndexPath: indexPath) as! SubcategoryCell
-
-        cell.subcategoryTitle.text = testData[indexPath.row] as? String
+        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
+        let category = fetchedResultsController.fetchedObjects as? [Category]
+        
+        cell.subcategoryTitle.text = category?[indexPath.row] as! String
         cell.amountTextField.text = "$0.00"
 
         return cell
@@ -137,7 +190,7 @@ class BudgetViewController: UIViewController {
         let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
         
         headerCell.titleLabel.text = "Test title"
-        headerCell.backgroundColor = UIColor.clearColor()
+        headerCell.backgroundColor = UIColor.whiteColor()
         
         return headerCell
         
@@ -153,7 +206,7 @@ class BudgetViewController: UIViewController {
         let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
         
         footerCell.addItemButton.setTitle("+ Add Item", forState: .Normal)
-        footerCell.backgroundColor = UIColor.clearColor()
+        footerCell.backgroundColor = UIColor.whiteColor()
             
         return footerCell
     }
@@ -161,7 +214,6 @@ class BudgetViewController: UIViewController {
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 32
-
     }
 
     /*
@@ -183,11 +235,10 @@ class BudgetViewController: UIViewController {
         }    
     }
     */
+}
 
-
-
-
-
-
-
+// MARK: - Fetched Results Controller Delegate
+extension BudgetViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
 }

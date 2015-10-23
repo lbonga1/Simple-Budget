@@ -1,5 +1,5 @@
 //
-//  Subcategories.swift
+//  Category.swift
 //  Simple Budget
 //
 //  Created by Lauren Bongartz on 10/11/15.
@@ -9,33 +9,30 @@
 import Foundation
 import CoreData
 
-// Make Subcategories available to Objective-C code
-@objc(Subcategories)
+// Make Category available to Objective-C code
+@objc(Category)
 
-class Subcategories: NSManagedObject {
+class Category: NSManagedObject {
     
     struct Keys {
         static let Title = "title"
-        static let DollarAmount = "dollar_amount"
     }
     
     // Promote from simple properties to Core Data attributes
-    @NSManaged var categories: Categories
     @NSManaged var title: String
-    @NSManaged var dollarAmount: Double
-    
+    @NSManaged var subcategory: NSSet
+
     // Core Data init method
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
     init(dictionary: [String: AnyObject], context: NSManagedObjectContext) {
-        // Get the entity associated with "Subcategories" type.
-        let entity =  NSEntityDescription.entityForName("Subcategories", inManagedObjectContext: context)!
+        // Get the entity associated with "Categories" type.
+        let entity =  NSEntityDescription.entityForName("Category", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
         // Init dictionary properties
-        title = dictionary[Subcategories.Keys.Title] as! String
-        dollarAmount = dictionary[Subcategories.Keys.DollarAmount] as! Double
+        title = dictionary[Category.Keys.Title] as! String
     }
 }
