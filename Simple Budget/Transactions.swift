@@ -18,6 +18,7 @@ class Transactions: NSManagedObject {
         static let Date = "date"
         static let Title = "title"
         static let Amount = "amount"
+        static let Notes = "notes"
     }
     
     // Promote from simple properties to Core Data attributes
@@ -26,6 +27,7 @@ class Transactions: NSManagedObject {
     @NSManaged var date: NSDate
     @NSManaged var title: String
     @NSManaged var amount: Double
+    @NSManaged var notes: String
     
     // Core Data init method
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -41,5 +43,6 @@ class Transactions: NSManagedObject {
         date = dictionary[Transactions.Keys.Date] as! NSDate
         title = dictionary[Transactions.Keys.Title] as! String
         amount = dictionary[Transactions.Keys.Amount] as! Double
+        notes = dictionary[Transactions.Keys.Notes] as! String
     }
 }

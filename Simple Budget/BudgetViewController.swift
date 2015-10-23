@@ -13,7 +13,9 @@ class BudgetViewController: UIViewController {
 // MARK: - Outlets
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet var addBarButtonItem: UIBarButtonItem!
+    @IBOutlet var addButton: UIBarButtonItem!
+    @IBOutlet var cancelButton: UIBarButtonItem!
+    @IBOutlet var doneButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test", "Test 2"]
     
@@ -21,7 +23,7 @@ class BudgetViewController: UIViewController {
         super.viewDidLoad()
         
         // Sets the add button on the right side of the navigation toolbar.
-        navigationItem.rightBarButtonItem = addBarButtonItem
+        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
     }
     
     // Presents NewTransTableViewController to add a new transaction.
@@ -33,11 +35,45 @@ class BudgetViewController: UIViewController {
     }
     
     @IBAction func addItemAction(sender: AnyObject) {
+        // Change navigation items
+        self.parentViewController!.navigationItem.leftBarButtonItem = cancelButton
+        self.parentViewController!.navigationItem.rightBarButtonItem = doneButton
+        
         self.tableView.beginUpdates()
-        self.testData.insertObject("Test 3", atIndex: self.testData.count)
+        // Defines the new cell to be added
+        let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("SubcategoryCell") as! SubcategoryCell
+        
+        // Adds new cell to the array
+        self.testData.insertObject(newCell!, atIndex: self.testData.count)
+        
+        // Inserts new row into the table
         var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        
+        self.tableView.reloadData()
+        
         self.tableView.endUpdates()
+    }
+    
+    @IBAction func cancelEditing(sender: AnyObject) {
+        // Change navigation items
+        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
+        self.parentViewController!.navigationItem.leftBarButtonItem = nil
+        
+        self.testData.removeLastObject()
+        var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        
+        self.tableView.reloadData()
+        
+        self.tableView.endUpdates()
+    }
+    
+    @IBAction func doneEditing(sender: AnyObject) {
+        // Change navigation items
+        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
+        self.parentViewController!.navigationItem.leftBarButtonItem = nil
+        
     }
     
     
@@ -45,7 +81,7 @@ class BudgetViewController: UIViewController {
 //        return  [
 //            [
 //                "title" : "Savings",
-//                "dollarMmount" : 0.00,
+//                "dollarAmount" : 0.00,
 //                "percentage" : 0,
 //            ], [
 //                "title" : "Housing",
@@ -95,10 +131,10 @@ class BudgetViewController: UIViewController {
 
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetCell", forIndexPath: indexPath) as! BudgetCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("SubcategoryCell", forIndexPath: indexPath) as! SubcategoryCell
 
         cell.subcategoryTitle.text = testData[indexPath.row] as? String
-        cell.amountLabel.text = "$0.00"
+        cell.amountTextField.text = "$0.00"
 
         return cell
      }

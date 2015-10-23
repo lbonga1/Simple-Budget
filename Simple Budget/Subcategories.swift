@@ -17,14 +17,12 @@ class Subcategories: NSManagedObject {
     struct Keys {
         static let Title = "title"
         static let DollarAmount = "dollar_amount"
-        static let PercentOfIncome = "percentage"
     }
     
     // Promote from simple properties to Core Data attributes
     @NSManaged var categories: Categories
     @NSManaged var title: String
     @NSManaged var dollarAmount: Double
-    @NSManaged var percentOfIcome: Int64
     
     // Core Data init method
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -39,6 +37,5 @@ class Subcategories: NSManagedObject {
         // Init dictionary properties
         title = dictionary[Subcategories.Keys.Title] as! String
         dollarAmount = dictionary[Subcategories.Keys.DollarAmount] as! Double
-        percentOfIcome = dictionary[Subcategories.Keys.PercentOfIncome] as! Int64
     }
 }
