@@ -26,6 +26,8 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
     }
     
+// MARK: - Actions
+    
     // Presents NewTransTableViewController to add a new transaction.
     @IBAction func addNewTransaction(sender: AnyObject) {
         let storyboard = self.storyboard
@@ -76,40 +78,31 @@ class BudgetViewController: UIViewController {
         
     }
     
-    
-//    func defaultCategories() -> [String: AnyObject] {
-//        return  [
-//            [
-//                "title" : "Savings",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ], [
-//                "title" : "Housing",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ], [
-//                "title" : "Transportation",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ], [
-//                "title" : "Food",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ], [
-//                "title" : "Lifestyle",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ], [
-//                "title" : "Insurance & Tax",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ], [
-//                "title" : "Debt",
-//                "dollarAmount" : 0.00,
-//                "percentage" : 0,
-//            ]
-//        ]
-//    }
+// MARK: - Additional Methods
+    // Defines intitial categories and subcategories
+    func defaultCategories() -> [[String: AnyObject]] {
+        return  [
+            [
+                "title": "Savings & Funds",
+                "subcategories": ["Emergency Fund"]
+            ], [
+                "title": "Housing",
+                "subcategories": ["Mortgage", "Electricity", "Natural Gas/Propane"]
+            ], [
+                "title": "Transportation",
+                "subcategories": ["Auto Gas & Oil"]
+            ], [
+                "title": "Food",
+                "subcategories": ["Groceries", "Restaurants"]
+            ], [
+                "title": "Lifestyle",
+                "subcategories": ["Entertainment", "Clothing"]
+            ], [
+                "title": "Insurance & Tax",
+                "subcategories": ["Health Insurance", "Life Insurance", "Auto Insurance"]
+            ]
+        ]
+    }
     
 }
 
@@ -144,7 +137,7 @@ class BudgetViewController: UIViewController {
         let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
         
         headerCell.titleLabel.text = "Test title"
-        headerCell.backgroundColor = UIColor.whiteColor()
+        headerCell.backgroundColor = UIColor.clearColor()
         
         return headerCell
         
@@ -159,8 +152,8 @@ class BudgetViewController: UIViewController {
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
         
-        footerCell.addItemButton.setTitle("Test footer", forState: .Normal)
-        footerCell.backgroundColor = UIColor.whiteColor()
+        footerCell.addItemButton.setTitle("+ Add Item", forState: .Normal)
+        footerCell.backgroundColor = UIColor.clearColor()
             
         return footerCell
     }

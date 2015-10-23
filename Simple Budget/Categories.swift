@@ -16,12 +16,10 @@ class Categories: NSManagedObject {
     
     struct Keys {
         static let Title = "title"
-        static let DollarAmount = "dollarAmount"
     }
     
     // Promote from simple properties to Core Data attributes
     @NSManaged var title: String
-    @NSManaged var dollarAmount: Double
 
     // Core Data init method
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -35,6 +33,5 @@ class Categories: NSManagedObject {
         super.init(entity: entity,insertIntoManagedObjectContext: context)
         // Init dictionary properties
         title = dictionary[Categories.Keys.Title] as! String
-        dollarAmount = dictionary[Categories.Keys.DollarAmount] as! Double
     }
 }

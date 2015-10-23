@@ -24,6 +24,8 @@
 		1AF10B091BCB19EA00F493D0 /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B081BCB19EA00F493D0 /* TextFieldDelegate.swift */; };
 		1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */; };
 		1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */; };
+		1AFF3DC91BD9F873006B571F /* SpentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF3DC81BD9F873006B571F /* SpentViewController.swift */; };
+		1AFF3DCB1BD9F883006B571F /* RemainingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		1AF10B081BCB19EA00F493D0 /* TextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
 		1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateUserViewController.swift; sourceTree = "<group>"; };
 		1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetViewController.swift; sourceTree = "<group>"; };
+		1AFF3DC81BD9F873006B571F /* SpentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpentViewController.swift; sourceTree = "<group>"; };
+		1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemainingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,10 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				1AA59F571BD4A05700704B98 /* Custom Cells */,
-				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
-				1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */,
-				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
-				1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */,
+				1AFF3DC61BD9F1B9006B571F /* View Controllers */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -103,9 +104,7 @@
 			children = (
 				1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */,
 				1AF10B081BCB19EA00F493D0 /* TextFieldDelegate.swift */,
-				1A19A3D61BCB614700A38E45 /* Categories.swift */,
-				1A19A3D81BCB616500A38E45 /* Subcategories.swift */,
-				1A19A3DA1BCB617000A38E45 /* Transactions.swift */,
+				1AFF3DC71BD9F1D3006B571F /* Core Data */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -147,7 +146,6 @@
 				1A19A3D31BCB60FC00A38E45 /* Controller */,
 				1AF10AEF1BCB18F400F493D0 /* Images.xcassets */,
 				1AF10AF11BCB18F400F493D0 /* LaunchScreen.xib */,
-				1AF10AE71BCB18F400F493D0 /* Simple_Budget.xcdatamodeld */,
 				1AF10AE31BCB18F400F493D0 /* Supporting Files */,
 			);
 			path = "Simple Budget";
@@ -176,6 +174,30 @@
 				1AF10AFD1BCB18F400F493D0 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1AFF3DC61BD9F1B9006B571F /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */,
+				1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */,
+				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
+				1AFF3DC81BD9F873006B571F /* SpentViewController.swift */,
+				1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */,
+				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		1AFF3DC71BD9F1D3006B571F /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				1A19A3D61BCB614700A38E45 /* Categories.swift */,
+				1A19A3D81BCB616500A38E45 /* Subcategories.swift */,
+				1A19A3DA1BCB617000A38E45 /* Transactions.swift */,
+				1AF10AE71BCB18F400F493D0 /* Simple_Budget.xcdatamodeld */,
+			);
+			name = "Core Data";
 			sourceTree = "<group>";
 		};
 		A18B4E3F819A8D9D62231FA5 /* Frameworks */ = {
@@ -290,7 +312,9 @@
 				1A19A3D71BCB614700A38E45 /* Categories.swift in Sources */,
 				1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */,
 				1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */,
+				1AFF3DC91BD9F873006B571F /* SpentViewController.swift in Sources */,
 				1AA59F561BD4A04800704B98 /* SubcategoryCell.swift in Sources */,
+				1AFF3DCB1BD9F883006B571F /* RemainingViewController.swift in Sources */,
 				1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */,
 				1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */,
 				1AF10AE91BCB18F400F493D0 /* Simple_Budget.xcdatamodeld in Sources */,
