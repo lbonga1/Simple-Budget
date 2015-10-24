@@ -14,10 +14,17 @@ class NewTransTableViewController: UITableViewController {
 
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet var cancelButton: UIBarButtonItem!
+    @IBOutlet var doneButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set up navigation items
+        self.navigationItem.leftBarButtonItem = cancelButton
+        self.navigationItem.rightBarButtonItem = doneButton
 
+        // Set date picker action target
         datePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
         // Date Picker is initially hidden
@@ -49,13 +56,19 @@ class NewTransTableViewController: UITableViewController {
     
     }
     
+    // Presents CatChooserTableViewController to make a category selection
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //TODO: Open categories selection if selected row is "Choose Budget Category"
+        let categoryChooser = self.storyboard!.instantiateViewControllerWithIdentifier("CategoryChooser") as! CatChooserTableViewController
+        self.navigationController!.pushViewController(categoryChooser, animated: true)    }
+    
+    // Make only "Choose Budget Category" row selectable
+    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if indexPath.row != 2 {
+            return false
+        } else {
+            return true
+        }
     }
-    
-    
-    
-
     
 // MARK: - Actions
     
@@ -68,5 +81,4 @@ class NewTransTableViewController: UITableViewController {
     @IBAction func cancelAction(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-
 }
