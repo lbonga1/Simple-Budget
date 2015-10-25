@@ -27,29 +27,29 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
         // Fetched Results Controller
-        //fetchedResultsController.performFetch(nil)
-        //fetchedResultsController.delegate = self
+        fetchedResultsController.performFetch(nil)
+        fetchedResultsController.delegate = self
     }
     
 // MARK: - Core Data Convenience
     
     // Shared context
-    //lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
     
     // Fetched results controller
-//    lazy var fetchedResultsController: NSFetchedResultsController = {
-//        
-//        let fetchRequest = NSFetchRequest(entityName: "Category")
-//        
-//        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//        
-//        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-//            managedObjectContext: self.sharedContext,
-//            sectionNameKeyPath: nil,
-//            cacheName: nil)
-//        
-//        return fetchedResultsController
-//        }()
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+            managedObjectContext: self.sharedContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        
+        return fetchedResultsController
+        }()
     
 // MARK: - Actions
     
@@ -106,14 +106,14 @@ class BudgetViewController: UIViewController {
         dictionary[Subcategory.Keys.Amount] = "test"
         
         // Init the Subcategory object
-        //let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
+        let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
         
         // Add subcategory to fetched objects
-        //fetchedResultsController.performFetch(nil)
+        fetchedResultsController.performFetch(nil)
         
         // Save to Core Data
         dispatch_async(dispatch_get_main_queue()) {
-           // CoreDataStackManager.sharedInstance().saveContext()
+            CoreDataStackManager.sharedInstance().saveContext()
         }
         
     }
@@ -161,11 +161,11 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-//        if fetchedResultsController.fetchedObjects != nil {
-//            return fetchedResultsController.fetchedObjects!.count
-//        } else {
+        if fetchedResultsController.fetchedObjects != nil {
+            return fetchedResultsController.fetchedObjects!.count
+        } else {
             return 1
-        //}
+        }
     }
 
     // Returns the number of rows in each section.
@@ -177,9 +177,9 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
-        //let category = fetchedResultsController.fetchedObjects as? [Category]
+        let category = fetchedResultsController.fetchedObjects as? [Category]
         
-        //cell.subcategoryTitle.text = category?[indexPath.row] as! String
+        cell.subcategoryTitle.text = category?[indexPath.row] as! String
         cell.amountTextField.text = "$0.00"
 
         return cell
@@ -238,6 +238,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - Fetched Results Controller Delegate
+
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {   }

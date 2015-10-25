@@ -372,7 +372,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="62" id="zZi-MH-n0L"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
@@ -391,7 +391,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="KsQ-aa-cj2"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <state key="normal">
                                                         <color key="titleColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -461,7 +461,7 @@
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="62" id="GFO-uY-x62"/>
                                                         <constraint firstAttribute="width" constant="62" id="ddC-Qw-YKE"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
@@ -477,14 +477,14 @@
                                                         </mask>
                                                     </variation>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0.00" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="knV-Xv-IFc">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="$0.00" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="knV-Xv-IFc">
                                                     <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="f2k-CK-xwq"/>
                                                         <constraint firstAttribute="height" constant="30" id="ioV-Z2-9Ev"/>
                                                     </constraints>
                                                     <color key="textColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -554,7 +554,7 @@
                                                             <variation key="heightClass=regular-widthClass=compact" constant="200"/>
                                                         </constraint>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
@@ -607,10 +607,12 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Merchant" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xlk-TS-1Pe">
                                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="62" id="5Dn-P3-5W1"/>
+                                                        <constraint firstAttribute="width" constant="62" id="5Dn-P3-5W1">
+                                                            <variation key="heightClass=regular-widthClass=compact" constant="75"/>
+                                                        </constraint>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="62" id="uF1-XB-RDt"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
@@ -622,7 +624,7 @@
                                                     <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="5Dn-P3-5W1"/>
-                                                            <include reference="uF1-XB-RDt"/>
+                                                            <exclude reference="uF1-XB-RDt"/>
                                                         </mask>
                                                     </variation>
                                                 </label>
@@ -633,7 +635,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="jY6-eT-MVa"/>
                                                     </constraints>
                                                     <color key="textColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -655,7 +657,9 @@
                                                 <constraint firstItem="Xlk-TS-1Pe" firstAttribute="top" secondItem="asY-Ey-q2h" secondAttribute="topMargin" constant="3" id="JJf-lK-qIY"/>
                                                 <constraint firstItem="K1B-ev-mwg" firstAttribute="leading" secondItem="Xlk-TS-1Pe" secondAttribute="trailing" constant="8" id="Rda-Ks-93g"/>
                                                 <constraint firstItem="K1B-ev-mwg" firstAttribute="trailing" secondItem="asY-Ey-q2h" secondAttribute="trailingMargin" id="a8a-Ci-ffa"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="K1B-ev-mwg" secondAttribute="bottom" constant="-2" id="xb6-kb-FSR"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="K1B-ev-mwg" secondAttribute="bottom" constant="-2" id="xb6-kb-FSR">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="-2"/>
+                                                </constraint>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
@@ -700,7 +704,7 @@
                                                         <constraint firstAttribute="height" constant="225" id="i2P-zi-cfu"/>
                                                     </constraints>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -823,6 +827,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="CategoryChooser" title="Category Chooser" id="jfs-j6-441" customClass="CatChooserTableViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nGu-T4-TUl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -830,6 +835,144 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="opE-nv-J1s" id="0h3-0u-R8A">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gPs-NQ-VQL">
+                                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remaining" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="igV-Rq-nk7">
+                                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="80" id="ync-ep-1k0"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="ync-ep-1k0"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="ync-ep-1k0"/>
+                                                </mask>
+                                            </variation>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="igV-Rq-nk7" firstAttribute="trailing" secondItem="0h3-0u-R8A" secondAttribute="trailingMargin" id="32u-Qf-ppB"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="gPs-NQ-VQL" secondAttribute="bottom" constant="3" id="5JW-PT-3u8"/>
+                                        <constraint firstItem="igV-Rq-nk7" firstAttribute="top" secondItem="0h3-0u-R8A" secondAttribute="topMargin" constant="3" id="5PD-zr-YwL"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="igV-Rq-nk7" secondAttribute="bottom" constant="3" id="Oxb-yH-wGg"/>
+                                        <constraint firstItem="igV-Rq-nk7" firstAttribute="leading" secondItem="gPs-NQ-VQL" secondAttribute="trailing" constant="10" id="ZLv-Be-KnU"/>
+                                        <constraint firstItem="gPs-NQ-VQL" firstAttribute="leading" secondItem="0h3-0u-R8A" secondAttribute="leadingMargin" id="cNA-KR-TFU"/>
+                                        <constraint firstItem="gPs-NQ-VQL" firstAttribute="top" secondItem="0h3-0u-R8A" secondAttribute="topMargin" constant="3" id="eL2-Ek-JGw"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="subviews">
+                                            <exclude reference="gPs-NQ-VQL"/>
+                                            <exclude reference="igV-Rq-nk7"/>
+                                        </mask>
+                                        <mask key="constraints">
+                                            <exclude reference="5JW-PT-3u8"/>
+                                            <exclude reference="cNA-KR-TFU"/>
+                                            <exclude reference="eL2-Ek-JGw"/>
+                                            <exclude reference="32u-Qf-ppB"/>
+                                            <exclude reference="5PD-zr-YwL"/>
+                                            <exclude reference="Oxb-yH-wGg"/>
+                                            <exclude reference="ZLv-Be-KnU"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=compact">
+                                        <mask key="subviews">
+                                            <include reference="gPs-NQ-VQL"/>
+                                            <include reference="igV-Rq-nk7"/>
+                                        </mask>
+                                        <mask key="constraints">
+                                            <include reference="5JW-PT-3u8"/>
+                                            <include reference="cNA-KR-TFU"/>
+                                            <include reference="eL2-Ek-JGw"/>
+                                            <include reference="32u-Qf-ppB"/>
+                                            <include reference="5PD-zr-YwL"/>
+                                            <include reference="Oxb-yH-wGg"/>
+                                            <include reference="ZLv-Be-KnU"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="cml-Zq-aBH">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cml-Zq-aBH" id="gof-iT-6hs">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subcategory Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1y-dK-RmG">
+                                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hC-2l-ooF">
+                                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="80" id="EFG-gI-pDV"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="EFG-gI-pDV"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="EFG-gI-pDV"/>
+                                                </mask>
+                                            </variation>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="1hC-2l-ooF" firstAttribute="trailing" secondItem="gof-iT-6hs" secondAttribute="trailingMargin" id="413-Da-Ruw"/>
+                                        <constraint firstItem="r1y-dK-RmG" firstAttribute="leading" secondItem="gof-iT-6hs" secondAttribute="leadingMargin" id="4mg-QS-ata"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="r1y-dK-RmG" secondAttribute="bottom" constant="3" id="7e2-CL-Mmr"/>
+                                        <constraint firstItem="1hC-2l-ooF" firstAttribute="leading" secondItem="r1y-dK-RmG" secondAttribute="trailing" constant="10" id="QN9-AB-WEz"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="1hC-2l-ooF" secondAttribute="bottom" constant="3" id="k0c-uQ-Uj3"/>
+                                        <constraint firstItem="1hC-2l-ooF" firstAttribute="top" secondItem="gof-iT-6hs" secondAttribute="topMargin" constant="3" id="kcu-B3-Taj"/>
+                                        <constraint firstItem="r1y-dK-RmG" firstAttribute="top" secondItem="gof-iT-6hs" secondAttribute="topMargin" constant="3" id="vLV-aS-YkG"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="subviews">
+                                            <exclude reference="r1y-dK-RmG"/>
+                                            <exclude reference="1hC-2l-ooF"/>
+                                        </mask>
+                                        <mask key="constraints">
+                                            <exclude reference="4mg-QS-ata"/>
+                                            <exclude reference="7e2-CL-Mmr"/>
+                                            <exclude reference="vLV-aS-YkG"/>
+                                            <exclude reference="413-Da-Ruw"/>
+                                            <exclude reference="QN9-AB-WEz"/>
+                                            <exclude reference="k0c-uQ-Uj3"/>
+                                            <exclude reference="kcu-B3-Taj"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=compact">
+                                        <mask key="subviews">
+                                            <include reference="r1y-dK-RmG"/>
+                                            <include reference="1hC-2l-ooF"/>
+                                        </mask>
+                                        <mask key="constraints">
+                                            <include reference="4mg-QS-ata"/>
+                                            <include reference="7e2-CL-Mmr"/>
+                                            <include reference="vLV-aS-YkG"/>
+                                            <include reference="413-Da-Ruw"/>
+                                            <include reference="QN9-AB-WEz"/>
+                                            <include reference="k0c-uQ-Uj3"/>
+                                            <include reference="kcu-B3-Taj"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -866,6 +1009,7 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Category Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YZa-Sd-vWi">
                                                     <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
+                                                    <color key="textColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <variation key="heightClass=regular-widthClass=compact" misplaced="YES">

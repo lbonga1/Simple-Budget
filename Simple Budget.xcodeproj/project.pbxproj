@@ -18,7 +18,7 @@
 		1AC059731BDAE27C0075302E /* SpenRemSubcatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */; };
 		1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059741BDAE86E0075302E /* CoreDataStackManager.swift */; };
 		1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */; };
-		1AF10AE91BCB18F400F493D0 /* Simple_Budget.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE71BCB18F400F493D0 /* Simple_Budget.xcdatamodeld */; };
+		1AF10AE91BCB18F400F493D0 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE71BCB18F400F493D0 /* Model.xcdatamodeld */; };
 		1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */; };
 		1AF10AEE1BCB18F400F493D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AF10AEC1BCB18F400F493D0 /* Main.storyboard */; };
 		1AF10AF01BCB18F400F493D0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AF10AEF1BCB18F400F493D0 /* Images.xcassets */; };
@@ -55,7 +55,7 @@
 		1AF10AE01BCB18F400F493D0 /* Simple Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Budget.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF10AE41BCB18F400F493D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1AF10AE81BCB18F400F493D0 /* Simple_Budget.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Simple_Budget.xcdatamodel; sourceTree = "<group>"; };
+		1AF10AE81BCB18F400F493D0 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1AF10AED1BCB18F400F493D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1AF10AEF1BCB18F400F493D0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -203,7 +203,7 @@
 		1AFF3DC71BD9F1D3006B571F /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				1AF10AE71BCB18F400F493D0 /* Simple_Budget.xcdatamodeld */,
+				1AF10AE71BCB18F400F493D0 /* Model.xcdatamodeld */,
 				1AC059741BDAE86E0075302E /* CoreDataStackManager.swift */,
 			);
 			name = "Core Data";
@@ -328,7 +328,7 @@
 				1AFF3DCB1BD9F883006B571F /* RemainingViewController.swift in Sources */,
 				1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */,
 				1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */,
-				1AF10AE91BCB18F400F493D0 /* Simple_Budget.xcdatamodeld in Sources */,
+				1AF10AE91BCB18F400F493D0 /* Model.xcdatamodeld in Sources */,
 				1AF10B091BCB19EA00F493D0 /* TextFieldDelegate.swift in Sources */,
 				1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */,
 				1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */,
@@ -543,13 +543,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		1AF10AE71BCB18F400F493D0 /* Simple_Budget.xcdatamodeld */ = {
+		1AF10AE71BCB18F400F493D0 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				1AF10AE81BCB18F400F493D0 /* Simple_Budget.xcdatamodel */,
+				1AF10AE81BCB18F400F493D0 /* Model.xcdatamodel */,
 			);
-			currentVersion = 1AF10AE81BCB18F400F493D0 /* Simple_Budget.xcdatamodel */;
-			path = Simple_Budget.xcdatamodeld;
+			currentVersion = 1AF10AE81BCB18F400F493D0 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
