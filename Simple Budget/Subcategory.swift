@@ -23,7 +23,7 @@ class Subcategory: NSManagedObject {
     @NSManaged var categories: Category
     @NSManaged var title: String
     @NSManaged var amount: Double
-    @NSManaged var transcations: NSSet
+    @NSManaged var transactions: NSSet
     
     // Core Data init method
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {

@@ -101,56 +101,72 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
-        var dictionary = [String : String]()
-        dictionary[Subcategory.Keys.Title] = "test"
-        dictionary[Subcategory.Keys.Amount] = "test"
-        
-        // Init the Subcategory object
-        let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
-        
-        // Add subcategory to fetched objects
-        fetchedResultsController.performFetch(nil)
-        
-        // Save to Core Data
-        dispatch_async(dispatch_get_main_queue()) {
-            CoreDataStackManager.sharedInstance().saveContext()
-        }
+//        var dictionary = [String : String]()
+//        dictionary[Subcategory.Keys.Title] = "test"
+//        dictionary[Subcategory.Keys.Amount] = "test"
+//        
+//        // Init the Subcategory object
+//        let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
+//        
+//        // Add subcategory to fetched objects
+//        fetchedResultsController.performFetch(nil)
+//        
+//        // Save to Core Data
+//        dispatch_async(dispatch_get_main_queue()) {
+//            CoreDataStackManager.sharedInstance().saveContext()
+//        }
         
     }
     
 // MARK: - Additional Methods
     // Defines intitial categories and subcategories
-//    func defaultCategories() -> [[String: AnyObject]] {
-//        return  [
-//            [
-//                "title": "Savings & Funds",
-//                "subcategories": ["Emergency Fund"]
-//            ], [
-//                "title": "Housing",
-//                "subcategories": ["Mortgage", "Electricity", "Natural Gas/Propane"]
-//            ], [
-//                "title": "Transportation",
-//                "subcategories": ["Auto Gas & Oil"]
-//            ], [
-//                "title": "Food",
-//                "subcategories": ["Groceries", "Restaurants"]
-//            ], [
-//                "title": "Lifestyle",
-//                "subcategories": ["Entertainment", "Clothing"]
-//            ], [
-//                "title": "Insurance & Tax",
-//                "subcategories": ["Health Insurance", "Life Insurance", "Auto Insurance"]
-//            ]
-//        ]
-//    }
-    
-//    func displaySavedCategories() {
-//        if let categories = fetchedResultsController.fetchedObjects as? [Categories] {
-//            for category in categories {
-//                
-//            }
-//        }
-//    }
+    func defaultCategories() -> [[String: AnyObject]] {
+        return  [
+            [
+                "title": "Savings & Funds",
+                "subcategories":
+                    [
+                        ["title": "Emergency Fund", "amount": "$0.00"]
+                    ]
+            ], [
+                "title": "Housing",
+                "subcategories":
+                    [
+                        ["title": "Mortgage", "amount": "$0.00"],
+                        ["title": "Electricity", "amount": "$0.00"],
+                        ["title": "Natural Gas/Propane", "amount": "$0.00"]
+                    ]
+            ], [
+                "title": "Transportation",
+                "subcategories":
+                    [
+                        ["title": "Auto Gas & Oil", "amount": "$0.00"]
+                    ]
+            ], [
+                "title": "Food",
+                "subcategories":
+                    [
+                        ["title": "Groceries", "amount": "$0.00"],
+                        ["title": "Restaurants", "amount": "$0.00"]
+                    ]
+            ], [
+                "title": "Lifestyle",
+                "subcategories":
+                    [
+                        ["title": "Entertainment", "amount": "$0.00"],
+                        ["title": "Clothing", "amount": "$0.00"]
+                    ]
+            ], [
+                "title": "Insurance & Tax",
+                "subcategories":
+                    [
+                        ["title": "Health Insurance", "amount": "$0.00"],
+                        ["title": "Life Insurance", "amount": "$0.00"],
+                        ["title": "Auto Insurance", "amount": "$0.00"]
+                    ]
+                ]
+            ]
+    }
     
 }
 
@@ -161,17 +177,24 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
+        let initialCategories = defaultCategories()
+        
         if fetchedResultsController.fetchedObjects != nil {
             return fetchedResultsController.fetchedObjects!.count
         } else {
-            return 1
+            return initialCategories.count
         }
     }
 
     // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return testData.count
+        //let currentCategories = fetchedResultsController.fetchedObjects as? [Category]
+        let initialCategories = defaultCategories()
+        
+        //return currentCategories[section].count
+        return initialCategories[section].count
+        //return testData[section].count
     }
 
     // Defines the budget item cells.

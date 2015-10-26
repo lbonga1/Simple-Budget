@@ -831,7 +831,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="opE-nv-J1s">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooserCategory" id="opE-nv-J1s">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="opE-nv-J1s" id="0h3-0u-R8A">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -903,7 +903,7 @@
                                     </variation>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="cml-Zq-aBH">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooserSubcategory" id="cml-Zq-aBH">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cml-Zq-aBH" id="gof-iT-6hs">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -949,13 +949,13 @@
                                             <exclude reference="1hC-2l-ooF"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="4mg-QS-ata"/>
-                                            <exclude reference="7e2-CL-Mmr"/>
-                                            <exclude reference="vLV-aS-YkG"/>
                                             <exclude reference="413-Da-Ruw"/>
                                             <exclude reference="QN9-AB-WEz"/>
                                             <exclude reference="k0c-uQ-Uj3"/>
                                             <exclude reference="kcu-B3-Taj"/>
+                                            <exclude reference="4mg-QS-ata"/>
+                                            <exclude reference="7e2-CL-Mmr"/>
+                                            <exclude reference="vLV-aS-YkG"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -964,13 +964,13 @@
                                             <include reference="1hC-2l-ooF"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="4mg-QS-ata"/>
-                                            <include reference="7e2-CL-Mmr"/>
-                                            <include reference="vLV-aS-YkG"/>
                                             <include reference="413-Da-Ruw"/>
                                             <include reference="QN9-AB-WEz"/>
                                             <include reference="k0c-uQ-Uj3"/>
                                             <include reference="kcu-B3-Taj"/>
+                                            <include reference="4mg-QS-ata"/>
+                                            <include reference="7e2-CL-Mmr"/>
+                                            <include reference="vLV-aS-YkG"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
