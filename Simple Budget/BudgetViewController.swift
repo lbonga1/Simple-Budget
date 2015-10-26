@@ -19,6 +19,12 @@ class BudgetViewController: UIViewController {
     @IBOutlet var doneButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test", "Test 2"]
+    var defaultCategories: [Category] = {
+        let section1 = Category(dictionary: ["title": "Savings & Funds"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
+        let section2 = Category(dictionary: ["title": "Housing"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
+        
+        return [section1, section2]
+        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,53 +126,53 @@ class BudgetViewController: UIViewController {
     
 // MARK: - Additional Methods
     // Defines intitial categories and subcategories
-    func defaultCategories() -> [[String: AnyObject]] {
-        return  [
-            [
-                "title": "Savings & Funds",
-                "subcategories":
-                    [
-                        ["title": "Emergency Fund", "amount": "$0.00"]
-                    ]
-            ], [
-                "title": "Housing",
-                "subcategories":
-                    [
-                        ["title": "Mortgage", "amount": "$0.00"],
-                        ["title": "Electricity", "amount": "$0.00"],
-                        ["title": "Natural Gas/Propane", "amount": "$0.00"]
-                    ]
-            ], [
-                "title": "Transportation",
-                "subcategories":
-                    [
-                        ["title": "Auto Gas & Oil", "amount": "$0.00"]
-                    ]
-            ], [
-                "title": "Food",
-                "subcategories":
-                    [
-                        ["title": "Groceries", "amount": "$0.00"],
-                        ["title": "Restaurants", "amount": "$0.00"]
-                    ]
-            ], [
-                "title": "Lifestyle",
-                "subcategories":
-                    [
-                        ["title": "Entertainment", "amount": "$0.00"],
-                        ["title": "Clothing", "amount": "$0.00"]
-                    ]
-            ], [
-                "title": "Insurance & Tax",
-                "subcategories":
-                    [
-                        ["title": "Health Insurance", "amount": "$0.00"],
-                        ["title": "Life Insurance", "amount": "$0.00"],
-                        ["title": "Auto Insurance", "amount": "$0.00"]
-                    ]
-                ]
-            ]
-    }
+//    func defaultCategories() -> [[String: AnyObject]] {
+//        return  [
+//            [
+//                "title": "Savings & Funds",
+//                "subcategories":
+//                    [
+//                        ["title": "Emergency Fund", "amount": "$0.00"]
+//                    ]
+//            ], [
+//                "title": "Housing",
+//                "subcategories":
+//                    [
+//                        ["title": "Mortgage", "amount": "$0.00"],
+//                        ["title": "Electricity", "amount": "$0.00"],
+//                        ["title": "Natural Gas/Propane", "amount": "$0.00"]
+//                    ]
+//            ], [
+//                "title": "Transportation",
+//                "subcategories":
+//                    [
+//                        ["title": "Auto Gas & Oil", "amount": "$0.00"]
+//                    ]
+//            ], [
+//                "title": "Food",
+//                "subcategories":
+//                    [
+//                        ["title": "Groceries", "amount": "$0.00"],
+//                        ["title": "Restaurants", "amount": "$0.00"]
+//                    ]
+//            ], [
+//                "title": "Lifestyle",
+//                "subcategories":
+//                    [
+//                        ["title": "Entertainment", "amount": "$0.00"],
+//                        ["title": "Clothing", "amount": "$0.00"]
+//                    ]
+//            ], [
+//                "title": "Insurance & Tax",
+//                "subcategories":
+//                    [
+//                        ["title": "Health Insurance", "amount": "$0.00"],
+//                        ["title": "Life Insurance", "amount": "$0.00"],
+//                        ["title": "Auto Insurance", "amount": "$0.00"]
+//                    ]
+//                ]
+//            ]
+//    }
     
 }
 
@@ -177,12 +183,13 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        let initialCategories = defaultCategories()
+//        let initialCategories = defaultCategories()
         
         if fetchedResultsController.fetchedObjects != nil {
             return fetchedResultsController.fetchedObjects!.count
         } else {
-            return initialCategories.count
+//            return initialCategories.count
+            return defaultCategories.count
         }
     }
 
@@ -190,11 +197,12 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         //let currentCategories = fetchedResultsController.fetchedObjects as? [Category]
-        let initialCategories = defaultCategories()
+//        let initialCategories = defaultCategories()
         
         //return currentCategories[section].count
-        return initialCategories[section].count
+//        return initialCategories[section].count
         //return testData[section].count
+        return 1
     }
 
     // Defines the budget item cells.
@@ -202,7 +210,8 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
         let category = fetchedResultsController.fetchedObjects as? [Category]
         
-        cell.subcategoryTitle.text = category?[indexPath.row] as! String
+        cell.subcategoryTitle.text = "test"
+//        cell.subcategoryTitle.text = category?[indexPath.row] as! String
         cell.amountTextField.text = "$0.00"
 
         return cell
