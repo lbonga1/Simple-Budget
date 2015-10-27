@@ -14,12 +14,8 @@ import CoreData
 
 class Category: NSManagedObject {
     
-    struct Keys {
-        static let Title = "title"
-    }
-    
     // Promote from simple properties to Core Data attributes
-    @NSManaged var title: String
+    @NSManaged var catTitle: String
     @NSManaged var subcategory: NSSet
 
     // Core Data init method
@@ -27,12 +23,10 @@ class Category: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(dictionary: [String: AnyObject], context: NSManagedObjectContext) {
+    init(catTitle: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Categories" type.
         let entity =  NSEntityDescription.entityForName("Category", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
-        // Init dictionary properties
-        title = dictionary[Category.Keys.Title] as! String
     }
 }

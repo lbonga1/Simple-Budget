@@ -19,12 +19,12 @@ class BudgetViewController: UIViewController {
     @IBOutlet var doneButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test", "Test 2"]
-    var defaultCategories: [Category] = {
-        let section1 = Category(dictionary: ["title": "Savings & Funds"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
-        let section2 = Category(dictionary: ["title": "Housing"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
-        
-        return [section1, section2]
-        }()
+//    var defaultCategories: [Category] = {
+//        let section1 = Category(dictionary: ["title": "Savings & Funds"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
+//        let section2 = Category(dictionary: ["title": "Housing"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
+//        
+//        return [section1, section2]
+//        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,13 +45,14 @@ class BudgetViewController: UIViewController {
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Category")
-        
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let primarySortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
+        let secondarySortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        fetchRequest.sortDescriptors = [primarySortDescriptor, secondarySortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "catTitle",
             cacheName: nil)
         
         return fetchedResultsController
@@ -183,36 +184,30 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-//        let initialCategories = defaultCategories()
-        
-        if fetchedResultsController.fetchedObjects != nil {
-            return fetchedResultsController.fetchedObjects!.count
-        } else {
-//            return initialCategories.count
-            return defaultCategories.count
+        if let sections = fetchedResultsController.sections {
+            return sections.count
         }
+        return 0
     }
 
     // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        //let currentCategories = fetchedResultsController.fetchedObjects as? [Category]
-//        let initialCategories = defaultCategories()
-        
-        //return currentCategories[section].count
-//        return initialCategories[section].count
-        //return testData[section].count
-        return 1
+        if let sections = fetchedResultsController.sections {
+            let currentSection: AnyObject = sections[section]
+            return currentSection.numberOfObjects
+        }
+        return 0
     }
 
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
-        let category = fetchedResultsController.fetchedObjects as? [Category]
+        let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         
-        cell.subcategoryTitle.text = "test"
-//        cell.subcategoryTitle.text = category?[indexPath.row] as! String
-        cell.amountTextField.text = "$0.00"
+        // Set title and amount values
+        cell.subcategoryTitle.text = subcategory.subTitle
+        cell.amountTextField.text = subcategory.totalAmount
 
         return cell
      }
@@ -221,13 +216,18 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
         
-        headerCell.titleLabel.text = "Test title"
+        if let sections = fetchedResultsController.sections {
+            let currentSection: AnyObject = sections[section]
+            headerCell.titleLabel.text = currentSection.name
+        }
+        
         headerCell.backgroundColor = UIColor.whiteColor()
         
         return headerCell
         
         }
-        
+    
+    // Header cell height
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
@@ -242,7 +242,8 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
             
         return footerCell
     }
-        
+    
+    // Footer cell height
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 32

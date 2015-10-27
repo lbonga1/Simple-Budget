@@ -14,15 +14,10 @@ import CoreData
 
 class Subcategory: NSManagedObject {
     
-    struct Keys {
-        static let Title = "title"
-        static let Amount = "dollar_amount"
-    }
-    
     // Promote from simple properties to Core Data attributes
-    @NSManaged var categories: Category
-    @NSManaged var title: String
-    @NSManaged var amount: Double
+    @NSManaged var category: Category
+    @NSManaged var subTitle: String
+    @NSManaged var totalAmount: String
     @NSManaged var transactions: NSSet
     
     // Core Data init method
@@ -30,13 +25,10 @@ class Subcategory: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(dictionary: [String: AnyObject], context: NSManagedObjectContext) {
+    init(subTitle: String, totalAmount: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Subcategories" type.
         let entity =  NSEntityDescription.entityForName("Subcategory", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
-        // Init dictionary properties
-        title = dictionary[Subcategory.Keys.Title] as! String
-        amount = dictionary[Subcategory.Keys.Amount] as! Double
     }
 }
