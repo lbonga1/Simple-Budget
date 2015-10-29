@@ -134,7 +134,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if fetchedResultsController.fetchedObjects != nil {
+        if fetchedResultsController.fetchedObjects!.count != 0 {
             return fetchedResultsController.fetchedObjects!.count
         }
         return 1
@@ -142,7 +142,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if fetchedResultsController.fetchedObjects != nil {
+        if fetchedResultsController.fetchedObjects!.count != 0 {
             if let sections = fetchedResultsController.sections {
                 let currentSection: AnyObject = sections[section]
                 return currentSection.numberOfObjects
@@ -157,8 +157,13 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         
         // Set title and amount values
-        cell.subcategoryTitle.text = subcategory.subTitle
-        cell.amountTextField.text = subcategory.totalAmount
+        if fetchedResultsController.fetchedObjects!.count != 0 {
+            cell.subcategoryTitle.text = subcategory.subTitle
+            cell.amountTextField.text = subcategory.totalAmount
+        } else {
+            cell.subcategoryTitle.text = "New Subcategory"
+            cell.amountTextField.text = "$0.00"
+        }
 
         return cell
      }
