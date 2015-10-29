@@ -15,7 +15,6 @@ import CoreData
 class Subcategory: NSManagedObject {
     
     // Promote from simple properties to Core Data attributes
-    @NSManaged var category: Category
     @NSManaged var subTitle: String
     @NSManaged var totalAmount: String
     @NSManaged var transactions: NSSet
@@ -30,5 +29,8 @@ class Subcategory: NSManagedObject {
         let entity =  NSEntityDescription.entityForName("Subcategory", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
+        // Init properties
+        self.subTitle = subTitle
+        self.totalAmount = totalAmount
     }
 }

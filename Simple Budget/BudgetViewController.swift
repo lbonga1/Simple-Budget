@@ -19,18 +19,14 @@ class BudgetViewController: UIViewController {
     @IBOutlet var doneButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test", "Test 2"]
-//    var defaultCategories: [Category] = {
-//        let section1 = Category(dictionary: ["title": "Savings & Funds"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
-//        let section2 = Category(dictionary: ["title": "Housing"], context: {CoreDataStackManager.sharedInstance().managedObjectContext!}())
-//        
-//        return [section1, section2]
-//        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
+    
+        //tableView.registerClass(CustomHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
         
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
@@ -45,10 +41,12 @@ class BudgetViewController: UIViewController {
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
-        let primarySortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
-        let secondarySortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
-        fetchRequest.sortDescriptors = [primarySortDescriptor, secondarySortDescriptor]
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+//        let primarySortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
+//        let secondarySortDescriptor = NSSortDescriptor(key: "subcategory", ascending: true)
+//        fetchRequest.sortDescriptors = [primarySortDescriptor, secondarySortDescriptor]
+        let sortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
@@ -108,73 +106,24 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
-//        var dictionary = [String : String]()
-//        dictionary[Subcategory.Keys.Title] = "test"
-//        dictionary[Subcategory.Keys.Amount] = "test"
-//        
-//        // Init the Subcategory object
-//        let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
-//        
-//        // Add subcategory to fetched objects
-//        fetchedResultsController.performFetch(nil)
-//        
-//        // Save to Core Data
-//        dispatch_async(dispatch_get_main_queue()) {
-//            CoreDataStackManager.sharedInstance().saveContext()
-//        }
+        let indexPath = tableView.indexPathForSelectedRow()
+        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
+        let headerView = tableView.headerViewForSection(indexPath!.section)
         
+        // Init the Subcategory object
+        let newSubcategory = Subcategory(subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
+        
+        //let newCategory = Category(catTitle: , subcategory: newSubcategory, context: self.sharedContext)
+        
+        
+        // Add subcategory to fetched objects
+        fetchedResultsController.performFetch(nil)
+        
+        // Save to Core Data
+        dispatch_async(dispatch_get_main_queue()) {
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
     }
-    
-// MARK: - Additional Methods
-    // Defines intitial categories and subcategories
-//    func defaultCategories() -> [[String: AnyObject]] {
-//        return  [
-//            [
-//                "title": "Savings & Funds",
-//                "subcategories":
-//                    [
-//                        ["title": "Emergency Fund", "amount": "$0.00"]
-//                    ]
-//            ], [
-//                "title": "Housing",
-//                "subcategories":
-//                    [
-//                        ["title": "Mortgage", "amount": "$0.00"],
-//                        ["title": "Electricity", "amount": "$0.00"],
-//                        ["title": "Natural Gas/Propane", "amount": "$0.00"]
-//                    ]
-//            ], [
-//                "title": "Transportation",
-//                "subcategories":
-//                    [
-//                        ["title": "Auto Gas & Oil", "amount": "$0.00"]
-//                    ]
-//            ], [
-//                "title": "Food",
-//                "subcategories":
-//                    [
-//                        ["title": "Groceries", "amount": "$0.00"],
-//                        ["title": "Restaurants", "amount": "$0.00"]
-//                    ]
-//            ], [
-//                "title": "Lifestyle",
-//                "subcategories":
-//                    [
-//                        ["title": "Entertainment", "amount": "$0.00"],
-//                        ["title": "Clothing", "amount": "$0.00"]
-//                    ]
-//            ], [
-//                "title": "Insurance & Tax",
-//                "subcategories":
-//                    [
-//                        ["title": "Health Insurance", "amount": "$0.00"],
-//                        ["title": "Life Insurance", "amount": "$0.00"],
-//                        ["title": "Auto Insurance", "amount": "$0.00"]
-//                    ]
-//                ]
-//            ]
-//    }
-    
 }
 
 // MARK: - Table view data source and delegate
@@ -183,21 +132,23 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        if let sections = fetchedResultsController.sections {
-            return sections.count
+        if fetchedResultsController.fetchedObjects != nil {
+            if let sections = fetchedResultsController.sections {
+                return sections.count
+            }
         }
-        return 0
+        return testData.count
     }
 
     // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if let sections = fetchedResultsController.sections {
-            let currentSection: AnyObject = sections[section]
-            return currentSection.numberOfObjects
+        if fetchedResultsController.fetchedObjects != nil {
+            if let sections = fetchedResultsController.sections {
+                let currentSection: AnyObject = sections[section]
+                return currentSection.numberOfObjects
+            }
         }
-        return 0
+        return testData.count
     }
 
     // Defines the budget item cells.
@@ -214,20 +165,49 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         
     // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
+        
+        let  headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
+        headerCell.backgroundColor = UIColor.whiteColor()
         
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
             headerCell.titleLabel.text = currentSection.name
+        } else {
+            headerCell.titleLabel.text = "New Category"
         }
         
-        headerCell.backgroundColor = UIColor.whiteColor()
+//        // Create header view
+//        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+//        headerView.contentView.backgroundColor = UIColor.whiteColor()
+//        
+//        // Create title label
+//        var titleLabel = UILabel(frame: CGRectMake(0, 0, 200, 27))
+//        titleLabel.textColor = UIColor.darkGrayColor()
+//        titleLabel.font = UIFont(name: "Avenir-Book", size: 17.0)
+//        titleLabel.textAlignment = NSTextAlignment.Left
+//        
+//        if let sections = fetchedResultsController.sections {
+//            let currentSection: AnyObject = sections[section]
+//            titleLabel.text = currentSection.name
+//        }
+//
+//        // Create "Planned" label
+//        var plannedLabel = UILabel(frame: CGRectMake(0, 0, 80, 27))
+//        plannedLabel.text = "Planned"
+//        plannedLabel.textColor = UIColor.lightGrayColor()
+//        plannedLabel.font = UIFont(name: "Avenir-Book", size: 17.0)
+//        plannedLabel.textAlignment = NSTextAlignment.Right
+//        
+//        // Add labels to header view
+//        headerView.contentView.addSubview(titleLabel)
+//        headerView.contentView.addSubview(plannedLabel)
+//    
+//        return headerView
         
         return headerCell
-        
-        }
+    }
     
-    // Header cell height
+    // Header view height
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
@@ -275,4 +255,36 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
+}
+
+// MARK: - Additional Methods
+
+extension BudgetViewController {
+    
+    // Load json file that contains default categories data
+    func loadDefaultData() {
+        // Create filepath
+        var filepath:String = NSBundle.mainBundle().pathForResource("defaults", ofType: "json")!
+        
+        // Create optional for NSError
+        var error:NSError?
+        
+        // Retrieve Data
+        var JSONData = NSData(contentsOfFile: filepath, options: NSDataReadingOptions.DataReadingMapped, error: &error)
+        // Create another error optional
+        var jsonerror:NSError?
+        // We don't know the type of object we'll receive back so use AnyObject
+        let swiftObject:AnyObject = NSJSONSerialization.JSONObjectWithData(JSONData!, options: NSJSONReadingOptions.AllowFragments, error:&jsonerror)!
+        // JSONObjectWithData returns AnyObject so the first thing to do is to downcast this to a known type
+        if let nsDictionaryObject = swiftObject as? NSDictionary {
+            if let swiftDictionary = nsDictionaryObject as Dictionary? {
+                println(swiftDictionary)
+            }
+        }
+        else if let nsArrayObject = swiftObject as? NSArray {
+            if let swiftArray = nsArrayObject as Array? {
+                println(swiftArray)
+            }
+        }
+    }
 }
