@@ -31,6 +31,8 @@ class BudgetViewController: UIViewController {
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+
+        println(fetchedResultsController.fetchedObjects)
     }
     
 // MARK: - Core Data Convenience
@@ -133,11 +135,9 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if fetchedResultsController.fetchedObjects != nil {
-            if let sections = fetchedResultsController.sections {
-                return sections.count
-            }
+            return fetchedResultsController.fetchedObjects!.count
         }
-        return testData.count
+        return 1
     }
 
     // Returns the number of rows in each section.
@@ -148,7 +148,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
                 return currentSection.numberOfObjects
             }
         }
-        return testData.count
+        return 1
     }
 
     // Defines the budget item cells.
