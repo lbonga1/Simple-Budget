@@ -18,7 +18,7 @@ class BudgetViewController: UIViewController {
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var doneButton: UIBarButtonItem!
     
-    var testData: NSMutableArray = ["Test", "Test 2"]
+    var testData: NSMutableArray = ["Test"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,7 +108,7 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
-        let indexPath = tableView.indexPathForSelectedRow()
+        let indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
         let headerView = tableView.headerViewForSection(indexPath!.section)
         
@@ -148,16 +148,16 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
                 return currentSection.numberOfObjects
             }
         }
-        return 1
+        return self.testData.count
     }
 
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
-        let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         
         // Set title and amount values
         if fetchedResultsController.fetchedObjects!.count != 0 {
+            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
             cell.subcategoryTitle.text = subcategory.subTitle
             cell.amountTextField.text = subcategory.totalAmount
         } else {
@@ -174,9 +174,11 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         let  headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
         headerCell.backgroundColor = UIColor.whiteColor()
         
-        if let sections = fetchedResultsController.sections {
-            let currentSection: AnyObject = sections[section]
-            headerCell.titleLabel.text = currentSection.name
+        if fetchedResultsController.fetchedObjects!.count != 0 {
+            if let sections = fetchedResultsController.sections {
+                let currentSection: AnyObject = sections[section]
+                headerCell.titleLabel.text = currentSection.name
+            }
         } else {
             headerCell.titleLabel.text = "New Category"
         }

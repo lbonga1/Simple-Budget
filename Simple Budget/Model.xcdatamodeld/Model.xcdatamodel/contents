@@ -4,7 +4,7 @@
         <attribute name="catTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="subcategory" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="category" inverseEntity="Subcategory" syncable="YES"/>
     </entity>
-    <entity name="Subcategory" representedClassName="Subcategories" syncable="YES">
+    <entity name="Subcategory" representedClassName="Subcategory" syncable="YES">
         <attribute name="subTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="totalAmount" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="subcategory" inverseEntity="Category" syncable="YES"/>
