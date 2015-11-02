@@ -19,6 +19,8 @@ class BudgetViewController: UIViewController {
     @IBOutlet var doneButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test"]
+    var currentlyEditingCategory = 0
+    var currentlyEditingSubcategory: NSIndexPath? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,8 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
     
         //tableView.registerClass(CustomHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
+//        var nib = UINib(nibName: "CustomHeaderCell", bundle: nil)
+//        tableView.registerNib(nib, forCellReuseIdentifier: "HeaderCell")
         
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
@@ -68,21 +72,26 @@ class BudgetViewController: UIViewController {
         self.presentViewController(controller, animated: true, completion: nil)
     }
     
-    @IBAction func addItemAction(sender: AnyObject) {
+    @IBAction func addItemAction(sender: UIButton) {
         // Change navigation items
         self.parentViewController!.navigationItem.leftBarButtonItem = cancelButton
         self.parentViewController!.navigationItem.rightBarButtonItem = doneButton
         
+        // Set current category to selected "add item" button's tag
+        currentlyEditingCategory = sender.tag
+        
         self.tableView.beginUpdates()
+        
         // Defines the new cell to be added
         let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell") as! BudgetSubcategoryCell
         
-        // Adds new cell to the array
+        // TODO: ADD ITEM TO DATA?
         self.testData.insertObject(newCell!, atIndex: self.testData.count)
         
         // Inserts new row into the table
         var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        currentlyEditingSubcategory = indexPath
         
         self.tableView.reloadData()
         
@@ -94,8 +103,10 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
+        //TODO: REMOVE ITEM FROM CORE DATA?
         self.testData.removeLastObject()
-        var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+
+        var indexPath: NSIndexPath = currentlyEditingSubcategory!
         self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         
         self.tableView.reloadData()
@@ -108,15 +119,29 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
+        // TODO: Change to currently editing indexPath
         let indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
-        let headerView = tableView.headerViewForSection(indexPath!.section)
         
         // Init the Subcategory object
         let newSubcategory = Subcategory(subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
         
-        //let newCategory = Category(catTitle: , subcategory: newSubcategory, context: self.sharedContext)
-        
+        if fetchedResultsController.fetchedObjects!.count != 0 {
+            if let sections = fetchedResultsController.sections {
+                let currentSection: AnyObject = sections[currentlyEditingCategory]
+                let headerTitle = currentSection.name
+            
+                // Init the Category object
+                let newCategory = Category(subcategory: newSubcategory, catTitle: headerTitle, context: self.sharedContext)
+            }
+        } else {
+            let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
+            let sectionTitle = sectionHeaderView?.textLabel.text
+            println(sectionTitle)
+            
+            // Init the Category Object
+            let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
+        }
         
         // Add subcategory to fetched objects
         fetchedResultsController.performFetch(nil)
@@ -170,10 +195,12 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         
     // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let  headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
+        
+        // Customize background color
         headerCell.backgroundColor = UIColor.whiteColor()
         
+        // Set title label text
         if fetchedResultsController.fetchedObjects!.count != 0 {
             if let sections = fetchedResultsController.sections {
                 let currentSection: AnyObject = sections[section]
@@ -182,6 +209,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             headerCell.titleLabel.text = "New Category"
         }
+        
         
 //        // Create header view
 //        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
@@ -224,8 +252,20 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
         
+        // Customize background color and button title
         footerCell.addItemButton.setTitle("+ Add Item", forState: .Normal)
         footerCell.backgroundColor = UIColor.whiteColor()
+        
+        // Get index path of "add item" button
+        let pointInTable = footerCell.addItemButton.convertPoint(footerCell.addItemButton.bounds.origin, toView: self.tableView)
+        let indexPath = self.tableView.indexPathForRowAtPoint(pointInTable)
+        
+        // Add tag and action to "add item" button
+        if indexPath != nil {
+            let currentSection = indexPath!.section
+            footerCell.addItemButton.tag = currentSection
+            footerCell.addItemButton.addTarget(self, action: Selector("addItemAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        }
             
         return footerCell
     }
@@ -268,30 +308,30 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
 
 extension BudgetViewController {
     
-    // Load json file that contains default categories data
-    func loadDefaultData() {
-        // Create filepath
-        var filepath:String = NSBundle.mainBundle().pathForResource("defaults", ofType: "json")!
-        
-        // Create optional for NSError
-        var error:NSError?
-        
-        // Retrieve Data
-        var JSONData = NSData(contentsOfFile: filepath, options: NSDataReadingOptions.DataReadingMapped, error: &error)
-        // Create another error optional
-        var jsonerror:NSError?
-        // We don't know the type of object we'll receive back so use AnyObject
-        let swiftObject:AnyObject = NSJSONSerialization.JSONObjectWithData(JSONData!, options: NSJSONReadingOptions.AllowFragments, error:&jsonerror)!
-        // JSONObjectWithData returns AnyObject so the first thing to do is to downcast this to a known type
-        if let nsDictionaryObject = swiftObject as? NSDictionary {
-            if let swiftDictionary = nsDictionaryObject as Dictionary? {
-                println(swiftDictionary)
-            }
-        }
-        else if let nsArrayObject = swiftObject as? NSArray {
-            if let swiftArray = nsArrayObject as Array? {
-                println(swiftArray)
-            }
-        }
-    }
+//    // Load json file that contains default categories data
+//    func loadDefaultData() {
+//        // Create filepath
+//        var filepath:String = NSBundle.mainBundle().pathForResource("defaults", ofType: "json")!
+//        
+//        // Create optional for NSError
+//        var error:NSError?
+//        
+//        // Retrieve Data
+//        var JSONData = NSData(contentsOfFile: filepath, options: NSDataReadingOptions.DataReadingMapped, error: &error)
+//        // Create another error optional
+//        var jsonerror:NSError?
+//        // We don't know the type of object we'll receive back so use AnyObject
+//        let swiftObject:AnyObject = NSJSONSerialization.JSONObjectWithData(JSONData!, options: NSJSONReadingOptions.AllowFragments, error:&jsonerror)!
+//        // JSONObjectWithData returns AnyObject so the first thing to do is to downcast this to a known type
+//        if let nsDictionaryObject = swiftObject as? NSDictionary {
+//            if let swiftDictionary = nsDictionaryObject as Dictionary? {
+//                println(swiftDictionary)
+//            }
+//        }
+//        else if let nsArrayObject = swiftObject as? NSArray {
+//            if let swiftArray = nsArrayObject as Array? {
+//                println(swiftArray)
+//            }
+//        }
+//    }
 }
