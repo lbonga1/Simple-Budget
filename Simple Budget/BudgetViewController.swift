@@ -18,7 +18,9 @@ class BudgetViewController: UIViewController {
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var doneButton: UIBarButtonItem!
     
-    var testData: NSMutableArray = ["Test", "Test 2"]
+    var testData: NSMutableArray = ["Test"]
+    var currentlyEditingCategory = 0
+    var currentlyEditingSubcategory: NSIndexPath? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,8 @@ class BudgetViewController: UIViewController {
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+
+        println(fetchedResultsController.fetchedObjects)
     }
     
 // MARK: - Core Data Convenience
@@ -39,13 +43,16 @@ class BudgetViewController: UIViewController {
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Category")
-        
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+//        let primarySortDescriptor = NSSortDescriptor(key: "Category.catTitle", ascending: true)
+//        let secondarySortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+//        fetchRequest.sortDescriptors = [primarySortDescriptor, secondarySortDescriptor]
+        let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "Category.catTitle",
             cacheName: nil)
         
         return fetchedResultsController
@@ -61,21 +68,27 @@ class BudgetViewController: UIViewController {
         self.presentViewController(controller, animated: true, completion: nil)
     }
     
-    @IBAction func addItemAction(sender: AnyObject) {
+    @IBAction func addItemAction(sender: UIButton) {
         // Change navigation items
         self.parentViewController!.navigationItem.leftBarButtonItem = cancelButton
         self.parentViewController!.navigationItem.rightBarButtonItem = doneButton
         
+        // Set current category to selected "add item" button's tag
+        currentlyEditingCategory = sender.tag
+        
         self.tableView.beginUpdates()
+        
         // Defines the new cell to be added
         let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell") as! BudgetSubcategoryCell
         
-        // Adds new cell to the array
+        // TODO: ADD ITEM TO CORE DATA?
         self.testData.insertObject(newCell!, atIndex: self.testData.count)
         
         // Inserts new row into the table
-        var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        //currentlyEditingSubcategory = indexPath
         
         self.tableView.reloadData()
         
@@ -87,8 +100,11 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
+        //TODO: REMOVE ITEM FROM CORE DATA?
         self.testData.removeLastObject()
-        var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+
+        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         
         self.tableView.reloadData()
@@ -101,12 +117,35 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
-        var dictionary = [String : String]()
-        dictionary[Subcategory.Keys.Title] = "test"
-        dictionary[Subcategory.Keys.Amount] = "test"
+        // TODO: Change to currently editing indexPath
+//        let indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+//        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
+        
+        // Define the index path of the added Subcategory cell and cast as BudgetSubcategoryCell
+        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
+        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
+        
+//        if fetchedResultsController.fetchedObjects!.count != 0 {
+//            if let sections = fetchedResultsController.sections {
+//                let currentSection: AnyObject = sections[currentlyEditingCategory]
+//                let headerTitle = currentSection.name
+//            
+//                // Init the Category object
+//                let newCategory = Category(subcategory: newSubcategory, catTitle: headerTitle, context: self.sharedContext)
+//            }
+//        } else {
         
         // Init the Subcategory object
-        let subcategory = Subcategory(dictionary: dictionary, context: self.sharedContext)
+        let newSubcategory = Subcategory(subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
+        
+        let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
+        let sectionTitle = sectionHeaderView?.textLabel.text
+        println(sectionHeaderView?.textLabel.text)
+            
+        // Init the Category Object
+        let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
+        //}
         
         // Add subcategory to fetched objects
         fetchedResultsController.performFetch(nil)
@@ -115,43 +154,7 @@ class BudgetViewController: UIViewController {
         dispatch_async(dispatch_get_main_queue()) {
             CoreDataStackManager.sharedInstance().saveContext()
         }
-        
     }
-    
-// MARK: - Additional Methods
-    // Defines intitial categories and subcategories
-//    func defaultCategories() -> [[String: AnyObject]] {
-//        return  [
-//            [
-//                "title": "Savings & Funds",
-//                "subcategories": ["Emergency Fund"]
-//            ], [
-//                "title": "Housing",
-//                "subcategories": ["Mortgage", "Electricity", "Natural Gas/Propane"]
-//            ], [
-//                "title": "Transportation",
-//                "subcategories": ["Auto Gas & Oil"]
-//            ], [
-//                "title": "Food",
-//                "subcategories": ["Groceries", "Restaurants"]
-//            ], [
-//                "title": "Lifestyle",
-//                "subcategories": ["Entertainment", "Clothing"]
-//            ], [
-//                "title": "Insurance & Tax",
-//                "subcategories": ["Health Insurance", "Life Insurance", "Auto Insurance"]
-//            ]
-//        ]
-//    }
-    
-//    func displaySavedCategories() {
-//        if let categories = fetchedResultsController.fetchedObjects as? [Categories] {
-//            for category in categories {
-//                
-//            }
-//        }
-//    }
-    
 }
 
 // MARK: - Table view data source and delegate
@@ -160,42 +163,106 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        if fetchedResultsController.fetchedObjects != nil {
+        if fetchedResultsController.fetchedObjects!.count != 0 {
             return fetchedResultsController.fetchedObjects!.count
-        } else {
-            return 1
         }
+        return 1
     }
 
     // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return testData.count
+        if fetchedResultsController.fetchedObjects!.count != 0 {
+            if let sections = fetchedResultsController.sections {
+                let currentSection: AnyObject = sections[section]
+                return currentSection.numberOfObjects
+            }
+        }
+        return self.testData.count
     }
 
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
-        let category = fetchedResultsController.fetchedObjects as? [Category]
         
-        cell.subcategoryTitle.text = category?[indexPath.row] as! String
-        cell.amountTextField.text = "$0.00"
+        // Set title and amount values
+        if fetchedResultsController.fetchedObjects!.count != 0 {
+            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+            cell.subcategoryTitle.text = subcategory.subTitle
+            cell.amountTextField.text = subcategory.totalAmount
+        } else {
+            cell.subcategoryTitle.text = "New Subcategory"
+            cell.amountTextField.text = "$0.00"
+        }
 
         return cell
      }
+    
+    func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
+        if let headerView: CustomHeaderView = view as? CustomHeaderView {
+            headerView.configureTextLabel()
+        }
+    }
         
     // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
+        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
         
-        headerCell.titleLabel.text = "Test title"
-        headerCell.backgroundColor = UIColor.whiteColor()
-        
-        return headerCell
-        
+//        // Customize background color
+//        headerView.contentView.backgroundColor = UIColor.whiteColor()
+
+        if (headerView == nil) {
+            // Here we get to customize the section, pass in background color, text
+            // color, line separator color, etc.
+            let textColor = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0)
+            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: textColor)
+        }
+        // Set title label text
+        if fetchedResultsController.fetchedObjects!.count != 0 {
+            if let sections = fetchedResultsController.sections {
+                let currentSection: AnyObject = sections[section]
+                headerView?.textLabel.text = currentSection.name
+            }
+        } else {
+            headerView!.textLabel.text = "New Category"
         }
         
+        return headerView!
+    
+
+        
+        
+//        // Create header view
+//        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+//        headerView.contentView.backgroundColor = UIColor.whiteColor()
+//        
+//        // Create title label
+//        var titleLabel = UILabel(frame: CGRectMake(0, 0, 200, 27))
+//        titleLabel.textColor = UIColor.darkGrayColor()
+//        titleLabel.font = UIFont(name: "Avenir-Book", size: 17.0)
+//        titleLabel.textAlignment = NSTextAlignment.Left
+//        
+//        if let sections = fetchedResultsController.sections {
+//            let currentSection: AnyObject = sections[section]
+//            titleLabel.text = currentSection.name
+//        }
+//
+//        // Create "Planned" label
+//        var plannedLabel = UILabel(frame: CGRectMake(0, 0, 80, 27))
+//        plannedLabel.text = "Planned"
+//        plannedLabel.textColor = UIColor.lightGrayColor()
+//        plannedLabel.font = UIFont(name: "Avenir-Book", size: 17.0)
+//        plannedLabel.textAlignment = NSTextAlignment.Right
+//        
+//        // Add labels to header view
+//        headerView.contentView.addSubview(titleLabel)
+//        headerView.contentView.addSubview(plannedLabel)
+//    
+//        return headerView
+        
+        //return headerView
+    }
+    
+    // Header view height
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
@@ -205,12 +272,25 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
         
+        // Customize background color and button title
         footerCell.addItemButton.setTitle("+ Add Item", forState: .Normal)
         footerCell.backgroundColor = UIColor.whiteColor()
+        
+        // Get index path of "add item" button
+        let pointInTable = footerCell.addItemButton.convertPoint(footerCell.addItemButton.bounds.origin, toView: self.tableView)
+        let indexPath = self.tableView.indexPathForRowAtPoint(pointInTable)
+        
+        // Add tag and action to "add item" button
+        if indexPath != nil {
+            let currentSection = indexPath!.section
+            footerCell.addItemButton.tag = currentSection
+            footerCell.addItemButton.addTarget(self, action: Selector("addItemAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        }
             
         return footerCell
     }
-        
+    
+    // Footer cell height
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 32
@@ -242,4 +322,36 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
+}
+
+// MARK: - Additional Methods
+
+extension BudgetViewController {
+    
+//    // Load json file that contains default categories data
+//    func loadDefaultData() {
+//        // Create filepath
+//        var filepath:String = NSBundle.mainBundle().pathForResource("defaults", ofType: "json")!
+//        
+//        // Create optional for NSError
+//        var error:NSError?
+//        
+//        // Retrieve Data
+//        var JSONData = NSData(contentsOfFile: filepath, options: NSDataReadingOptions.DataReadingMapped, error: &error)
+//        // Create another error optional
+//        var jsonerror:NSError?
+//        // We don't know the type of object we'll receive back so use AnyObject
+//        let swiftObject:AnyObject = NSJSONSerialization.JSONObjectWithData(JSONData!, options: NSJSONReadingOptions.AllowFragments, error:&jsonerror)!
+//        // JSONObjectWithData returns AnyObject so the first thing to do is to downcast this to a known type
+//        if let nsDictionaryObject = swiftObject as? NSDictionary {
+//            if let swiftDictionary = nsDictionaryObject as Dictionary? {
+//                println(swiftDictionary)
+//            }
+//        }
+//        else if let nsArrayObject = swiftObject as? NSArray {
+//            if let swiftArray = nsArrayObject as Array? {
+//                println(swiftArray)
+//            }
+//        }
+//    }
 }

@@ -11,7 +11,7 @@
 		1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3D81BCB616500A38E45 /* Subcategory.swift */; };
 		1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DA1BCB617000A38E45 /* Transaction.swift */; };
 		1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */; };
-		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderCell.swift */; };
+		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */; };
 		1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */; };
 		1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */; };
 		1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */; };
@@ -46,7 +46,7 @@
 		1A19A3D81BCB616500A38E45 /* Subcategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subcategory.swift; sourceTree = "<group>"; };
 		1A19A3DA1BCB617000A38E45 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTransTableViewController.swift; path = ../NewTransTableViewController.swift; sourceTree = "<group>"; };
-		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderCell.swift; sourceTree = "<group>"; };
+		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatChooserTableViewController.swift; sourceTree = "<group>"; };
 		1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFooterCell.swift; sourceTree = "<group>"; };
 		1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetSubcategoryCell.swift; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 			children = (
 				1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */,
 				1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */,
-				1A42D4CE1BD45B7A00F85A1D /* CustomHeaderCell.swift */,
+				1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */,
 				1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */,
 			);
 			name = "Custom Cells";
@@ -316,7 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A42D4CF1BD45B7A00F85A1D /* CustomHeaderCell.swift in Sources */,
+				1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */,
 				1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Category.swift in Sources */,
 				1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */,
