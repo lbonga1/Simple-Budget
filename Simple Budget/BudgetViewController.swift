@@ -27,10 +27,6 @@ class BudgetViewController: UIViewController {
         
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
-    
-//        self.tableView.registerClass(CustomHeaderView.self, forHeaderFooterViewReuseIdentifier: headerViewReuseIdentifier)
-//        var nib = UINib(nibName: "CustomHeaderCell", bundle: nil)
-//        tableView.registerNib(nib, forCellReuseIdentifier: "HeaderCell")
         
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
@@ -47,16 +43,16 @@ class BudgetViewController: UIViewController {
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Category")
-//        let primarySortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
-//        let secondarySortDescriptor = NSSortDescriptor(key: "subcategory", ascending: true)
+        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+//        let primarySortDescriptor = NSSortDescriptor(key: "Category.catTitle", ascending: true)
+//        let secondarySortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
 //        fetchRequest.sortDescriptors = [primarySortDescriptor, secondarySortDescriptor]
-        let sortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
-            sectionNameKeyPath: "catTitle",
+            sectionNameKeyPath: "Category.catTitle",
             cacheName: nil)
         
         return fetchedResultsController
@@ -130,24 +126,26 @@ class BudgetViewController: UIViewController {
         let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
         
+//        if fetchedResultsController.fetchedObjects!.count != 0 {
+//            if let sections = fetchedResultsController.sections {
+//                let currentSection: AnyObject = sections[currentlyEditingCategory]
+//                let headerTitle = currentSection.name
+//            
+//                // Init the Category object
+//                let newCategory = Category(subcategory: newSubcategory, catTitle: headerTitle, context: self.sharedContext)
+//            }
+//        } else {
+        
         // Init the Subcategory object
         let newSubcategory = Subcategory(subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
         
-        if fetchedResultsController.fetchedObjects!.count != 0 {
-            if let sections = fetchedResultsController.sections {
-                let currentSection: AnyObject = sections[currentlyEditingCategory]
-                let headerTitle = currentSection.name
+        let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
+        let sectionTitle = sectionHeaderView?.textLabel.text
+        println(sectionHeaderView?.textLabel.text)
             
-                // Init the Category object
-                let newCategory = Category(subcategory: newSubcategory, catTitle: headerTitle, context: self.sharedContext)
-            }
-        } else {
-            let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
-            let sectionTitle = sectionHeaderView?.textLabel.text
-            
-            // Init the Category Object
-            let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
-        }
+        // Init the Category Object
+        let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
+        //}
         
         // Add subcategory to fetched objects
         fetchedResultsController.performFetch(nil)
@@ -215,7 +213,8 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         if (headerView == nil) {
             // Here we get to customize the section, pass in background color, text
             // color, line separator color, etc.
-            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: UIColor.greenColor())
+            let textColor = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0)
+            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: textColor)
         }
         // Set title label text
         if fetchedResultsController.fetchedObjects!.count != 0 {

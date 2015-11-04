@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F1021" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Category" representedClassName="Categories" syncable="YES">
+    <entity name="Category" representedClassName="Category" syncable="YES">
         <attribute name="catTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="subcategory" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="category" inverseEntity="Subcategory" syncable="YES"/>
     </entity>
@@ -10,7 +10,7 @@
         <relationship name="category" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="subcategory" inverseEntity="Category" syncable="YES"/>
         <relationship name="transaction" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Transaction" inverseName="subcategory" inverseEntity="Transaction" syncable="YES"/>
     </entity>
-    <entity name="Transaction" representedClassName="Transactions" syncable="YES">
+    <entity name="Transaction" representedClassName="Transaction" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="merchant" optional="YES" attributeType="String" syncable="YES"/>

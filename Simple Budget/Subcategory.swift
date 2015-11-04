@@ -15,6 +15,7 @@ import CoreData
 class Subcategory: NSManagedObject {
     
     // Promote from simple properties to Core Data attributes
+    //@NSManaged var category: Category
     @NSManaged var subTitle: String
     @NSManaged var totalAmount: String
     @NSManaged var transactions: NSSet
