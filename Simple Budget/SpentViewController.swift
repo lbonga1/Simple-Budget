@@ -61,9 +61,9 @@ extension SpentViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
+        let headerCell = tableView.dequeueReusableHeaderFooterViewWithIdentifier("HeaderView") as! CustomHeaderView
         
-        headerCell.titleLabel.text = "Test title"
+        //headerCell.titleTextField.text = "Test title"
         headerCell.backgroundColor = UIColor.clearColor()
         
         return headerCell

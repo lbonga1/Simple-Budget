@@ -28,7 +28,7 @@ class BudgetViewController: UIViewController {
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
     
-        //tableView.registerClass(CustomHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
+//        self.tableView.registerClass(CustomHeaderView.self, forHeaderFooterViewReuseIdentifier: headerViewReuseIdentifier)
 //        var nib = UINib(nibName: "CustomHeaderCell", bundle: nil)
 //        tableView.registerNib(nib, forCellReuseIdentifier: "HeaderCell")
         
@@ -85,13 +85,14 @@ class BudgetViewController: UIViewController {
         // Defines the new cell to be added
         let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell") as! BudgetSubcategoryCell
         
-        // TODO: ADD ITEM TO DATA?
+        // TODO: ADD ITEM TO CORE DATA?
         self.testData.insertObject(newCell!, atIndex: self.testData.count)
         
         // Inserts new row into the table
-        var indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        currentlyEditingSubcategory = indexPath
+        //currentlyEditingSubcategory = indexPath
         
         self.tableView.reloadData()
         
@@ -106,7 +107,8 @@ class BudgetViewController: UIViewController {
         //TODO: REMOVE ITEM FROM CORE DATA?
         self.testData.removeLastObject()
 
-        var indexPath: NSIndexPath = currentlyEditingSubcategory!
+        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         
         self.tableView.reloadData()
@@ -120,7 +122,12 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
         // TODO: Change to currently editing indexPath
-        let indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+//        let indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
+//        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
+        
+        // Define the index path of the added Subcategory cell and cast as BudgetSubcategoryCell
+        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
         
         // Init the Subcategory object
@@ -137,7 +144,6 @@ class BudgetViewController: UIViewController {
         } else {
             let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
             let sectionTitle = sectionHeaderView?.textLabel.text
-            println(sectionTitle)
             
             // Init the Category Object
             let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
@@ -192,23 +198,38 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 
         return cell
      }
+    
+    func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
+        if let headerView: CustomHeaderView = view as? CustomHeaderView {
+            headerView.configureTextLabel()
+        }
+    }
         
     // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let  headerCell = tableView.dequeueReusableCellWithIdentifier("HeaderCell") as! CustomHeaderCell
+        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
         
-        // Customize background color
-        headerCell.backgroundColor = UIColor.whiteColor()
-        
+//        // Customize background color
+//        headerView.contentView.backgroundColor = UIColor.whiteColor()
+
+        if (headerView == nil) {
+            // Here we get to customize the section, pass in background color, text
+            // color, line separator color, etc.
+            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: UIColor.greenColor())
+        }
         // Set title label text
         if fetchedResultsController.fetchedObjects!.count != 0 {
             if let sections = fetchedResultsController.sections {
                 let currentSection: AnyObject = sections[section]
-                headerCell.titleLabel.text = currentSection.name
+                headerView?.textLabel.text = currentSection.name
             }
         } else {
-            headerCell.titleLabel.text = "New Category"
+            headerView!.textLabel.text = "New Category"
         }
+        
+        return headerView!
+    
+
         
         
 //        // Create header view
@@ -239,7 +260,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
 //    
 //        return headerView
         
-        return headerCell
+        //return headerView
     }
     
     // Header view height
