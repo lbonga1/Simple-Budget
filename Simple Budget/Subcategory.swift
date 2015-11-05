@@ -25,12 +25,13 @@ class Subcategory: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(subTitle: String, totalAmount: String, context: NSManagedObjectContext) {
+    init(category: Category, subTitle: String, totalAmount: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Subcategory" type.
         let entity =  NSEntityDescription.entityForName("Subcategory", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
         // Init properties
+        self.category = category
         self.subTitle = subTitle
         self.totalAmount = totalAmount
     }

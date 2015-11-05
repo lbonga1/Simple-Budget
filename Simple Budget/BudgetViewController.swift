@@ -45,9 +45,6 @@ class BudgetViewController: UIViewController {
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
-//        let primarySortDescriptor = NSSortDescriptor(key: "Category.catTitle", ascending: true)
-//        let secondarySortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
-//        fetchRequest.sortDescriptors = [primarySortDescriptor, secondarySortDescriptor]
         let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -124,15 +121,15 @@ class BudgetViewController: UIViewController {
         let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
         
-        // Init the Subcategory object
-        let newSubcategory = Subcategory(subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
-        
         let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
         let sectionTitle = sectionHeaderView?.textLabel.text
         println(sectionHeaderView?.textLabel.text)
             
         // Init the Category Object
-        let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
+        let newCategory = Category(catTitle: sectionTitle!, context: self.sharedContext)
+        
+        // Init the Subcategory object
+        let newSubcategory = Subcategory(category: newCategory, subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
         
         // Add subcategory to fetched objects
         fetchedResultsController.performFetch(nil)

@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 
 public class DataHelper {
+    var error: NSError?
+    
     let context: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
@@ -37,10 +39,11 @@ public class DataHelper {
             newCategory.catTitle = category.catTitle
             //newCategory.totalAmount = category.totalAmount
         }
+        
+        context.save(&error)
     }
     
     private func seedSubcategories() {
-        var error: NSError?
         
         let categoryFetchRequest = NSFetchRequest(entityName: "Category")
         let allCategories = (context.executeFetchRequest(categoryFetchRequest, error: &error)) as! [Category]
@@ -96,6 +99,8 @@ public class DataHelper {
             newSubcategory.subTitle = subcategory.subTitle
             newSubcategory.category = subcategory.category
         }
+        
+        context.save(&error)
     }
 
 }

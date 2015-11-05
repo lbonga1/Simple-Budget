@@ -28,13 +28,12 @@ class Category: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(subcategory: Subcategory, catTitle: String, context: NSManagedObjectContext) {
+    init(catTitle: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Categories" type.
         let entity =  NSEntityDescription.entityForName("Category", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
         // Init properties
-        //self.subcategory = subcategory
         self.catTitle = catTitle
     }
 }

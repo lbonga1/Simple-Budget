@@ -13,4 +13,6 @@ class BudgetSubcategoryCell: UITableViewCell {
     @IBOutlet weak var subcategoryTitle: UITextField!
     @IBOutlet weak var amountTextField: UILabel!
     
+    
+    
 }
