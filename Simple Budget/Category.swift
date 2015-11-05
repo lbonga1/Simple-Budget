@@ -20,8 +20,9 @@ class Category: NSManagedObject {
     
     // Promote from simple properties to Core Data attributes
     @NSManaged var catTitle: String
-    @NSManaged var subcategory: Subcategory
-
+   // @NSManaged var subcategory: Subcategory
+    @NSManaged var subcategory: NSSet
+    
     // Core Data init method
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -33,7 +34,7 @@ class Category: NSManagedObject {
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
         // Init properties
-        self.subcategory = subcategory
+        //self.subcategory = subcategory
         self.catTitle = catTitle
     }
 }

@@ -17,6 +17,7 @@
 		1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */; };
 		1AC059731BDAE27C0075302E /* SpenRemSubcatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */; };
 		1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059741BDAE86E0075302E /* CoreDataStackManager.swift */; };
+		1AD04ADE1BEADB5F008F1A05 /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD04ADD1BEADB5F008F1A05 /* DataHelper.swift */; };
 		1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */; };
 		1AF10AE91BCB18F400F493D0 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE71BCB18F400F493D0 /* Model.xcdatamodeld */; };
 		1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */; };
@@ -52,6 +53,7 @@
 		1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetSubcategoryCell.swift; sourceTree = "<group>"; };
 		1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpenRemSubcatCell.swift; path = ../SpenRemSubcatCell.swift; sourceTree = "<group>"; };
 		1AC059741BDAE86E0075302E /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
+		1AD04ADD1BEADB5F008F1A05 /* DataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
 		1AF10AE01BCB18F400F493D0 /* Simple Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Budget.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF10AE41BCB18F400F493D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			children = (
 				1AA59F571BD4A05700704B98 /* Custom Cells */,
 				1AFF3DC61BD9F1B9006B571F /* View Controllers */,
+				1AD04ADD1BEADB5F008F1A05 /* DataHelper.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 			files = (
 				1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */,
 				1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */,
+				1AD04ADE1BEADB5F008F1A05 /* DataHelper.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Category.swift in Sources */,
 				1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */,
 				1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */,
