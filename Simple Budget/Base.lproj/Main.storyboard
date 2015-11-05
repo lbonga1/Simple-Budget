@@ -826,7 +826,7 @@
         <scene sceneID="rKB-lm-F1G">
             <objects>
                 <tableViewController storyboardIdentifier="CategoryChooser" title="Category Chooser" id="jfs-j6-441" customClass="CatChooserTableViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nGu-T4-TUl">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nGu-T4-TUl">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -981,8 +981,17 @@
                             <outlet property="delegate" destination="jfs-j6-441" id="DDg-a9-qYi"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="doneButton" destination="X9X-RK-u7B" id="uTJ-Id-pVp"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="whF-YD-KYl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem style="done" systemItem="done" id="X9X-RK-u7B">
+                    <connections>
+                        <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
+                        <segue destination="39i-zt-kcm" kind="show" identifier="returnToNewTrans" id="ztA-IJ-RxN"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1057.5" y="1300.5"/>
         </scene>
@@ -1278,7 +1287,8 @@
                                                             <exclude reference="URj-oE-wHi"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="237" y="8" width="75" height="27"/>
                                                         <mask key="constraints">
                                                             <include reference="URj-oE-wHi"/>
                                                         </mask>
@@ -1569,4 +1579,7 @@
             <point key="canvasLocation" x="1057.5" y="615.75"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="ztA-IJ-RxN"/>
+    </inferredMetricsTieBreakers>
 </document>

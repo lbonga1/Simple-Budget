@@ -21,6 +21,7 @@ class BudgetViewController: UIViewController {
     var testData: NSMutableArray = ["Test"]
     var currentlyEditingCategory = 0
     var currentlyEditingSubcategory: NSIndexPath? = nil
+    var subcatToDelete: Subcategory?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +78,7 @@ class BudgetViewController: UIViewController {
         currentlyEditingCategory = sender.tag
         
         self.tableView.beginUpdates()
+    
         
         // Defines the new cell to be added
         let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell") as! BudgetSubcategoryCell
@@ -117,24 +119,10 @@ class BudgetViewController: UIViewController {
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = nil
         
-        // TODO: Change to currently editing indexPath
-//        let indexPath = NSIndexPath(forRow: self.testData.count - 1, inSection: 0)
-//        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
-        
         // Define the index path of the added Subcategory cell and cast as BudgetSubcategoryCell
         let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
         let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BudgetSubcategoryCell
-        
-//        if fetchedResultsController.fetchedObjects!.count != 0 {
-//            if let sections = fetchedResultsController.sections {
-//                let currentSection: AnyObject = sections[currentlyEditingCategory]
-//                let headerTitle = currentSection.name
-//            
-//                // Init the Category object
-//                let newCategory = Category(subcategory: newSubcategory, catTitle: headerTitle, context: self.sharedContext)
-//            }
-//        } else {
         
         // Init the Subcategory object
         let newSubcategory = Subcategory(subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
@@ -145,7 +133,6 @@ class BudgetViewController: UIViewController {
             
         // Init the Category Object
         let newCategory = Category(subcategory: newSubcategory, catTitle: sectionTitle!, context: self.sharedContext)
-        //}
         
         // Add subcategory to fetched objects
         fetchedResultsController.performFetch(nil)
@@ -206,13 +193,9 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
     // Defines the custom header cells.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
-        
-//        // Customize background color
-//        headerView.contentView.backgroundColor = UIColor.whiteColor()
 
         if (headerView == nil) {
-            // Here we get to customize the section, pass in background color, text
-            // color, line separator color, etc.
+            // Customize background color and text color
             let textColor = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0)
             headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: textColor)
         }
@@ -296,39 +279,91 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         return 32
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    // Editing the table view.
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+            
+    
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 }
 
 // MARK: - Fetched Results Controller Delegate
 
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(
+        controller: NSFetchedResultsController,
+        didChangeObject anObject: AnyObject,
+        atIndexPath indexPath: NSIndexPath?,
+        forChangeType type: NSFetchedResultsChangeType,
+        newIndexPath: NSIndexPath?) {
+            
+            switch type {
+            case NSFetchedResultsChangeType.Insert:
+                if let insertIndexPath = newIndexPath {
+                    self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+            case NSFetchedResultsChangeType.Delete:
+                if let deleteIndexPath = indexPath {
+                    self.tableView.deleteRowsAtIndexPaths([deleteIndexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+            case NSFetchedResultsChangeType.Update:
+                if let updateIndexPath = indexPath {
+                    let cell = self.tableView.cellForRowAtIndexPath(updateIndexPath) as! BudgetSubcategoryCell
+                    let subcategory = self.fetchedResultsController.objectAtIndexPath(updateIndexPath) as? Subcategory
+                    
+                    cell.subcategoryTitle.text = subcategory?.subTitle
+                }
+            case NSFetchedResultsChangeType.Move:
+                if let deleteIndexPath = indexPath {
+                    self.tableView.deleteRowsAtIndexPaths([deleteIndexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+                
+                if let insertIndexPath = newIndexPath {
+                    self.tableView.insertRowsAtIndexPaths([insertIndexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+            }
+    }
+    
+//    func controller(
+//        controller: NSFetchedResultsController,
+//        didChangeSection sectionInfo: NSFetchedResultsSectionInfo,
+//        atIndex sectionIndex: Int,
+//        forChangeType type: NSFetchedResultsChangeType) {
+//            
+//            switch type {
+//            case .Insert:
+//                let sectionIndexSet = NSIndexSet(index: sectionIndex)
+//                self.tableView.insertSections(sectionIndexSet, withRowAnimation: UITableViewRowAnimation.Fade)
+//            case .Delete:
+//                let sectionIndexSet = NSIndexSet(index: sectionIndex)
+//                self.tableView.deleteSections(sectionIndexSet, withRowAnimation: UITableViewRowAnimation.Fade)
+//            default:
+//                ""
+//            }
+//    }
+
 }
 
 // MARK: - Additional Methods
 
 extension BudgetViewController {
     
-//    // Load json file that contains default categories data
+    func deleteSubcategory() {
+        if let objectToDelete = self.subcatToDelete {
+            self.sharedContext.deleteObject(objectToDelete)
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
+    }
+    //    // Load json file that contains default categories data
 //    func loadDefaultData() {
 //        // Create filepath
 //        var filepath:String = NSBundle.mainBundle().pathForResource("defaults", ofType: "json")!

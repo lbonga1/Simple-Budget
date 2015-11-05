@@ -11,11 +11,13 @@ import UIKit
 class NewTransTableViewController: UITableViewController {
 
 // MARK: - Outlets
-
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var doneButton: UIBarButtonItem!
+    
+// MARK: - Variables
+    var selectedSubcategory: Subcategory!
     
     override func viewDidLoad() {
         super.viewDidLoad()
