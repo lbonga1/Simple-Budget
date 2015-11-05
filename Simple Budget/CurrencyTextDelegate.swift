@@ -43,5 +43,4 @@ class CurrencyTextDelegate: NSObject, UITextFieldDelegate {
         
         return true;
     }
-
 }

@@ -15,6 +15,7 @@ class SpentViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var addButton: UIBarButtonItem!
+    @IBOutlet weak var savedLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,15 @@ class SpentViewController: UIViewController {
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        // Saved categories label is hidden if there are categories to display.
+        if fetchedResultsController.fetchedObjects!.count == 0{
+            savedLabel.hidden = false
+        } else {
+            savedLabel.hidden = true
+        }
     }
     
 // MARK: - Core Data Convenience
