@@ -187,7 +187,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
         
-    // Defines the custom header cells.
+    // Defines the custom header view.
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
 

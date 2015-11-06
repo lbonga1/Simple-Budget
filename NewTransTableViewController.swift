@@ -48,6 +48,13 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         setCurrentDate()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        // Set categoryLabel to subcategory title if a subcategory has been selected.
+        if selectedSubcategory != nil {
+            categoryLabel.text = selectedSubcategory.subTitle
+        }
+    }
+    
 // MARK: - Core Data Convenience
     
     // Shared context
@@ -58,8 +65,10 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
     
     // Presents CatChooserTableViewController to make a category selection
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let categoryChooser = self.storyboard!.instantiateViewControllerWithIdentifier("CategoryChooser") as! CatChooserTableViewController
-        self.navigationController!.pushViewController(categoryChooser, animated: true)
+        let storyboard = self.storyboard
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CategoryChooser") as! UINavigationController
+        
+        self.presentViewController(controller, animated: true, completion: nil)
     }
     
     // Make only "Choose Budget Category" row selectable

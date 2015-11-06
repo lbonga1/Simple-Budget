@@ -13,8 +13,10 @@ class CatChooserTableViewController: UITableViewController {
 
 // MARK: - Outlets
     @IBOutlet var doneButton: UIBarButtonItem!
+    @IBOutlet var cancelButton: UIBarButtonItem!
     
 // MARK: - Variables
+    var selectedCategory: Category?
     var selectedSubcategory: Subcategory?
     
     override func viewDidLoad() {
@@ -27,8 +29,9 @@ class CatChooserTableViewController: UITableViewController {
         // Tableview is automatically in editing mode.
         self.tableView.setEditing(true, animated: false)
         
-        // Sets the done button on the right side of the navigation toolbar.
+        // Sets up navigation bar items
         self.parentViewController!.navigationItem.rightBarButtonItem = doneButton
+        self.parentViewController!.navigationItem.leftBarButtonItem = cancelButton
     }
 
 // MARK: - Core Data Convenience
@@ -53,10 +56,15 @@ class CatChooserTableViewController: UITableViewController {
     
 // MARK: - Actions
     
+    // Dismiss view controller to cancel selection
+    @IBAction func cancelAction(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // Segue back to NewTransTableViewController with selectedSubcategory data
     @IBAction func doneSelecting(sender: AnyObject) {
         performSegueWithIdentifier("returnToNewTrans", sender: self)
     }
-    
     
 // MARK: - Table view data source
 
@@ -76,14 +84,19 @@ class CatChooserTableViewController: UITableViewController {
         }
         return 0
     }
+    
+// MARK: - Table view delegate
 
+    // Defines subcategory cells.
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! SpenRemSubcatCell
         
         // Set title and amount values
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         cell.subcategoryTitle.text = subcategory.subTitle
-        cell.amountTextField.text = ""
+        
+    // TODO: Change to remaining amount (budgeted - transactions)
+        cell.amountLabel.text = ""
 
         return cell
     }
@@ -94,7 +107,7 @@ class CatChooserTableViewController: UITableViewController {
         }
     }
     
-    // Defines the custom header cells.
+    // Defines the custom header view.
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
         
@@ -111,7 +124,32 @@ class CatChooserTableViewController: UITableViewController {
         
         return headerView!
     }
-
+    
+    // Inits Category and Subcategory objects when a row is selected
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        // Get index path
+        let indexPath = tableView.indexPathForSelectedRow()
+        
+        if indexPath != nil {
+            // Define selected cell
+            let selectedCell = tableView.cellForRowAtIndexPath(indexPath!) as! SpenRemSubcatCell
+            
+            // Define sectionHeaderView and title
+            let sectionHeaderView = tableView.headerViewForSection(indexPath!.section)
+            let sectionTitle = sectionHeaderView?.textLabel.text
+            
+            // Init Category object
+            selectedCategory = Category(catTitle: sectionTitle!, context: self.sharedContext)
+            
+            // Init Subcategory object
+            selectedSubcategory = Subcategory(
+                category: selectedCategory!,
+                subTitle: selectedCell.subcategoryTitle.text,
+                totalAmount: selectedCell.amountLabel.text!,
+                context: self.sharedContext
+            )
+        }
+    }
 }
 
 // MARK: - Fetched Results Controller Delegate
@@ -125,6 +163,7 @@ extension CatChooserTableViewController: NSFetchedResultsControllerDelegate {
 
 extension CatChooserTableViewController {
     
+    // Carry selectedSubcategory object data back to NewTransTableViewController
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "returnToNewTrans" {
             let newTrans = segue.destinationViewController as!

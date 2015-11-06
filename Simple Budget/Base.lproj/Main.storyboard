@@ -1006,6 +1006,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="cancelButton" destination="5mH-8e-Gcl" id="imy-QO-g9G"/>
                         <outlet property="doneButton" destination="X9X-RK-u7B" id="uTJ-Id-pVp"/>
                     </connections>
                 </tableViewController>
@@ -1014,6 +1015,11 @@
                     <connections>
                         <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
                         <segue destination="39i-zt-kcm" kind="show" identifier="returnToNewTrans" id="ztA-IJ-RxN"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem systemItem="cancel" id="5mH-8e-Gcl">
+                    <connections>
+                        <action selector="cancelAction:" destination="jfs-j6-441" id="jat-Wk-mI8"/>
                     </connections>
                 </barButtonItem>
             </objects>

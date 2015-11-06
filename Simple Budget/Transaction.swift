@@ -15,7 +15,6 @@ import CoreData
 class Transaction: NSManagedObject {
     
     // Promote from simple properties to Core Data attributes
-    //@NSManaged var category: Category
     @NSManaged var subcategory: Subcategory
     @NSManaged var date: NSDate
     @NSManaged var title: String
