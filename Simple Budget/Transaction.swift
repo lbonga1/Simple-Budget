@@ -14,19 +14,12 @@ import CoreData
 
 class Transaction: NSManagedObject {
     
-    struct Keys {
-        static let Date = "date"
-        static let Title = "title"
-        static let Amount = "amount"
-        static let Notes = "notes"
-    }
-    
     // Promote from simple properties to Core Data attributes
-    @NSManaged var category: Category
+    //@NSManaged var category: Category
     @NSManaged var subcategory: Subcategory
     @NSManaged var date: NSDate
     @NSManaged var title: String
-    @NSManaged var amount: Double
+    @NSManaged var amount: String
     @NSManaged var notes: String
     
     // Core Data init method
@@ -34,15 +27,16 @@ class Transaction: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(dictionary: [String: AnyObject], context: NSManagedObjectContext) {
+    init(subcategory: Subcategory, date: NSDate, title: String, amount: String, notes: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Transactions" type.
         let entity =  NSEntityDescription.entityForName("Transaction", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
-        // Init dictionary properties
-        date = dictionary[Transaction.Keys.Date] as! NSDate
-        title = dictionary[Transaction.Keys.Title] as! String
-        amount = dictionary[Transaction.Keys.Amount] as! Double
-        notes = dictionary[Transaction.Keys.Notes] as! String
+        // Init properties
+        self.subcategory = subcategory
+        self.date = date
+        self.title = title
+        self.amount = amount
+        self.notes = notes
     }
 }

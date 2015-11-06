@@ -800,10 +800,15 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="vmT-5m-y1A"/>
                     <connections>
+                        <outlet property="addButton" destination="CKs-Ai-0Zt" id="TZI-WU-s26"/>
+                        <outlet property="amountTextField" destination="knV-Xv-IFc" id="GTi-Zy-sbU"/>
                         <outlet property="cancelButton" destination="y7d-vy-txF" id="l7H-rf-gBc"/>
+                        <outlet property="categoryLabel" destination="T6G-pD-UKr" id="kSc-tN-mhY"/>
                         <outlet property="dateButton" destination="AyP-7U-a3v" id="dVI-kO-eNH"/>
                         <outlet property="datePicker" destination="ixb-KL-r58" id="zxn-2s-iMN"/>
                         <outlet property="doneButton" destination="NuA-gQ-5Ht" id="9RF-jV-5Eu"/>
+                        <outlet property="merchantTextField" destination="K1B-ev-mwg" id="TTe-fI-Fe6"/>
+                        <outlet property="notesTextView" destination="sY1-s5-sNA" id="5D8-Fk-mvU"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A5a-MW-Wbz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -812,7 +817,16 @@
                         <action selector="cancelAction:" destination="39i-zt-kcm" id="ugU-ku-vzw"/>
                     </connections>
                 </barButtonItem>
-                <barButtonItem systemItem="done" id="NuA-gQ-5Ht"/>
+                <barButtonItem systemItem="done" id="NuA-gQ-5Ht">
+                    <connections>
+                        <action selector="doneAction:" destination="39i-zt-kcm" id="E4M-9i-o0W"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem title="Add" id="CKs-Ai-0Zt">
+                    <connections>
+                        <action selector="addAction:" destination="39i-zt-kcm" id="HtY-v9-xnp"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="376.5" y="1300.5"/>
         </scene>
