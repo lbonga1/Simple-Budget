@@ -45,12 +45,12 @@ class BudgetViewController: UIViewController {
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
-        let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
-            sectionNameKeyPath: "Category.catTitle",
+            sectionNameKeyPath: "category.catTitle",
             cacheName: nil)
         
         return fetchedResultsController
@@ -80,7 +80,7 @@ class BudgetViewController: UIViewController {
         // Defines the new cell to be added
         let newCell: AnyObject? = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell") as! BudgetSubcategoryCell
         
-        // TODO: ADD ITEM TO CORE DATA?
+    // TODO: ADD ITEM TO CORE DATA?
         self.testData.insertObject(newCell!, atIndex: self.testData.count)
         
         // Inserts new row into the table
@@ -161,7 +161,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
                 return currentSection.numberOfObjects
             }
         }
-        return self.testData.count
+        return 1
     }
 
     // Defines the budget item cells.
@@ -181,6 +181,7 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
      }
     
+    // Customize header text label before view is displayed
     func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
         if let headerView: CustomHeaderView = view as? CustomHeaderView {
             headerView.configureTextLabel()

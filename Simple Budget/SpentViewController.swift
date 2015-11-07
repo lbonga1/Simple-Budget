@@ -46,12 +46,12 @@ class SpentViewController: UIViewController {
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
-        let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
-            sectionNameKeyPath: "Category.catTitle",
+            sectionNameKeyPath: "category.catTitle",
             cacheName: nil)
         
         return fetchedResultsController

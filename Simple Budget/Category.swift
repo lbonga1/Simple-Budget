@@ -14,13 +14,8 @@ import CoreData
 
 class Category: NSManagedObject {
     
-//    struct Keys {
-//        static let catTitle = "cattitle"
-//    }
-    
     // Promote from simple properties to Core Data attributes
     @NSManaged var catTitle: String
-   // @NSManaged var subcategory: Subcategory
     @NSManaged var subcategory: NSSet
     
     // Core Data init method

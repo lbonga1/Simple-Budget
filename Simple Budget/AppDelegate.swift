@@ -18,8 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        let dataHelper = DataHelper(context: self.managedObjectContext!)
+        let dataHelper = DataHelper()
         dataHelper.seedDataStore()
+        dataHelper.printAllCategories()
+        dataHelper.printAllSubcategories()
         
         return true
     }

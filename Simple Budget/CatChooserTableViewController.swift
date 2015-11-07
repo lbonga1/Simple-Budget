@@ -44,11 +44,11 @@ class CatChooserTableViewController: UITableViewController {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
         
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "subTitle", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.catTitle", ascending: true)]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
-            sectionNameKeyPath: "Category.catTitle",
+            sectionNameKeyPath: "category.catTitle",
             cacheName: nil)
         
         return fetchedResultsController
@@ -101,6 +101,7 @@ class CatChooserTableViewController: UITableViewController {
         return cell
     }
     
+    // Customize header text label before view is displayed
     override func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
         if let headerView: CustomHeaderView = view as? CustomHeaderView {
             headerView.configureTextLabel()
