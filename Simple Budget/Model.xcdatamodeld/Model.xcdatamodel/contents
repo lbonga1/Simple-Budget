@@ -13,8 +13,8 @@
     <entity name="Transaction" representedClassName="Transaction" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="merchant" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="subcategory" maxCount="1" deletionRule="Nullify" destinationEntity="Subcategory" inverseName="transaction" inverseEntity="Subcategory" syncable="YES"/>
     </entity>
     <elements>

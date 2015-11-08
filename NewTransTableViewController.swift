@@ -65,6 +65,10 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
     
     // Presents CatChooserTableViewController to make a category selection
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        // Deselect row to make it visually reselectable.
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        // Present Category Chooser
         let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CategoryChooser") as! UINavigationController
         self.presentViewController(controller, animated: true, completion: nil)
@@ -115,10 +119,19 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
             dispatch_async(dispatch_get_main_queue()) {
                 CoreDataStackManager.sharedInstance().saveContext()
             }
+            // Dismiss view controller
+            self.dismissViewControllerAnimated(true, completion: nil)
         } else {
             // Display error alert view
             displayAlert()
         }
+    }
+    
+    @IBAction func unwindSegue(unwindSegue: UIStoryboardSegue) {
+        if let newTrans = unwindSegue.sourceViewController as? CatChooserTableViewController {
+            selectedSubcategory = newTrans.selectedSubcategory
+        }
+
     }
 }
 

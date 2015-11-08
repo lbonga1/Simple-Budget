@@ -354,6 +354,7 @@
                         <outlet property="addButton" destination="4VS-tp-1A3" id="EVb-ay-x2P"/>
                         <outlet property="savedLabel" destination="fg2-yR-r7l" id="GtX-ns-XTt"/>
                         <outlet property="tableView" destination="edt-6Y-Jcj" id="fVV-7b-cLp"/>
+                        <segue destination="1Sd-Z0-8hd" kind="show" id="kC7-1v-Wv5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vww-C7-FOt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -859,10 +860,10 @@
         <scene sceneID="rKB-lm-F1G">
             <objects>
                 <tableViewController title="Category Chooser" id="jfs-j6-441" customClass="CatChooserTableViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nGu-T4-TUl">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="nGu-T4-TUl">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HeaderView" id="opE-nv-J1s">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -1018,19 +1019,21 @@
                             <outlet property="delegate" destination="jfs-j6-441" id="DDg-a9-qYi"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="aiw-gm-2c4"/>
+                    <navigationItem key="navigationItem" id="aiw-gm-2c4">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="X9X-RK-u7B">
+                            <connections>
+                                <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
+                                <segue destination="Uxx-rI-Nla" kind="unwind" identifier="returnToNewTrans" unwindAction="unwindSegue:" id="JD6-D3-Zco"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="cancelButton" destination="5mH-8e-Gcl" id="imy-QO-g9G"/>
                         <outlet property="doneButton" destination="X9X-RK-u7B" id="uTJ-Id-pVp"/>
-                        <segue destination="39i-zt-kcm" kind="presentation" identifier="returnToNewTrans" id="MG0-Ys-d5P"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="whF-YD-KYl" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem style="done" systemItem="done" id="X9X-RK-u7B">
-                    <connections>
-                        <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
-                    </connections>
-                </barButtonItem>
+                <exit id="Uxx-rI-Nla" userLabel="Exit" sceneMemberID="exit"/>
                 <barButtonItem systemItem="cancel" id="5mH-8e-Gcl">
                     <connections>
                         <action selector="cancelAction:" destination="jfs-j6-441" id="jat-Wk-mI8"/>
@@ -1296,6 +1299,7 @@
                         <outlet property="addButton" destination="sSS-19-XCi" id="f7W-P3-mwb"/>
                         <outlet property="savedLabel" destination="b0x-cM-YFx" id="xeY-T1-r1K"/>
                         <outlet property="tableView" destination="6NC-sh-a2u" id="Ms0-GE-MvJ"/>
+                        <segue destination="1Sd-Z0-8hd" kind="show" id="DTe-5A-uXi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tiu-9f-LBS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1609,6 +1613,7 @@
                         <outlet property="cancelButton" destination="MBX-sL-HcO" id="Y5C-7c-5Is"/>
                         <outlet property="doneButton" destination="VC6-z4-OMe" id="Egf-90-jff"/>
                         <outlet property="tableView" destination="oOR-eb-WT8" id="Tte-UZ-JNC"/>
+                        <segue destination="1Sd-Z0-8hd" kind="show" id="sdy-wf-NGO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="56V-8X-KpY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1629,6 +1634,59 @@
                 </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1803" y="-46.5"/>
+        </scene>
+        <!--Transactions-->
+        <scene sceneID="5Lk-aQ-6bB">
+            <objects>
+                <viewController storyboardIdentifier="Transactions" title="Transactions" id="1Sd-Z0-8hd" customClass="TransactionsViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nZ7-Nz-J2L"/>
+                        <viewControllerLayoutGuide type="bottom" id="uQD-pG-7U5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="geX-hS-5Ba">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="eIj-sp-RCH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TransactionCell" id="IA9-2P-Q9c">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IA9-2P-Q9c" id="dot-wn-Qhd">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="20" width="400" height="800"/>
+                                </variation>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="eIj-sp-RCH"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="eIj-sp-RCH"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="addButton" destination="JN1-pq-Kw0" id="Z05-eV-KvX"/>
+                        <outlet property="tableView" destination="eIj-sp-RCH" id="hbj-4M-ez6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kOr-U3-5h8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem systemItem="add" id="JN1-pq-Kw0">
+                    <connections>
+                        <action selector="addNewTransaction:" destination="1Sd-Z0-8hd" id="2sx-Cp-qhf"/>
+                    </connections>
+                </barButtonItem>
+            </objects>
+            <point key="canvasLocation" x="2586" y="615.75"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Ewg-CE-dsU">
@@ -1671,6 +1729,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="MG0-Ys-d5P"/>
+        <segue reference="DTe-5A-uXi"/>
     </inferredMetricsTieBreakers>
 </document>

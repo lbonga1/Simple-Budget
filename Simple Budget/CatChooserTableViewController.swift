@@ -177,18 +177,3 @@ extension CatChooserTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
 }
-
-// MARK: Additional methods 
-
-extension CatChooserTableViewController {
-    
-    // Carry selectedSubcategory object data back to NewTransTableViewController
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "returnToNewTrans" {
-            let newTrans = segue.destinationViewController as!
-            NewTransTableViewController
-            
-            newTrans.selectedSubcategory = selectedSubcategory
-        }
-    }
-}

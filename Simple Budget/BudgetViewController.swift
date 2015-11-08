@@ -139,9 +139,9 @@ class BudgetViewController: UIViewController {
     }
 }
 
-// MARK: - Table view data source and delegate
+// MARK: - Table view data source
     
-extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
+extension BudgetViewController: UITableViewDataSource {
 
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -159,6 +159,11 @@ extension BudgetViewController: UITableViewDataSource, UITableViewDelegate {
         }
         return 1
     }
+}
+
+// MARK: - Table view delegate
+
+extension BudgetViewController: UITableViewDelegate {
 
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -349,40 +354,14 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
 
 }
 
-// MARK: - Additional Methods
-
-extension BudgetViewController {
-    
-    func deleteSubcategory() {
-        if let objectToDelete = self.subcatToDelete {
-            self.sharedContext.deleteObject(objectToDelete)
-            CoreDataStackManager.sharedInstance().saveContext()
-        }
-    }
-    //    // Load json file that contains default categories data
-//    func loadDefaultData() {
-//        // Create filepath
-//        var filepath:String = NSBundle.mainBundle().pathForResource("defaults", ofType: "json")!
-//        
-//        // Create optional for NSError
-//        var error:NSError?
-//        
-//        // Retrieve Data
-//        var JSONData = NSData(contentsOfFile: filepath, options: NSDataReadingOptions.DataReadingMapped, error: &error)
-//        // Create another error optional
-//        var jsonerror:NSError?
-//        // We don't know the type of object we'll receive back so use AnyObject
-//        let swiftObject:AnyObject = NSJSONSerialization.JSONObjectWithData(JSONData!, options: NSJSONReadingOptions.AllowFragments, error:&jsonerror)!
-//        // JSONObjectWithData returns AnyObject so the first thing to do is to downcast this to a known type
-//        if let nsDictionaryObject = swiftObject as? NSDictionary {
-//            if let swiftDictionary = nsDictionaryObject as Dictionary? {
-//                println(swiftDictionary)
-//            }
-//        }
-//        else if let nsArrayObject = swiftObject as? NSArray {
-//            if let swiftArray = nsArrayObject as Array? {
-//                println(swiftArray)
-//            }
+//// MARK: - Additional Methods
+//
+//extension BudgetViewController {
+//    
+//    func deleteSubcategory() {
+//        if let objectToDelete = self.subcatToDelete {
+//            self.sharedContext.deleteObject(objectToDelete)
+//            CoreDataStackManager.sharedInstance().saveContext()
 //        }
 //    }
-}
+//}

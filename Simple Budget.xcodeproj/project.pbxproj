@@ -14,6 +14,7 @@
 		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */; };
 		1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */; };
 		1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */; };
+		1A7E334F1BEED9310055D901 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */; };
 		1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */; };
 		1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */; };
 		1AC059731BDAE27C0075302E /* SpenRemSubcatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */; };
@@ -51,6 +52,7 @@
 		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyTextDelegate.swift; sourceTree = "<group>"; };
 		1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatChooserTableViewController.swift; sourceTree = "<group>"; };
+		1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFooterCell.swift; sourceTree = "<group>"; };
 		1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetSubcategoryCell.swift; sourceTree = "<group>"; };
 		1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpenRemSubcatCell.swift; path = ../SpenRemSubcatCell.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
 				1AFF3DC81BD9F873006B571F /* SpentViewController.swift */,
 				1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */,
+				1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */,
 				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
 				1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */,
 			);
@@ -336,6 +339,7 @@
 				1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */,
 				1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */,
 				1AF10AE91BCB18F400F493D0 /* Model.xcdatamodeld in Sources */,
+				1A7E334F1BEED9310055D901 /* TransactionsViewController.swift in Sources */,
 				1AF10B091BCB19EA00F493D0 /* TextFieldDelegate.swift in Sources */,
 				1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */,
 				1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */,

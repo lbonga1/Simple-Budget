@@ -27,7 +27,7 @@ class Transaction: NSManagedObject {
     }
     
     init(subcategory: Subcategory, date: NSDate, title: String, amount: String, notes: String, context: NSManagedObjectContext) {
-        // Get the entity associated with "Transactions" type.
+        // Get the entity associated with "Transaction" type.
         let entity =  NSEntityDescription.entityForName("Transaction", inManagedObjectContext: context)!
         // Inherited init method
         super.init(entity: entity,insertIntoManagedObjectContext: context)
