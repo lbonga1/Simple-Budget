@@ -18,7 +18,8 @@ class TransactionsViewController: UIViewController {
     
 // MARK: - Variables
     
-    var chosenSubcategory: Subcategory?
+    var chosenSubcategory: Subcategory!
+    var error: NSError?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,8 @@ class TransactionsViewController: UIViewController {
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+        
+        println(fetchedResultsController.fetchedObjects)
     }
     
 // MARK: - Core Data Convenience
@@ -39,9 +42,13 @@ class TransactionsViewController: UIViewController {
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Transaction")
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        let subcategory = self.chosenSubcategory
+        let predicate = NSPredicate(format: "subTitle == %@", subcategory!.subTitle)
+        fetchRequest.predicate = predicate
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
@@ -63,7 +70,7 @@ class TransactionsViewController: UIViewController {
 
 // MARK: - Table view data source
 
-extension BudgetViewController: UITableViewDataSource {
+extension TransactionsViewController: UITableViewDataSource {
     
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -80,6 +87,7 @@ extension BudgetViewController: UITableViewDataSource {
             return currentSection.numberOfObjects
         }
         return 1
+        //return chosenSubcategory!.transactions.count
     }
 }
 
@@ -88,6 +96,24 @@ extension BudgetViewController: UITableViewDataSource {
 extension TransactionsViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("TransactionCell", forIndexPath: indexPath) as! TransactionCell
+        
+        // Set title and amount values
+        let transaction = fetchedResultsController.objectAtIndexPath(indexPath) as! Transaction
+        cell.titleLabel.text = transaction.title
+        cell.amountLabel.text = transaction.amount
+        cell.dateLabel.text = setDate(transaction.date)
+            
+//        let cell = tableView.dequeueReusableCellWithIdentifier("TransactionCell", forIndexPath: indexPath) as! TransactionCell
+//        let transactions = chosenSubcategory?.transactions as! [Transaction]
+//        
+//        for transaction in transactions {
+//            cell.titleLabel.text = transaction.title
+//            cell.amountLabel.text = transaction.amount
+//            cell.dateLabel.text = setDate(transaction.date)
+//        }
+        return cell
     }
 }
 
@@ -96,4 +122,18 @@ extension TransactionsViewController: UITableViewDelegate {
 extension TransactionsViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+}
+
+extension TransactionsViewController {
+    
+    func setDate(date: NSDate) -> String {
+        var dateFormatter = NSDateFormatter()
+        
+        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+        
+        var strDate = dateFormatter.stringFromDate(date)
+        
+        return strDate
+    }
+    
 }

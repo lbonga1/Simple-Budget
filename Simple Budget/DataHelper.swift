@@ -126,4 +126,17 @@ public class DataHelper {
             print("Subcategory Title: \(subcategory.subTitle)")
         }
     }
+    
+    public func printAllTransactions() {
+        let subcategoryFetchRequest = NSFetchRequest(entityName: "Transaction")
+        let primarySortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        
+        subcategoryFetchRequest.sortDescriptors = [primarySortDescriptor]
+        
+        let allTransactions = (sharedContext.executeFetchRequest(subcategoryFetchRequest, error: &error)) as! [Transaction]
+        
+        for transaction in allTransactions {
+            print("Transaction Title: \(transaction.title)")
+        }
+    }
 }

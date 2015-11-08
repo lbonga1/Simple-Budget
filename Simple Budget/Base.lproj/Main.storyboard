@@ -354,7 +354,7 @@
                         <outlet property="addButton" destination="4VS-tp-1A3" id="EVb-ay-x2P"/>
                         <outlet property="savedLabel" destination="fg2-yR-r7l" id="GtX-ns-XTt"/>
                         <outlet property="tableView" destination="edt-6Y-Jcj" id="fVV-7b-cLp"/>
-                        <segue destination="1Sd-Z0-8hd" kind="show" id="kC7-1v-Wv5"/>
+                        <segue destination="1Sd-Z0-8hd" kind="show" identifier="displayTransactions" id="kC7-1v-Wv5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vww-C7-FOt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -416,8 +416,7 @@
                                                             <exclude reference="KsQ-aa-cj2"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="78" y="7" width="514" height="30"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="KsQ-aa-cj2"/>
                                                         </mask>
@@ -508,8 +507,7 @@
                                                             <exclude reference="ioV-Z2-9Ev"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="78" y="7" width="514" height="30"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <exclude reference="f2k-CK-xwq"/>
                                                             <include reference="ioV-Z2-9Ev"/>
@@ -660,8 +658,7 @@
                                                             <exclude reference="jY6-eT-MVa"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="91" y="7" width="501" height="30"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <exclude reference="aUi-9E-zeg"/>
                                                             <include reference="jY6-eT-MVa"/>
@@ -729,8 +726,7 @@
                                                             <exclude reference="i2P-zi-cfu"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="8" y="8" width="584" height="225"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="i2P-zi-cfu"/>
                                                         </mask>
@@ -751,8 +747,7 @@
                                                             <exclude reference="CcE-VT-ZIv"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="0.0" y="202" width="600" height="216"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="CcE-VT-ZIv"/>
                                                         </mask>
@@ -1299,7 +1294,7 @@
                         <outlet property="addButton" destination="sSS-19-XCi" id="f7W-P3-mwb"/>
                         <outlet property="savedLabel" destination="b0x-cM-YFx" id="xeY-T1-r1K"/>
                         <outlet property="tableView" destination="6NC-sh-a2u" id="Ms0-GE-MvJ"/>
-                        <segue destination="1Sd-Z0-8hd" kind="show" id="DTe-5A-uXi"/>
+                        <segue destination="1Sd-Z0-8hd" kind="show" identifier="displayTransactions" id="DTe-5A-uXi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tiu-9f-LBS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1613,7 +1608,7 @@
                         <outlet property="cancelButton" destination="MBX-sL-HcO" id="Y5C-7c-5Is"/>
                         <outlet property="doneButton" destination="VC6-z4-OMe" id="Egf-90-jff"/>
                         <outlet property="tableView" destination="oOR-eb-WT8" id="Tte-UZ-JNC"/>
-                        <segue destination="1Sd-Z0-8hd" kind="show" id="sdy-wf-NGO"/>
+                        <segue destination="1Sd-Z0-8hd" kind="show" identifier="displayTransactions" id="sdy-wf-NGO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="56V-8X-KpY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1644,17 +1639,137 @@
                         <viewControllerLayoutGuide type="bottom" id="uQD-pG-7U5"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="geX-hS-5Ba">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="eIj-sp-RCH">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TransactionCell" id="IA9-2P-Q9c">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TransactionCell" id="IA9-2P-Q9c" customClass="TransactionCell" customModule="Simple_Budget" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IA9-2P-Q9c" id="dot-wn-Qhd">
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qE7-nX-qV0">
+                                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="yMO-4K-TNd"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                                    <color key="textColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="yMO-4K-TNd"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="yMO-4K-TNd"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transaction Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i6F-id-RoN">
+                                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="246" id="PGU-he-2SR">
+                                                            <variation key="heightClass=regular-widthClass=compact" constant="245"/>
+                                                        </constraint>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="PGU-he-2SR"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="PGU-he-2SR"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7l2-Jz-zxa">
+                                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="90" id="IfO-gW-PrQ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="IfO-gW-PrQ"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="IfO-gW-PrQ"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="qE7-nX-qV0" secondAttribute="bottom" constant="3" id="3wC-14-cET"/>
+                                                <constraint firstItem="qE7-nX-qV0" firstAttribute="leading" secondItem="dot-wn-Qhd" secondAttribute="leadingMargin" id="By3-E7-J7f"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="7l2-Jz-zxa" secondAttribute="bottom" constant="3" id="Mga-Wm-LwG"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="i6F-id-RoN" secondAttribute="bottom" constant="3" id="PlF-oi-rNN"/>
+                                                <constraint firstItem="qE7-nX-qV0" firstAttribute="top" secondItem="dot-wn-Qhd" secondAttribute="topMargin" constant="3" id="W8P-an-PtL"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="i6F-id-RoN" secondAttribute="trailing" constant="10" id="WH4-zU-Nrz"/>
+                                                <constraint firstItem="i6F-id-RoN" firstAttribute="top" secondItem="dot-wn-Qhd" secondAttribute="topMargin" constant="3" id="ePN-Ea-Vbb"/>
+                                                <constraint firstItem="7l2-Jz-zxa" firstAttribute="trailing" secondItem="dot-wn-Qhd" secondAttribute="trailingMargin" id="pN1-3R-hLD"/>
+                                                <constraint firstItem="i6F-id-RoN" firstAttribute="leading" secondItem="qE7-nX-qV0" secondAttribute="trailing" constant="10" id="rEu-RY-uvl"/>
+                                                <constraint firstItem="7l2-Jz-zxa" firstAttribute="top" secondItem="dot-wn-Qhd" secondAttribute="topMargin" constant="3" id="tZ4-dB-tpL"/>
+                                                <constraint firstItem="i6F-id-RoN" firstAttribute="leading" secondItem="qE7-nX-qV0" secondAttribute="trailing" constant="10" id="zsX-GO-jsI"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="qE7-nX-qV0"/>
+                                                    <exclude reference="i6F-id-RoN"/>
+                                                    <exclude reference="7l2-Jz-zxa"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="3wC-14-cET"/>
+                                                    <exclude reference="By3-E7-J7f"/>
+                                                    <exclude reference="W8P-an-PtL"/>
+                                                    <exclude reference="PlF-oi-rNN"/>
+                                                    <exclude reference="WH4-zU-Nrz"/>
+                                                    <exclude reference="ePN-Ea-Vbb"/>
+                                                    <exclude reference="rEu-RY-uvl"/>
+                                                    <exclude reference="zsX-GO-jsI"/>
+                                                    <exclude reference="Mga-Wm-LwG"/>
+                                                    <exclude reference="pN1-3R-hLD"/>
+                                                    <exclude reference="tZ4-dB-tpL"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="subviews">
+                                                    <include reference="qE7-nX-qV0"/>
+                                                    <include reference="i6F-id-RoN"/>
+                                                    <include reference="7l2-Jz-zxa"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="3wC-14-cET"/>
+                                                    <include reference="By3-E7-J7f"/>
+                                                    <include reference="W8P-an-PtL"/>
+                                                    <include reference="PlF-oi-rNN"/>
+                                                    <exclude reference="WH4-zU-Nrz"/>
+                                                    <include reference="ePN-Ea-Vbb"/>
+                                                    <include reference="rEu-RY-uvl"/>
+                                                    <exclude reference="zsX-GO-jsI"/>
+                                                    <include reference="Mga-Wm-LwG"/>
+                                                    <include reference="pN1-3R-hLD"/>
+                                                    <include reference="tZ4-dB-tpL"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="amountLabel" destination="7l2-Jz-zxa" id="4sk-tF-sRh"/>
+                                            <outlet property="dateLabel" destination="qE7-nX-qV0" id="jXK-kr-uf2"/>
+                                            <outlet property="titleLabel" destination="i6F-id-RoN" id="S9r-Rs-RWJ"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">

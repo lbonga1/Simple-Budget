@@ -21,7 +21,7 @@ class BudgetViewController: UIViewController {
     var testData: NSMutableArray = ["Test"]
     var currentlyEditingCategory = 0
     var currentlyEditingSubcategory: NSIndexPath? = nil
-    var subcatToDelete: Subcategory?
+    var chosenSubcategory: Subcategory?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,7 +121,6 @@ class BudgetViewController: UIViewController {
         
         let sectionHeaderView = tableView.headerViewForSection(currentlyEditingCategory)
         let sectionTitle = sectionHeaderView?.textLabel.text
-        println(sectionHeaderView?.textLabel.text)
             
         // Init the Category Object
         let newCategory = Category(catTitle: sectionTitle!, context: self.sharedContext)
@@ -174,13 +173,10 @@ extension BudgetViewController: UITableViewDelegate {
             let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
             cell.subcategoryTitle.text = subcategory.subTitle
             cell.amountTextField.text = subcategory.totalAmount
-            
-            
         } else {
             cell.subcategoryTitle.text = "New Subcategory"
             cell.amountTextField.text = "$0.00"
         }
-
         return cell
      }
     
@@ -290,6 +286,31 @@ extension BudgetViewController: UITableViewDelegate {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
+    
+    // Segue to TransactionsViewController upon selecting a cell
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        // Deselect row to make it visually reselectable.
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        let chosenCell = tableView.cellForRowAtIndexPath(indexPath) as! BudgetSubcategoryCell
+        let sectionHeaderView = tableView.headerViewForSection(indexPath.section)
+        let sectionTitle = sectionHeaderView?.textLabel.text
+        
+        // Init Category object
+        let catObject = Category(catTitle: sectionTitle!, context: self.sharedContext)
+    
+        // Init Subcategory Object
+        let subcatObject = Subcategory(category: catObject,
+            subTitle: chosenCell.subcategoryTitle.text,
+            totalAmount: chosenCell.amountTextField.text!,
+            context: self.sharedContext)
+        
+        // Set chosenSubcategory value to the selected Subcategory
+        chosenSubcategory = subcatObject
+        
+        // Push TransacationsViewController
+        self.performSegueWithIdentifier("displayTransactions", sender: self)
+    }
 }
 
 // MARK: - Fetched Results Controller Delegate
@@ -354,14 +375,22 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
 
 }
 
-//// MARK: - Additional Methods
-//
-//extension BudgetViewController {
-//    
-//    func deleteSubcategory() {
+// MARK: - Additional Methods
+
+extension BudgetViewController {
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "displayTransactions") {
+            let transactionsVC = segue.destinationViewController as!
+            TransactionsViewController
+            transactionsVC.chosenSubcategory = self.chosenSubcategory
+        }
+    }
+
+    //    func deleteSubcategory() {
 //        if let objectToDelete = self.subcatToDelete {
 //            self.sharedContext.deleteObject(objectToDelete)
 //            CoreDataStackManager.sharedInstance().saveContext()
 //        }
 //    }
-//}
+}
