@@ -858,13 +858,13 @@
         <!--Category Chooser-->
         <scene sceneID="rKB-lm-F1G">
             <objects>
-                <tableViewController storyboardIdentifier="CategoryChooser" title="Category Chooser" id="jfs-j6-441" customClass="CatChooserTableViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Category Chooser" id="jfs-j6-441" customClass="CatChooserTableViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nGu-T4-TUl">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooserCategory" id="opE-nv-J1s">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HeaderView" id="opE-nv-J1s">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="opE-nv-J1s" id="0h3-0u-R8A">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -936,7 +936,7 @@
                                     </variation>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooserSubcategory" id="cml-Zq-aBH">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooserSubcategory" id="cml-Zq-aBH" customClass="SpenRemSubcatCell" customModule="Simple_Budget" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cml-Zq-aBH" id="gof-iT-6hs">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -1007,6 +1007,10 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="amountLabel" destination="1hC-2l-ooF" id="OaM-lC-Whd"/>
+                                    <outlet property="subcatTitle" destination="r1y-dK-RmG" id="cX7-rp-p9w"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1014,16 +1018,17 @@
                             <outlet property="delegate" destination="jfs-j6-441" id="DDg-a9-qYi"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="aiw-gm-2c4"/>
                     <connections>
                         <outlet property="cancelButton" destination="5mH-8e-Gcl" id="imy-QO-g9G"/>
                         <outlet property="doneButton" destination="X9X-RK-u7B" id="uTJ-Id-pVp"/>
+                        <segue destination="39i-zt-kcm" kind="presentation" identifier="returnToNewTrans" id="MG0-Ys-d5P"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="whF-YD-KYl" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <barButtonItem style="done" systemItem="done" id="X9X-RK-u7B">
                     <connections>
                         <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
-                        <segue destination="39i-zt-kcm" kind="show" identifier="returnToNewTrans" id="ztA-IJ-RxN"/>
                     </connections>
                 </barButtonItem>
                 <barButtonItem systemItem="cancel" id="5mH-8e-Gcl">
@@ -1032,7 +1037,7 @@
                     </connections>
                 </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1057.5" y="1300.5"/>
+            <point key="canvasLocation" x="1057.5" y="1998"/>
         </scene>
         <!--Remaining-->
         <scene sceneID="akS-pM-6gF">
@@ -1152,7 +1157,8 @@
                                                             <exclude reference="dmY-5E-YJz"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="232" y="8" width="80" height="27"/>
                                                         <mask key="constraints">
                                                             <include reference="dmY-5E-YJz"/>
                                                         </mask>
@@ -1163,6 +1169,9 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="8" y="8" width="214" height="27"/>
+                                                    </variation>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -1310,9 +1319,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="44" sectionFooterHeight="32" translatesAutoresizingMaskIntoConstraints="NO" id="oOR-eb-WT8">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="oOR-eb-WT8">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="HeaderView" id="kOK-jW-MRm" customClass="CustomHeaderView" customModule="Simple_Budget" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1351,7 +1360,8 @@
                                                             <exclude reference="URj-oE-wHi"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="237" y="8" width="75" height="27"/>
                                                         <mask key="constraints">
                                                             <include reference="URj-oE-wHi"/>
                                                         </mask>
@@ -1641,8 +1651,26 @@
             </objects>
             <point key="canvasLocation" x="1057.5" y="615.75"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kP9-86-wgM">
+            <objects>
+                <navigationController storyboardIdentifier="CategoryChooser" automaticallyAdjustsScrollViewInsets="NO" id="EQh-BD-erk" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="l1m-tS-JNW">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="jfs-j6-441" kind="relationship" relationship="rootViewController" id="cL3-g8-65H"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="avE-bc-xi5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1057.5" y="1300.5"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ztA-IJ-RxN"/>
+        <segue reference="MG0-Ys-d5P"/>
     </inferredMetricsTieBreakers>
 </document>

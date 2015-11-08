@@ -12,5 +12,6 @@ class SpenRemSubcatCell: UITableViewCell {
 
     @IBOutlet weak var subcategoryTitle: UITextField!
     @IBOutlet weak var amountLabel: UILabel!
+    @IBOutlet weak var subcatTitle: UILabel!
 
 }

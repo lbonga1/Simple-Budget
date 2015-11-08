@@ -67,7 +67,6 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CategoryChooser") as! UINavigationController
-        
         self.presentViewController(controller, animated: true, completion: nil)
     }
     

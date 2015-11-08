@@ -74,27 +74,28 @@ public class DataHelper {
         }).first
         
         let subcategories = [
-            (subTitle: "Emergency Fund", category: savings!),
-            (subTitle: "Mortgage", category: housing!),
-            (subTitle: "Natural Gas/Propane", category: housing!),
-            (subTitle: "Electricity", category: housing!),
-            (subTitle: "Mobile Phone", category: housing!),
-            (subTitle: "Groceries", category: food!),
-            (subTitle: "Restaurants", category: food!),
-            (subTitle: "Auto Gas & Oil", category: transportation!),
-            (subTitle: "Car Replacement", category: transportation!),
-            (subTitle: "Clothing", category: lifestyle!),
-            (subTitle: "Entertainment", category: lifestyle!),
-            (subTitle: "Health Insurance", category: insuranceTax!),
-            (subTitle: "Life Insurance", category: insuranceTax!),
-            (subTitle: "Auto Insurance", category: insuranceTax!),
-            (subTitle: "Student Loans", category: debt!)
+            (subTitle: "Emergency Fund", category: savings!, totalAmount: "$0.00"),
+            (subTitle: "Mortgage", category: housing!, totalAmount: "$0.00"),
+            (subTitle: "Natural Gas/Propane", category: housing!, totalAmount: "$0.00"),
+            (subTitle: "Electricity", category: housing!, totalAmount: "$0.00"),
+            (subTitle: "Mobile Phone", category: housing!, totalAmount: "$0.00"),
+            (subTitle: "Groceries", category: food!, totalAmount: "$0.00"),
+            (subTitle: "Restaurants", category: food!, totalAmount: "$0.00"),
+            (subTitle: "Auto Gas & Oil", category: transportation!, totalAmount: "$0.00"),
+            (subTitle: "Car Replacement", category: transportation!, totalAmount: "$0.00"),
+            (subTitle: "Clothing", category: lifestyle!, totalAmount: "$0.00"),
+            (subTitle: "Entertainment", category: lifestyle!, totalAmount: "$0.00"),
+            (subTitle: "Health Insurance", category: insuranceTax!, totalAmount: "$0.00"),
+            (subTitle: "Life Insurance", category: insuranceTax!, totalAmount: "$0.00"),
+            (subTitle: "Auto Insurance", category: insuranceTax!, totalAmount: "$0.00"),
+            (subTitle: "Student Loans", category: debt!, totalAmount: "$0.00")
         ]
         
         for subcategory in subcategories {
             let newSubcategory = NSEntityDescription.insertNewObjectForEntityForName("Subcategory", inManagedObjectContext: sharedContext) as! Subcategory
             newSubcategory.subTitle = subcategory.subTitle
             newSubcategory.category = subcategory.category
+            newSubcategory.totalAmount = subcategory.totalAmount
         }
         
         sharedContext.save(&error)

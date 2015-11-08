@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let dataHelper = DataHelper()
         dataHelper.seedDataStore()
-        dataHelper.printAllCategories()
-        dataHelper.printAllSubcategories()
+        //dataHelper.printAllCategories()
+        //dataHelper.printAllSubcategories()
         
         return true
     }
