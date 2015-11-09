@@ -10,7 +10,8 @@ import UIKit
 
 class BudgetSubcategoryCell: UITableViewCell {
 
-    @IBOutlet weak var subcategoryTitle: UITextField!
+    
+    @IBOutlet weak var subcategoryTitle: UILabel!
     @IBOutlet weak var amountTextField: UILabel!
     
     

@@ -117,6 +117,7 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
             
             // Save to Core Data
             dispatch_async(dispatch_get_main_queue()) {
+                newTransaction.subcategory = self.selectedSubcategory
                 CoreDataStackManager.sharedInstance().saveContext()
             }
             // Dismiss view controller

@@ -32,7 +32,10 @@ class BudgetViewController: UIViewController {
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+        
+        println(fetchedResultsController.fetchedObjects)
     }
+
     
 // MARK: - Core Data Convenience
     
@@ -126,13 +129,14 @@ class BudgetViewController: UIViewController {
         let newCategory = Category(catTitle: sectionTitle!, context: self.sharedContext)
         
         // Init the Subcategory object
-        let newSubcategory = Subcategory(category: newCategory, subTitle: cell.subcategoryTitle.text, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
+        let newSubcategory = Subcategory(category: newCategory, subTitle: cell.subcategoryTitle.text!, totalAmount: cell.amountTextField.text!, context: self.sharedContext)
         
         // Add subcategory to fetched objects
         fetchedResultsController.performFetch(nil)
         
         // Save to Core Data
         dispatch_async(dispatch_get_main_queue()) {
+            newSubcategory.category = newCategory
             CoreDataStackManager.sharedInstance().saveContext()
         }
     }
@@ -280,7 +284,6 @@ extension BudgetViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-            
     
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -292,24 +295,14 @@ extension BudgetViewController: UITableViewDelegate {
         // Deselect row to make it visually reselectable.
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
+        // Cast chosenCell as BudgetSubcategoryCell
         let chosenCell = tableView.cellForRowAtIndexPath(indexPath) as! BudgetSubcategoryCell
-        let sectionHeaderView = tableView.headerViewForSection(indexPath.section)
-        let sectionTitle = sectionHeaderView?.textLabel.text
-        
-        // Init Category object
-        let catObject = Category(catTitle: sectionTitle!, context: self.sharedContext)
-    
-        // Init Subcategory Object
-        let subcatObject = Subcategory(category: catObject,
-            subTitle: chosenCell.subcategoryTitle.text,
-            totalAmount: chosenCell.amountTextField.text!,
-            context: self.sharedContext)
         
         // Set chosenSubcategory value to the selected Subcategory
-        chosenSubcategory = searchForSubcategory(subcatObject.subTitle)
+        chosenSubcategory = searchForSubcategory(chosenCell.subcategoryTitle.text!)
         
         // Push TransacationsViewController
-        self.performSegueWithIdentifier("displayTransactions", sender: self)
+        self.performSegueWithIdentifier("displayTransactions", sender: chosenSubcategory)
     }
 }
 

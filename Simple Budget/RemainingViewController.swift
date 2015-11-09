@@ -94,7 +94,7 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
         
         // Set title and amount values
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-        cell.subcategoryTitle.text = subcategory.subTitle
+        cell.subcatTitle.text = subcategory.subTitle
         
     // TODO: Change amount to budgeted amount - any transaction amounts
         cell.amountLabel.text = subcategory.totalAmount

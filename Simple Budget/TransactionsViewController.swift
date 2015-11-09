@@ -37,11 +37,13 @@ class TransactionsViewController: UIViewController {
         // Display no transactions label if there are no fetchedObjects
         if fetchedResultsController.fetchedObjects!.count == 0 {
             noTransactionsLabel.hidden = false
+            tableView.hidden = true
         } else {
             noTransactionsLabel.hidden = true
+            tableView.hidden = false
         }
-        
-        print(fetchedResultsController.fetchedObjects)
+        print(chosenSubcategory)
+        print(fetchedResultsController.fetchedObjects as! [Transaction])
     }
     
 // MARK: - Core Data Convenience
@@ -94,7 +96,7 @@ extension TransactionsViewController: UITableViewDataSource {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
-        return 0
+        return 1
     }
     
     // Returns the number of rows in each section.
@@ -103,7 +105,7 @@ extension TransactionsViewController: UITableViewDataSource {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
         }
-        return 0
+        return 1
     }
 }
 

@@ -22,20 +22,34 @@ class CreateUserViewController: UIViewController {
         self.usernameField.delegate = textDelegate
         self.passwordField.delegate = textDelegate
     }
+    
+// MARK: - Actions
 
     @IBAction func createUser(sender: AnyObject) {
         if usernameField.text.isEmpty {
-            println("no username")
+            // Display error message
+            self.displayAlert()
         }
         else if passwordField.text.isEmpty {
-            println("no password")
+            // Display error message
+            self.displayAlert()
         } else {
-            
             let newUsername = usernameField.text
             let newPassword = passwordField.text
             
+            // Save to NSUserDefaults
             NSUserDefaults.standardUserDefaults().setValue(newUsername, forKey: "username")
             NSUserDefaults.standardUserDefaults().setValue(newPassword, forKey: "password")
         }
+    }
+    
+// MARK: - Methods
+    
+    // Alert view for missing inputs.
+    func displayAlert() {
+        let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .Alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 }
