@@ -31,7 +31,6 @@ class CatChooserTableViewController: UITableViewController {
         
         // Tableview is automatically in editing mode
         self.tableView.setEditing(true, animated: false)
-        //self.tableView.allowsSelectionDuringEditing = true
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
         // Sets up navigation bar items

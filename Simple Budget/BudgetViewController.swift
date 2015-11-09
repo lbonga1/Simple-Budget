@@ -306,7 +306,7 @@ extension BudgetViewController: UITableViewDelegate {
             context: self.sharedContext)
         
         // Set chosenSubcategory value to the selected Subcategory
-        chosenSubcategory = subcatObject
+        chosenSubcategory = searchForSubcategory(subcatObject.subTitle)
         
         // Push TransacationsViewController
         self.performSegueWithIdentifier("displayTransactions", sender: self)
@@ -385,6 +385,15 @@ extension BudgetViewController {
             TransactionsViewController
             transactionsVC.chosenSubcategory = self.chosenSubcategory
         }
+    }
+    
+    // Support for finding selected Subcategory in core data
+    func searchForSubcategory(subTitle: String) -> Subcategory {
+        let subcategories = fetchedResultsController.fetchedObjects as! [Subcategory]
+        
+        return subcategories.filter { subcategory in
+            subcategory.subTitle == subTitle
+            }.first!
     }
 
     //    func deleteSubcategory() {

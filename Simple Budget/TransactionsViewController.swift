@@ -14,7 +14,9 @@ class TransactionsViewController: UIViewController {
 // MARK: - Outlets
 
     @IBOutlet var addButton: UIBarButtonItem!
+    @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var noTransactionsLabel: UILabel!
     
 // MARK: - Variables
     
@@ -24,14 +26,22 @@ class TransactionsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Sets the add button on the right side of the navigation toolbar.
+        // Sets up navigation buttons.
         self.navigationItem.rightBarButtonItem = addButton
+        self.navigationItem.leftBarButtonItem = cancelButton
         
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
         
-        println(fetchedResultsController.fetchedObjects)
+        // Display no transactions label if there are no fetchedObjects
+        if fetchedResultsController.fetchedObjects!.count == 0 {
+            noTransactionsLabel.hidden = false
+        } else {
+            noTransactionsLabel.hidden = true
+        }
+        
+        print(fetchedResultsController.fetchedObjects)
     }
     
 // MARK: - Core Data Convenience
@@ -42,12 +52,13 @@ class TransactionsViewController: UIViewController {
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
-        let sortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        // Fetch transactions
+        let fetchRequest = NSFetchRequest(entityName: "Transaction")
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        let subcategory = self.chosenSubcategory
-        let predicate = NSPredicate(format: "subTitle == %@", subcategory!.subTitle)
+        // Limit results to only the chosen subcategory
+        let predicate = NSPredicate(format: "subcategory == %@", self.chosenSubcategory)
         fetchRequest.predicate = predicate
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -60,11 +71,17 @@ class TransactionsViewController: UIViewController {
     
 // MARK: - Actions
     
+    // Present newTransVC to add a new transaction
     @IBAction func addNewTransaction(sender: AnyObject) {
         let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+    
+    // Return to budgeting view controllers
+    @IBAction func cancelAction(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
     }
 }
 
@@ -77,7 +94,7 @@ extension TransactionsViewController: UITableViewDataSource {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
-        return 1
+        return 0
     }
     
     // Returns the number of rows in each section.
@@ -86,8 +103,7 @@ extension TransactionsViewController: UITableViewDataSource {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
         }
-        return 1
-        //return chosenSubcategory!.transactions.count
+        return 0
     }
 }
 
@@ -99,20 +115,12 @@ extension TransactionsViewController: UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("TransactionCell", forIndexPath: indexPath) as! TransactionCell
         
-        // Set title and amount values
+        // Set title, amount, and date values
         let transaction = fetchedResultsController.objectAtIndexPath(indexPath) as! Transaction
         cell.titleLabel.text = transaction.title
         cell.amountLabel.text = transaction.amount
-        cell.dateLabel.text = setDate(transaction.date)
+        cell.dateLabel.text = transaction.date
             
-//        let cell = tableView.dequeueReusableCellWithIdentifier("TransactionCell", forIndexPath: indexPath) as! TransactionCell
-//        let transactions = chosenSubcategory?.transactions as! [Transaction]
-//        
-//        for transaction in transactions {
-//            cell.titleLabel.text = transaction.title
-//            cell.amountLabel.text = transaction.amount
-//            cell.dateLabel.text = setDate(transaction.date)
-//        }
         return cell
     }
 }
@@ -122,18 +130,4 @@ extension TransactionsViewController: UITableViewDelegate {
 extension TransactionsViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
-}
-
-extension TransactionsViewController {
-    
-    func setDate(date: NSDate) -> String {
-        var dateFormatter = NSDateFormatter()
-        
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        
-        var strDate = dateFormatter.stringFromDate(date)
-        
-        return strDate
-    }
-    
 }

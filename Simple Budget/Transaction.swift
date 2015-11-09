@@ -16,7 +16,7 @@ class Transaction: NSManagedObject {
     
     // Promote from simple properties to Core Data attributes
     @NSManaged var subcategory: Subcategory
-    @NSManaged var date: NSDate
+    @NSManaged var date: String
     @NSManaged var title: String
     @NSManaged var amount: String
     @NSManaged var notes: String
@@ -26,7 +26,7 @@ class Transaction: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(subcategory: Subcategory, date: NSDate, title: String, amount: String, notes: String, context: NSManagedObjectContext) {
+    init(subcategory: Subcategory, date: String, title: String, amount: String, notes: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Transaction" type.
         let entity =  NSEntityDescription.entityForName("Transaction", inManagedObjectContext: context)!
         // Inherited init method

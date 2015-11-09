@@ -18,10 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        let dataHelper = DataHelper()
-        dataHelper.seedDataStore()
-        //dataHelper.printAllCategories()
-        //dataHelper.printAllSubcategories()
+        let firstLaunch = NSUserDefaults.standardUserDefaults().boolForKey("FirstLaunch")
+        if firstLaunch  {
+            println("Do not need to set NSUserDefault")
+        } else {
+            println("First launch, setting NSUserDefault.")
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
+            let dataHelper = DataHelper()
+            dataHelper.seedDataStore()
+            //dataHelper.printAllCategories()
+            //dataHelper.printAllSubcategories()
+        }
         
         return true
     }

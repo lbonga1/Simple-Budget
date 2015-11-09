@@ -109,7 +109,7 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
             
             // Init transaction object
             let newTransaction = Transaction(subcategory: selectedSubcategory,
-                date: datePicker.date,
+                date: dateButton.titleLabel!.text!,
                 title: merchantTextField.text,
                 amount: amountTextField.text,
                 notes: notesTextView.text,
@@ -131,7 +131,6 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         if let newTrans = unwindSegue.sourceViewController as? CatChooserTableViewController {
             selectedSubcategory = newTrans.selectedSubcategory
         }
-
     }
 }
 
