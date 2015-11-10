@@ -17,6 +17,7 @@ class BudgetViewController: UIViewController {
     @IBOutlet var addButton: UIBarButtonItem!
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var doneButton: UIBarButtonItem!
+    @IBOutlet var connectButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test"]
     var currentlyEditingCategory = 0
@@ -28,6 +29,7 @@ class BudgetViewController: UIViewController {
         
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
+        self.parentViewController!.navigationItem.leftBarButtonItem = connectButton
         
         // Fetched Results Controller
         fetchedResultsController.performFetch(nil)
@@ -98,7 +100,7 @@ class BudgetViewController: UIViewController {
     @IBAction func cancelEditing(sender: AnyObject) {
         // Change navigation items
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
-        self.parentViewController!.navigationItem.leftBarButtonItem = nil
+        self.parentViewController!.navigationItem.leftBarButtonItem = connectButton
         
         //TODO: REMOVE ITEM FROM CORE DATA?
         self.testData.removeLastObject()

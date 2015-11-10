@@ -16,6 +16,9 @@
 		1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */; };
 		1A7E334F1BEED9310055D901 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */; };
 		1A7E33511BEF0E0D0055D901 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */; };
+		1A9D67641BF16CCA006D2165 /* Plaid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67631BF16CCA006D2165 /* Plaid.swift */; };
+		1A9D67661BF16D0F006D2165 /* PlaidClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67651BF16D0F006D2165 /* PlaidClient.swift */; };
+		1A9D67681BF16F64006D2165 /* AccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */; };
 		1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */; };
 		1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */; };
 		1AC059731BDAE27C0075302E /* SpenRemSubcatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */; };
@@ -55,6 +58,9 @@
 		1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatChooserTableViewController.swift; sourceTree = "<group>"; };
 		1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
+		1A9D67631BF16CCA006D2165 /* Plaid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plaid.swift; sourceTree = "<group>"; };
+		1A9D67651BF16D0F006D2165 /* PlaidClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidClient.swift; sourceTree = "<group>"; };
+		1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewController.swift; sourceTree = "<group>"; };
 		1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFooterCell.swift; sourceTree = "<group>"; };
 		1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetSubcategoryCell.swift; sourceTree = "<group>"; };
 		1AC059721BDAE27C0075302E /* SpenRemSubcatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpenRemSubcatCell.swift; path = ../SpenRemSubcatCell.swift; sourceTree = "<group>"; };
@@ -123,6 +129,7 @@
 				1A19A3D61BCB614700A38E45 /* Category.swift */,
 				1A19A3D81BCB616500A38E45 /* Subcategory.swift */,
 				1A19A3DA1BCB617000A38E45 /* Transaction.swift */,
+				1A9D67631BF16CCA006D2165 /* Plaid.swift */,
 				1AFF3DC71BD9F1D3006B571F /* Core Data */,
 			);
 			name = Model;
@@ -202,10 +209,12 @@
 			children = (
 				1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */,
 				1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */,
+				1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */,
 				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
 				1AFF3DC81BD9F873006B571F /* SpentViewController.swift */,
 				1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */,
 				1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */,
+				1A9D67651BF16D0F006D2165 /* PlaidClient.swift */,
 				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
 				1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */,
 			);
@@ -329,6 +338,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */,
+				1A9D67681BF16F64006D2165 /* AccountTableViewController.swift in Sources */,
+				1A9D67641BF16CCA006D2165 /* Plaid.swift in Sources */,
 				1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */,
 				1AD04ADE1BEADB5F008F1A05 /* DataHelper.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Category.swift in Sources */,
@@ -348,6 +359,7 @@
 				1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */,
 				1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */,
 				1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */,
+				1A9D67661BF16D0F006D2165 /* PlaidClient.swift in Sources */,
 				1AC059731BDAE27C0075302E /* SpenRemSubcatCell.swift in Sources */,
 				1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */,
 			);

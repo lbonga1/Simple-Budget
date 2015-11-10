@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //dataHelper.printAllSubcategories()
         }
         
+        Plaid.initializePlaid("55de548f3b5cadf40371c4e1", secret: "42e09ede97c282670f35d768cb65a1", appStatus: .Testing)
+        
         return true
     }
 
