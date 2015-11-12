@@ -31,17 +31,46 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
     
 // MARK: - Actions
     
-    // Dismiss to budgeting view controllers
-    @IBAction func cancelAction(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
     
     @IBAction func doneAction(sender: AnyObject) {
         
-        let instName = self.stringToInstitution(string: institutionLabel.text!)
+        //let instName = self.stringToInstitution(string: institutionLabel.text!)
         
-        PS_addUser(.Connect, usernameTextField.text, passwordTextField.text, pinTextField.text, instName) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
-            // Respond to results
+        PS_addUser(.Connect, usernameTextField.text, passwordTextField.text, pinTextField.text, Institution.wells) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+     
+            if response != nil {
+                let response = response as! NSHTTPURLResponse
+                
+                switch response.statusCode {
+                case 200:
+                    println("test success")
+                case 201:
+                    println("mfa required")
+                case 400:
+                    self.displayAlert("Could not log in",
+                        message: "Please check your credentials and try again.")
+                case 401:
+                    self.displayAlert("Could not log in",
+                        message: "Please check your credentials and try again.")
+                case 402:
+                    self.displayAlert("Could not log in",
+                        message: "Please check your credentials and try again.")
+                case 403:
+                    self.displayAlert("Could not log in",
+                        message: "Please check your credentials and try again.")
+                case 404:
+                    self.displayAlert("Could not log in",
+                        message: "Please check your credentials and try again.")
+                default:
+                    self.displayAlert("Server error",
+                        message: "Please try again at a later time.")
+                }
+            } else {
+                 dispatch_async(dispatch_get_main_queue()) {
+                    self.displayAlert("Network error",
+                        message: "Please check your network connection and try again.")
+                }
+            }
         }
     }
         
@@ -70,37 +99,56 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
 }
 
 extension AccountTableViewController {
-
-    func stringToInstitution(#string: String) -> Institution {
-        var institution: Institution {
-            switch string {
-            case "American Express":
-                return .amex
-            case "Bank of America":
-                return .bofa
-            case "Capital One 360":
-                return .capone360
-            case "Chase":
-                return .chase
-            case "Citi":
-                return .citi
-            case "Fidelity":
-                return .fidelity
-            case "PNC":
-                return .pnc
-            case "Charles Schwab":
-                return .schwab
-            case "US Bank":
-                return .us
-            case "USAA":
-                return .usaa
-            case "Wells Fargo":
-                return .wells
-            default:
-                break
-            }
-           return institution
-        }
+    
+    func displayAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func addTextField(textField: UITextField!){
+        textField.placeholder = "Enter your response."
+    }
+    
+    func displayResponseAlert(message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        alertController.addTextFieldWithConfigurationHandler(addTextField)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
+//    func stringToInstitution(#string: String) -> Institution {
+//        var institution: Institution {
+//            switch string {
+//            case "American Express":
+//                return .amex
+//            case "Bank of America":
+//                return .bofa
+//            case "Capital One 360":
+//                return .capone360
+//            case "Chase":
+//                return .chase
+//            case "Citi":
+//                return .citi
+//            case "Fidelity":
+//                return .fidelity
+//            case "PNC":
+//                return .pnc
+//            case "Charles Schwab":
+//                return .schwab
+//            case "US Bank":
+//                return .us
+//            case "USAA":
+//                return .usaa
+//            case "Wells Fargo":
+//                return .wells
+//            default:
+//                break
+//            }
+//           return institution
+//        }
+//    }
+    
 }

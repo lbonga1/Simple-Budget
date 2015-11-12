@@ -145,7 +145,8 @@
                                                             <exclude reference="7XG-z2-270"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="232" y="8" width="80" height="27"/>
                                                         <mask key="constraints">
                                                             <include reference="7XG-z2-270"/>
                                                         </mask>
@@ -156,6 +157,9 @@
                                                     <color key="textColor" red="0.0" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="8" y="8" width="214" height="27"/>
+                                                    </variation>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -856,7 +860,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hjB-pg-eDo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-318" y="1300.5"/>
+            <point key="canvasLocation" x="-486" y="1300.5"/>
         </scene>
         <!--Category Chooser-->
         <scene sceneID="rKB-lm-F1G">
@@ -1370,7 +1374,8 @@
                                                             <exclude reference="URj-oE-wHi"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="232" y="8" width="80" height="27"/>
                                                         <mask key="constraints">
                                                             <include reference="URj-oE-wHi"/>
                                                         </mask>
@@ -1439,7 +1444,8 @@
                                                             <exclude reference="2ma-4V-NBP"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="232" y="11" width="80" height="21"/>
                                                         <mask key="constraints">
                                                             <include reference="2ma-4V-NBP"/>
                                                         </mask>
@@ -1643,20 +1649,24 @@
                         <action selector="addNewTransaction:" destination="sdX-uT-RGW" id="ysy-xg-1Y9"/>
                     </connections>
                 </barButtonItem>
-                <barButtonItem title="Connect" id="agr-y4-San"/>
+                <barButtonItem title="Connect" id="agr-y4-San">
+                    <connections>
+                        <action selector="connectAction:" destination="sdX-uT-RGW" id="YAe-FY-CI3"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1803" y="-46.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="odu-kd-Ryf">
             <objects>
-                <navigationController id="NIn-go-Vb1" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewAccountNavController" id="NIn-go-Vb1" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="I6W-yy-Bgs">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="qgv-dU-Z5H" kind="show" id="meP-Ag-X3e"/>
+                        <segue destination="qgv-dU-Z5H" kind="relationship" relationship="rootViewController" id="lY7-YQ-DHB"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TQY-Ag-4ac" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1666,19 +1676,9 @@
         <!--New Account-->
         <scene sceneID="BS5-gd-1eJ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pmb-sN-nzf" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem systemItem="cancel" id="Xtb-V1-GcE">
-                    <connections>
-                        <action selector="cancelAction:" destination="qgv-dU-Z5H" id="8ci-Vv-R6g"/>
-                    </connections>
-                </barButtonItem>
-                <barButtonItem systemItem="done" id="NF1-8v-TLD">
-                    <connections>
-                        <action selector="doneAction:" destination="qgv-dU-Z5H" id="6V8-xg-8Um"/>
-                    </connections>
-                </barButtonItem>
                 <tableViewController storyboardIdentifier="AccountTable" title="New Account" id="qgv-dU-Z5H" customClass="AccountTableViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="eDj-UJ-0ah">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -1857,13 +1857,13 @@
                                                     <exclude reference="HRX-8c-rmN"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <exclude reference="3oD-H2-Ugo"/>
-                                                    <exclude reference="7jb-Le-PEE"/>
-                                                    <exclude reference="b8e-HH-q52"/>
                                                     <exclude reference="Sxc-K8-2FV"/>
                                                     <exclude reference="UHd-bE-ueC"/>
                                                     <exclude reference="bhs-PD-Tot"/>
                                                     <exclude reference="vNR-de-YHu"/>
+                                                    <exclude reference="3oD-H2-Ugo"/>
+                                                    <exclude reference="7jb-Le-PEE"/>
+                                                    <exclude reference="b8e-HH-q52"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -1872,13 +1872,13 @@
                                                     <include reference="HRX-8c-rmN"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <include reference="3oD-H2-Ugo"/>
-                                                    <include reference="7jb-Le-PEE"/>
-                                                    <include reference="b8e-HH-q52"/>
                                                     <include reference="Sxc-K8-2FV"/>
                                                     <include reference="UHd-bE-ueC"/>
                                                     <include reference="bhs-PD-Tot"/>
                                                     <include reference="vNR-de-YHu"/>
+                                                    <include reference="3oD-H2-Ugo"/>
+                                                    <include reference="7jb-Le-PEE"/>
+                                                    <include reference="b8e-HH-q52"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1931,13 +1931,13 @@
                                                     <exclude reference="0an-fe-vlC"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <exclude reference="5bn-AD-Trg"/>
-                                                    <exclude reference="IRF-f4-Opw"/>
-                                                    <exclude reference="gmk-7m-0qT"/>
                                                     <exclude reference="5YJ-gX-RzY"/>
                                                     <exclude reference="QO7-JF-6M2"/>
                                                     <exclude reference="tEm-2t-ppp"/>
                                                     <exclude reference="tOm-k1-WZq"/>
+                                                    <exclude reference="5bn-AD-Trg"/>
+                                                    <exclude reference="IRF-f4-Opw"/>
+                                                    <exclude reference="gmk-7m-0qT"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -1946,13 +1946,13 @@
                                                     <include reference="0an-fe-vlC"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <include reference="5bn-AD-Trg"/>
-                                                    <include reference="IRF-f4-Opw"/>
-                                                    <include reference="gmk-7m-0qT"/>
                                                     <include reference="5YJ-gX-RzY"/>
                                                     <include reference="QO7-JF-6M2"/>
                                                     <include reference="tEm-2t-ppp"/>
                                                     <include reference="tOm-k1-WZq"/>
+                                                    <include reference="5bn-AD-Trg"/>
+                                                    <include reference="IRF-f4-Opw"/>
+                                                    <include reference="gmk-7m-0qT"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1965,8 +1965,8 @@
                             <outlet property="delegate" destination="qgv-dU-Z5H" id="VtI-E6-aGW"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="abT-J2-E5b"/>
                     <connections>
-                        <outlet property="cancelAction" destination="Xtb-V1-GcE" id="ShW-KZ-Ixl"/>
                         <outlet property="cancelButton" destination="Xtb-V1-GcE" id="rho-BX-2Nd"/>
                         <outlet property="doneButton" destination="NF1-8v-TLD" id="NbG-Gt-2ud"/>
                         <outlet property="institutionLabel" destination="fHQ-rx-kUg" id="Rd9-FH-Tzu"/>
@@ -1975,6 +1975,13 @@
                         <outlet property="usernameTextField" destination="zfj-No-tUy" id="8Ih-Zz-U6N"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pmb-sN-nzf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem systemItem="cancel" id="Xtb-V1-GcE"/>
+                <barButtonItem systemItem="done" id="NF1-8v-TLD">
+                    <connections>
+                        <action selector="doneAction:" destination="qgv-dU-Z5H" id="6V8-xg-8Um"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="3339" y="-46.5"/>
         </scene>
@@ -2058,7 +2065,8 @@
                                                             <exclude reference="IfO-gW-PrQ"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="222" y="11" width="90" height="21"/>
                                                         <mask key="constraints">
                                                             <include reference="IfO-gW-PrQ"/>
                                                         </mask>
@@ -2143,12 +2151,12 @@
                                 <exclude reference="eIj-sp-RCH"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="6eK-jW-N2q"/>
+                                <exclude reference="VRa-QQ-YxF"/>
                                 <exclude reference="DD4-99-AP8"/>
                                 <exclude reference="TNu-fJ-9yJ"/>
                                 <exclude reference="YMi-Fk-ePv"/>
                                 <exclude reference="lxH-rn-mk6"/>
-                                <exclude reference="6eK-jW-N2q"/>
-                                <exclude reference="VRa-QQ-YxF"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -2157,12 +2165,12 @@
                                 <include reference="eIj-sp-RCH"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="6eK-jW-N2q"/>
+                                <include reference="VRa-QQ-YxF"/>
                                 <include reference="DD4-99-AP8"/>
                                 <include reference="TNu-fJ-9yJ"/>
                                 <include reference="YMi-Fk-ePv"/>
                                 <include reference="lxH-rn-mk6"/>
-                                <include reference="6eK-jW-N2q"/>
-                                <include reference="VRa-QQ-YxF"/>
                             </mask>
                         </variation>
                     </view>

@@ -142,6 +142,13 @@ class BudgetViewController: UIViewController {
             CoreDataStackManager.sharedInstance().saveContext()
         }
     }
+    
+    @IBAction func connectAction(sender: AnyObject) {
+        let storyboard = self.storyboard
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewAccountNavController") as! UINavigationController
+        
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Table view data source
@@ -213,9 +220,7 @@ extension BudgetViewController: UITableViewDelegate {
         }
         
         return headerView!
-    
 
-        
         
 //        // Create header view
 //        let headerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView

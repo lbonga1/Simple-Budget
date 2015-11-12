@@ -137,7 +137,7 @@ public struct Transactions {
 
 //MARK: Add Connect or Auth User
 
-func PS_addUser(userType: Type, username: String, password: String, pin: String?, instiution: Institution, completion: (response: NSURLResponse?, accessToken:String, mfaType:String?, mfa:[[String:AnyObject]]?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
+func PS_addUser(userType: Type, username: String, password: String, pin: String?, instiution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa:[[String:AnyObject]]?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
     let baseURL = Plaid.baseURL!
     let clientId = Plaid.clientId!
     let secret = Plaid.secret!
@@ -184,7 +184,7 @@ func PS_addUser(userType: Type, username: String, password: String, pin: String?
             
             if let token:String = jsonResult?.valueForKey("access_token") as? String {
                 if let mfaResponse = jsonResult!.valueForKey("mfa") as? [[String:AnyObject]] {
-                    let mfaTwo = mfaResponse[0]
+                    //let mfaTwo = mfaResponse[0]
                     mfaDict = mfaResponse
                     if let typeMfa = jsonResult!.valueForKey("type") as? String {
                         type = typeMfa
@@ -200,6 +200,7 @@ func PS_addUser(userType: Type, username: String, password: String, pin: String?
                 }
             } else {
                 //Handle invalid cred login
+                completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
             }
         })
         task.resume()

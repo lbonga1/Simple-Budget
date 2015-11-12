@@ -130,6 +130,7 @@
 				1A19A3D81BCB616500A38E45 /* Subcategory.swift */,
 				1A19A3DA1BCB617000A38E45 /* Transaction.swift */,
 				1A9D67631BF16CCA006D2165 /* Plaid.swift */,
+				1A9D67651BF16D0F006D2165 /* PlaidClient.swift */,
 				1AFF3DC71BD9F1D3006B571F /* Core Data */,
 			);
 			name = Model;
@@ -214,7 +215,6 @@
 				1AFF3DC81BD9F873006B571F /* SpentViewController.swift */,
 				1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */,
 				1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */,
-				1A9D67651BF16D0F006D2165 /* PlaidClient.swift */,
 				1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */,
 				1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */,
 			);
