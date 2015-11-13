@@ -21,15 +21,16 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var instPicker: UIPickerView!
     
 // MARK: - Variables
-    var institution: Institution? = nil
+    var institution: PlaidClient.Institution? = nil
     var responseTextField: UITextField? = nil
     let textDelegate = TextFieldDelegate()
-    let plaid = Plaid()
+    let plaid = PlaidClient.Plaid()
     let instData = ["American Express", "Bank of America", "Capital One 360", "Charles Schwab", "Chase", "Citi Bank", "Fidelity", "PNC", "US Bank", "USAA", "Wells Fargo"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Set up navigation bar button items
         self.navigationItem.rightBarButtonItem = saveButton
         self.navigationItem.leftBarButtonItem = cancelButton
         
@@ -37,14 +38,25 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
         instPicker.hidden = true
         instPicker.dataSource = self
         instPicker.delegate = self
+        
+        // Text delegates
+        usernameTextField.delegate = textDelegate
+        passwordTextField.delegate = textDelegate
     }
     
 // MARK: - Actions
     
+    // Dismiss AccountTableViewController
+    @IBAction func cancelAction(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // Save new account
     @IBAction func saveAction(sender: AnyObject) {
         
         let instType = institutionLabel.text!
-        
+       
+        // Get Institution from institution label text
         switch instType {
         case "American Express":
             institution = .amex
@@ -72,49 +84,60 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
             break
         }
         
-        PS_addUser(.Connect, usernameTextField.text, passwordTextField.text, pinTextField.text, institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+        // Submit add user request
+        PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text, password: passwordTextField.text, pin: pinTextField.text, instiution: institution!) {  (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+            
             // Check response code
             if response != nil {
                 let response = response as! NSHTTPURLResponse
                 
                 switch response.statusCode {
+                // Successful
                 case 200:
-                    println("test success")
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                // MFA response needed
                 case 201:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.checkMfaType(mfaType, mfa: mfa)
                     }
+                // User error
                 case 400:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 401:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 402:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 403:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 404:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // Server error
                 default:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Server error",
                             message: "Please try again at a later time.")
                     }
                 }
+            // Network error
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.displayAlert("Network error",
@@ -125,12 +148,11 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     
-    @IBAction func doneAction(sender: AnyObject) {
-        
-        self.navigationItem.rightBarButtonItem = saveButton
-        instPicker.hidden = true
-    }
-        
+//    @IBAction func doneAction(sender: AnyObject) {
+//        self.navigationItem.rightBarButtonItem = saveButton
+//        instPicker.hidden = true
+//    }
+    
     
 // MARK: - Tableview Delegate
     
@@ -186,6 +208,7 @@ extension AccountTableViewController: UIPickerViewDelegate {
 
 extension AccountTableViewController {
     
+    // Error alert
     func displayAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
@@ -193,19 +216,22 @@ extension AccountTableViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    // Check if MFA type is questions or code
     func checkMfaType(mfaType: String?, mfa: String?) {
         if mfaType == "questions" {
             self.displayResponseAlert(mfa!)
         } else {
-           // handle code based mfa
+           // TODO: handle code based mfa
         }
     }
     
+    // Text field for MFA question response
     func addTextField(textField: UITextField!) {
         responseTextField = textField
         responseTextField!.placeholder = "Enter your response."
     }
     
+    // Display alert with text field for MFA question response
     func displayResponseAlert(message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         alertController.addTextFieldWithConfigurationHandler(addTextField)
@@ -216,50 +242,60 @@ extension AccountTableViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    // Submit MFA answer
     func submitMfaResponse() {
-        PS_submitMFAResponse(PlaidData.sharedInstance().accessToken, responseTextField!.text!) { (response, mfaType, mfa, accounts, transactions, error) -> () in
+        PlaidClient.sharedInstance().PS_submitMFAResponse(PlaidData.sharedInstance().accessToken, response: responseTextField!.text!) { (response, mfaType, mfa, accounts, transactions, error) -> () in
             // Check response code
             if response != nil {
                 let response = response as! NSHTTPURLResponse
                 
                 switch response.statusCode {
+                // Successful
                 case 200:
-                    println("test success")
+                    println("successful")
+                // MFA response needed
                 case 201:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.checkMfaType(mfaType, mfa: mfa)
                     }
+                // User error
                 case 400:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 401:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 402:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 403:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // User error
                 case 404:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
                     }
+                // Server error
                 default:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Server error",
                             message: "Please try again at a later time.")
                     }
                 }
+            // Network error
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.displayAlert("Network error",
@@ -268,5 +304,4 @@ extension AccountTableViewController {
             }
         }
     }
-    
 }

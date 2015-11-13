@@ -11,6 +11,12 @@ import UIKit
 class PlaidData: NSObject {
    
     var accessToken: String!
+    var categoryName: String!
+    var subcategoryName: String!
+    var transactionName: String!
+    var transactionAmount: String!
+    var transactionDate: String!
+    
 
 // MARK: - Shared Instance
 

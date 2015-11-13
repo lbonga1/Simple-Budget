@@ -22,15 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if firstLaunch  {
             println("Do not need to set NSUserDefault")
         } else {
-            println("First launch, setting NSUserDefault.")
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "FirstLaunch")
             let dataHelper = DataHelper()
             dataHelper.seedDataStore()
-            //dataHelper.printAllCategories()
-            //dataHelper.printAllSubcategories()
         }
         
-        Plaid.initializePlaid("55de548f3b5cadf40371c4e1", secret: "42e09ede97c282670f35d768cb65a1", appStatus: .Testing)
+        PlaidClient.Plaid.initializePlaid("55de548f3b5cadf40371c4e1", secret: "42e09ede97c282670f35d768cb65a1", appStatus: .Testing)
         
         return true
     }

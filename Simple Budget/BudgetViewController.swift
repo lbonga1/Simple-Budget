@@ -35,7 +35,7 @@ class BudgetViewController: UIViewController {
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
         
-        println(fetchedResultsController.fetchedObjects)
+        //println(fetchedResultsController.fetchedObjects)
     }
 
     
