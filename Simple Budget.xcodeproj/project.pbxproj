@@ -17,7 +17,7 @@
 		1A7E334F1BEED9310055D901 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */; };
 		1A7E33511BEF0E0D0055D901 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */; };
 		1A9D67641BF16CCA006D2165 /* Plaid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67631BF16CCA006D2165 /* Plaid.swift */; };
-		1A9D67661BF16D0F006D2165 /* PlaidClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67651BF16D0F006D2165 /* PlaidClient.swift */; };
+		1A9D67661BF16D0F006D2165 /* PlaidData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67651BF16D0F006D2165 /* PlaidData.swift */; };
 		1A9D67681BF16F64006D2165 /* AccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */; };
 		1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */; };
 		1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */; };
@@ -59,7 +59,7 @@
 		1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
 		1A9D67631BF16CCA006D2165 /* Plaid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plaid.swift; sourceTree = "<group>"; };
-		1A9D67651BF16D0F006D2165 /* PlaidClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidClient.swift; sourceTree = "<group>"; };
+		1A9D67651BF16D0F006D2165 /* PlaidData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidData.swift; sourceTree = "<group>"; };
 		1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewController.swift; sourceTree = "<group>"; };
 		1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFooterCell.swift; sourceTree = "<group>"; };
 		1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetSubcategoryCell.swift; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 				1A19A3D81BCB616500A38E45 /* Subcategory.swift */,
 				1A19A3DA1BCB617000A38E45 /* Transaction.swift */,
 				1A9D67631BF16CCA006D2165 /* Plaid.swift */,
-				1A9D67651BF16D0F006D2165 /* PlaidClient.swift */,
+				1A9D67651BF16D0F006D2165 /* PlaidData.swift */,
 				1AFF3DC71BD9F1D3006B571F /* Core Data */,
 			);
 			name = Model;
@@ -359,7 +359,7 @@
 				1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */,
 				1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */,
 				1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */,
-				1A9D67661BF16D0F006D2165 /* PlaidClient.swift in Sources */,
+				1A9D67661BF16D0F006D2165 /* PlaidData.swift in Sources */,
 				1AC059731BDAE27C0075302E /* SpenRemSubcatCell.swift in Sources */,
 				1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */,
 			);

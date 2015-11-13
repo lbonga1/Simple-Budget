@@ -137,7 +137,7 @@ public struct Transactions {
 
 //MARK: Add Connect or Auth User
 
-func PS_addUser(userType: Type, username: String, password: String, pin: String?, instiution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa:[[String:AnyObject]]?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
+func PS_addUser(userType: Type, username: String, password: String, pin: String?, instiution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
     let baseURL = Plaid.baseURL!
     let clientId = Plaid.clientId!
     let secret = Plaid.secret!
@@ -150,20 +150,15 @@ func PS_addUser(userType: Type, username: String, password: String, pin: String?
         
     } else if userType == .Connect {
         
-        var optionsDict: [String:AnyObject] =
-        [
-            "list":true
-        ]
+        var optionsDict: [String:AnyObject] = ["list": true]
         
         let optionsDictStr = dictToString(optionsDict)
         
         var urlString:String?
         if pin != nil {
             urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&pin=\(pin!)&type=\(institutionStr)&\(optionsDictStr.encodValue)"
-        }
-        else {
+        } else {
             urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&type=\(institutionStr)&options=\(optionsDictStr.encodValue)"
-            
         }
         
         println("urlString: \(urlString!)")
@@ -174,22 +169,26 @@ func PS_addUser(userType: Type, username: String, password: String, pin: String?
         
         let task = session.dataTaskWithRequest(request, completionHandler: {
             data, response, error in
-            var error:NSError?
-            var mfaDict:[[String:AnyObject]]?
-            var type:String?
+            var error: NSError?
+            var mfaDict: [[String:AnyObject]]?
+            var type: String?
             
-            let jsonResult:NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
+            let jsonResult: NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
             
-            //println("jsonResult: \(jsonResult!)")
+            println("jsonResult: \(jsonResult!)")
             
-            if let token:String = jsonResult?.valueForKey("access_token") as? String {
-                if let mfaResponse = jsonResult!.valueForKey("mfa") as? [[String:AnyObject]] {
-                    //let mfaTwo = mfaResponse[0]
-                    mfaDict = mfaResponse
-                    if let typeMfa = jsonResult!.valueForKey("type") as? String {
-                        type = typeMfa
+            if let token = jsonResult?.valueForKey("access_token") as? String {
+                if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
+                    if let questionDictionary = mfaResponse[0] as? NSDictionary {
+                        if let questionString = questionDictionary["question"] as? String {
+                            println(questionString)
+                            if let typeMfa = jsonResult?.valueForKey("type") as? String {
+                                type = typeMfa
+                                PlaidData.sharedInstance().accessToken = token
+                                completion(response: response, accessToken: token, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
+                            }
+                        }
                     }
-                    completion(response: response, accessToken: token, mfaType: type, mfa: mfaDict, accounts: nil, transactions: nil, error: error)
                 } else {
                     let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
                     let accts = acctsArray.map{Account(account: $0)}
@@ -209,7 +208,7 @@ func PS_addUser(userType: Type, username: String, password: String, pin: String?
 
 //MARK: MFA funcs
 
-func PS_submitMFAResponse(accessToken: String, response: String, completion: (response: NSURLResponse?, accounts: [Account]?, transactions: [Transactions]?, error: NSError?) -> ()) {
+func PS_submitMFAResponse(accessToken: String, response: String, completion: (response: NSURLResponse?, mfaType: String?, mfa: String?,accounts: [Account]?, transactions: [Transactions]?, error: NSError?) -> ()) {
     let baseURL = Plaid.baseURL!
     let clientId = Plaid.clientId!
     let secret = Plaid.secret!
@@ -229,15 +228,31 @@ func PS_submitMFAResponse(accessToken: String, response: String, completion: (re
         println("mfa data: \(data)")
         println(error)
         var error:NSError?
+        var type: String?
+        
         let jsonResult:NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
         
-        if jsonResult?.valueForKey("accounts") != nil {
+        if let token = jsonResult?.valueForKey("access_token") as? String {
+            if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
+                if let questionDictionary = mfaResponse[0] as? NSDictionary {
+                    if let questionString = questionDictionary["question"] as? String {
+                        println(questionString)
+                        if let typeMfa = jsonResult?.valueForKey("type") as? String {
+                            type = typeMfa
+                            PlaidData.sharedInstance().accessToken = token
+                            completion(response: response, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
+                        }
+                    }
+                }
+            }
+        } else if jsonResult?.valueForKey("accounts") != nil {
+            
             let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
             let accts = acctsArray.map{Account(account: $0)}
             let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
             let trxns = trxnArray.map{Transactions(transactions: $0)}
             
-            completion(response: response, accounts: accts, transactions: trxns, error: error)
+            completion(response: response, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
         }
         
         println("jsonResult: \(jsonResult!)")
