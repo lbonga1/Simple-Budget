@@ -61,7 +61,7 @@ public class PlaidClient: NSObject {
                 
                 let jsonResult: NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
                 
-                println("jsonResult: \(jsonResult!)")
+                println(jsonResult!)
                 
                 if let token = jsonResult?.valueForKey("access_token") as? String {
                     if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {

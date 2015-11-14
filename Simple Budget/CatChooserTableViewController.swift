@@ -17,7 +17,6 @@ class CatChooserTableViewController: UITableViewController {
 
     
 // MARK: - Variables
-    var selectedCategory: Category?
     var selectedSubcategory: Subcategory?
     var selectedIndexArray: NSMutableArray = []
     var selectedIndexPath: NSIndexPath?
@@ -67,6 +66,8 @@ class CatChooserTableViewController: UITableViewController {
     
     // Segue back to NewTransTableViewController with selectedSubcategory data
     @IBAction func doneSelecting(sender: AnyObject) {
+        
+        // Unwind segue to NewTransTableViewController
         performSegueWithIdentifier("returnToNewTrans", sender: self)
     }
     
@@ -131,9 +132,9 @@ class CatChooserTableViewController: UITableViewController {
         return headerView!
     }
     
-    // Inits Category and Subcategory objects when a row is selected
+    // Saves selectedSubcategory data when row is selected
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        /* Allow only one subcategory selection, despite multiple selection enabled */
         // Keep track of selected cell
         if selectedIndexArray.count == 0 {
             // Add selected indexPath to array
@@ -150,23 +151,11 @@ class CatChooserTableViewController: UITableViewController {
             selectedIndexPath = indexPath
         }
         
-        // Define the selected cell
-        let selectedCell = tableView.cellForRowAtIndexPath(indexPath) as! SpenRemSubcatCell
-            
-        // Define sectionHeaderView and title
-        let sectionHeaderView = tableView.headerViewForSection(indexPath.section)
-        let sectionTitle = sectionHeaderView?.textLabel.text
-            
-        // Init Category object
-        selectedCategory = Category(catTitle: sectionTitle!, context: self.sharedContext)
-            
-        // Init Subcategory object
-        selectedSubcategory = Subcategory(
-            category: selectedCategory!,
-            subTitle: selectedCell.subcatTitle.text!,
-            totalAmount: selectedCell.amountLabel.text!,
-            context: self.sharedContext
-        )
+        // Get index path for the selected subcategory
+        let selectedSubcategoryIndex = tableView.indexPathForSelectedRow()
+        
+        // Set selectedSubcategory to the correct value using fetchedResultsController
+        selectedSubcategory = fetchedResultsController.objectAtIndexPath(selectedSubcategoryIndex!) as? Subcategory
     }
 }
 

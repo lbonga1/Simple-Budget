@@ -128,9 +128,10 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         }
     }
     
+    // Set up unwind segue to transition selected subcategory object data
     @IBAction func unwindSegue(unwindSegue: UIStoryboardSegue) {
-        if let newTrans = unwindSegue.sourceViewController as? CatChooserTableViewController {
-            selectedSubcategory = newTrans.selectedSubcategory
+        if let catChooser = unwindSegue.sourceViewController as? CatChooserTableViewController {
+            selectedSubcategory = catChooser.selectedSubcategory
         }
     }
 }

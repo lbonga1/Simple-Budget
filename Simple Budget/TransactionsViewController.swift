@@ -12,15 +12,14 @@ import CoreData
 class TransactionsViewController: UIViewController {
     
 // MARK: - Outlets
-
     @IBOutlet var addButton: UIBarButtonItem!
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noTransactionsLabel: UILabel!
     
 // MARK: - Variables
-    
     var chosenSubcategory: Subcategory!
+    var newDateString: String?
     var error: NSError?
 
     override func viewDidLoad() {
@@ -42,8 +41,6 @@ class TransactionsViewController: UIViewController {
             noTransactionsLabel.hidden = true
             tableView.hidden = false
         }
-        print(chosenSubcategory)
-        print(fetchedResultsController.fetchedObjects as! [Transaction])
     }
     
 // MARK: - Core Data Convenience
@@ -117,11 +114,16 @@ extension TransactionsViewController: UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("TransactionCell", forIndexPath: indexPath) as! TransactionCell
         
-        // Set title, amount, and date values
+        // Set title and amount values
         let transaction = fetchedResultsController.objectAtIndexPath(indexPath) as! Transaction
         cell.titleLabel.text = transaction.title
         cell.amountLabel.text = transaction.amount
-        cell.dateLabel.text = transaction.date
+        
+        // Change date format
+        self.changeDateFormat(transaction.date)
+        
+        // Set date value
+        cell.dateLabel.text = newDateString
             
         return cell
     }
@@ -132,4 +134,20 @@ extension TransactionsViewController: UITableViewDelegate {
 extension TransactionsViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+}
+
+// MARK: - Additional Methods 
+
+extension TransactionsViewController {
+    
+    // Change date format to short style
+    func changeDateFormat(dateString: String) {
+        var dateFormatter = NSDateFormatter()
+        
+        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        
+        let newDate = dateFormatter.dateFromString(dateString)
+        
+        newDateString = dateFormatter.stringFromDate(newDate!)
+    }
 }

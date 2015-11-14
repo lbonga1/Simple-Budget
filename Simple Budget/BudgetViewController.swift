@@ -302,11 +302,8 @@ extension BudgetViewController: UITableViewDelegate {
         // Deselect row to make it visually reselectable.
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        // Cast chosenCell as BudgetSubcategoryCell
-        let chosenCell = tableView.cellForRowAtIndexPath(indexPath) as! BudgetSubcategoryCell
-        
-        // Set chosenSubcategory value to the selected Subcategory
-        chosenSubcategory = searchForSubcategory(chosenCell.subcategoryTitle.text!)
+        // Set chosenSubcategory to the correct Subcategory object from fetchedResultsController
+        chosenSubcategory = fetchedResultsController.objectAtIndexPath(indexPath) as? Subcategory
         
         // Push TransacationsViewController
         self.performSegueWithIdentifier("displayTransactions", sender: chosenSubcategory)
