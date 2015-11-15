@@ -98,12 +98,31 @@ extension SpentViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpentSubcategoryCell", forIndexPath: indexPath) as! SpenRemSubcatCell
         
-        // Set title and amount values
+        // Set title value
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+                
         cell.subcatTitle.text = subcategory.subTitle
         
-    // TODO: Change amount to sum of transaction amounts
-        cell.amountLabel.text = subcategory.totalAmount
+//        // Cast transactions NSSet as an array
+//        let transactions = subcategory.transactions.allObjects as! [Transaction]
+//        
+//        // Convert amount strings to floats, then get the sum
+//        var sum: Float = 0
+//        for transaction in transactions {
+//            let transaction = transaction as Transaction
+//            let amountString = transaction.amount
+//            let amountFloat = (amountString as NSString).floatValue
+//            sum += amountFloat
+//        }
+//        
+//        // Format the sum back into a string
+//        let formatter = NSNumberFormatter()
+//        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+//        formatter.locale = NSLocale(localeIdentifier: "en_US")
+//        let sumAmountString = formatter.stringFromNumber(sum)
+//
+//        // Set amount label value
+//        cell.amountLabel.text = sumAmountString
         
         return cell
     }
