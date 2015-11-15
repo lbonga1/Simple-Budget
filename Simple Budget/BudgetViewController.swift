@@ -20,6 +20,7 @@ class BudgetViewController: UIViewController {
     @IBOutlet var connectButton: UIBarButtonItem!
     
     var testData: NSMutableArray = ["Test"]
+    var editingTextFieldSubcategory: Subcategory?
     var currentlyEditingCategory = 0
     var currentlyEditingSubcategory: NSIndexPath? = nil
     var chosenSubcategory: Subcategory?
@@ -171,7 +172,12 @@ extension BudgetViewController: UITableViewDataSource {
         }
         return 1
     }
+    
+    func getTextFieldIndex() {
+        
+    }
 }
+
 
 // MARK: - Table view delegate
 
@@ -180,7 +186,7 @@ extension BudgetViewController: UITableViewDelegate {
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
-        
+
         // Set title and amount values
         if fetchedResultsController.fetchedObjects!.count != 0 {
             let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
@@ -265,7 +271,7 @@ extension BudgetViewController: UITableViewDelegate {
         
         // Customize background color and button title
         footerCell.addItemButton.setTitle("+ Add Item", forState: .Normal)
-        footerCell.backgroundColor = UIColor.whiteColor()
+        footerCell.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.01)
         
         // Get index path of "add item" button
         let pointInTable = footerCell.addItemButton.convertPoint(footerCell.addItemButton.bounds.origin, toView: self.tableView)
@@ -284,7 +290,7 @@ extension BudgetViewController: UITableViewDelegate {
     // Footer cell height
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
-        return 32
+        return 25
     }
 
     // Editing the table view.

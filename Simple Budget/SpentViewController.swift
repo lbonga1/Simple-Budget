@@ -30,7 +30,7 @@ class SpentViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         // Saved categories label is hidden if there are categories to display.
-        if fetchedResultsController.fetchedObjects!.count == 0{
+        if fetchedResultsController.fetchedObjects!.count == 0 {
             savedLabel.hidden = false
         } else {
             savedLabel.hidden = true
@@ -68,28 +68,31 @@ class SpentViewController: UIViewController {
     }
 }
     
-// MARK: - Table view data source and delegate
+// MARK: - Table view data source
     
-extension SpentViewController: UITableViewDataSource, UITableViewDelegate {
+extension SpentViewController: UITableViewDataSource {
     
     // Returns the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if fetchedResultsController.fetchedObjects!.count != 0 {
-            return fetchedResultsController.fetchedObjects!.count
+        if let sections = fetchedResultsController.sections {
+            return sections.count
         }
         return 0
     }
     
     // Returns the number of rows in each section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if fetchedResultsController.fetchedObjects!.count != 0 {
-            if let sections = fetchedResultsController.sections {
-                let currentSection: AnyObject = sections[section]
-                return currentSection.numberOfObjects
-            }
+        if let sections = fetchedResultsController.sections {
+            let currentSection: AnyObject = sections[section]
+            return currentSection.numberOfObjects
         }
         return 0
     }
+}
+
+// MARK: - Table view delegate
+
+extension SpentViewController: UITableViewDelegate {
     
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -141,8 +144,8 @@ extension SpentViewController: UITableViewDataSource, UITableViewDelegate {
     // Defines the custom footer cells.
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         // Create footer view
-        let footerView: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
-        footerView.contentView.backgroundColor = UIColor.whiteColor()
+        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
+        footerView.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.1)
         
         return footerView
     }
@@ -150,7 +153,7 @@ extension SpentViewController: UITableViewDataSource, UITableViewDelegate {
     // Footerview height
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
-        return 32
+        return 25
     }
 
 }

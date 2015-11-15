@@ -7,13 +7,69 @@
 //
 
 import UIKit
+import CoreData
 
-class BudgetSubcategoryCell: UITableViewCell {
+class BudgetSubcategoryCell: UITableViewCell, UITextFieldDelegate {
 
-    
+// MARK: -Outlets
     @IBOutlet weak var subcategoryTitle: UILabel!
-    @IBOutlet weak var amountTextField: UILabel!
+    @IBOutlet weak var amountTextField: UITextField!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Set text field delegate
+        amountTextField.delegate = self
+    }
     
+// MARK: - Text field delegate
     
+    // Dismisses keyboard when user taps "return".
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true;
+    }
+    
+    // Change characters of user's input into currency string
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        // Construct the text that will be in the field if this change is accepted
+        var oldText = textField.text as NSString
+        var newText = oldText.stringByReplacingCharactersInRange(range, withString: string) as NSString!
+        var newTextString = String(newText)
+        
+        let digits = NSCharacterSet.decimalDigitCharacterSet()
+        var digitText = ""
+        for c in newTextString.unicodeScalars {
+            if digits.longCharacterIsMember(c.value) {
+                digitText.append(c)
+            }
+        }
+        // Format to US currency
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        var numberFromField = (NSString(string: digitText).doubleValue)/100
+        newText = formatter.stringFromNumber(numberFromField)
+        
+        textField.text = newText as String
+        
+        return false
+    }
+    
+    // Update amount value in core data when text field ends editing
+    func textFieldDidEndEditing(textField: UITextField) {
+        var batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
+        batchRequest.propertiesToUpdate = ["totalAmount": amountTextField.text]
+        //batchRequest.predicate = NSPredicate(format: "subcategory == %@", BudgetViewController().editingTextFieldSubcategory!)
+        batchRequest.resultType = .UpdatedObjectsCountResultType
+        var error : NSError?
+        self.sharedContext.executeRequest(batchRequest, error: &error) as! NSBatchUpdateResult
+    }
+    
+// MARK: - Core Data Convenience
+    
+    // Shared context
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+
 }

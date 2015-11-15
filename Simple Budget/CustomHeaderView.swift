@@ -8,13 +8,13 @@
 
 import UIKit
 
-private let headerViewTitleFont = UIFont(name:"Avenir-Book", size: 17)
+private let headerViewTitleFont = UIFont(name: "Avenir-Book", size: 17)
 
 let headerViewReuseIdentifier: String = "HeaderView"
 
 class CustomHeaderView: UITableViewHeaderFooterView {
     
-    private var textColor:UIColor?
+    private var textColor: UIColor?
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -22,11 +22,11 @@ class CustomHeaderView: UITableViewHeaderFooterView {
 
     // We must implement this, since the designated init of the parent class
     // calls this by default!
-    override init(frame:CGRect) {
-        super.init(frame:frame)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
-    init(backgroundColor:UIColor, textColor:UIColor) {
+    init(backgroundColor: UIColor, textColor: UIColor) {
         super.init(reuseIdentifier: headerViewReuseIdentifier)
         contentView.backgroundColor = backgroundColor
         self.textColor = textColor
