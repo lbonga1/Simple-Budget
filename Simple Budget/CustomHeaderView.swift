@@ -16,15 +16,15 @@ class CustomHeaderView: UITableViewHeaderFooterView {
     
     private var textColor: UIColor?
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // We must implement this, since the designated init of the parent class
-    // calls this by default!
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
+//    // We must implement this, since the designated init of the parent class
+//    // calls this by default!
+//    init(frame: CGRect) {
+//        super.init(frame: frame)
+//    }
     
     init(backgroundColor: UIColor, textColor: UIColor) {
         super.init(reuseIdentifier: headerViewReuseIdentifier)
@@ -33,7 +33,7 @@ class CustomHeaderView: UITableViewHeaderFooterView {
     }
     
     func configureTextLabel() {
-        textLabel.textColor = textColor
-        textLabel.font = headerViewTitleFont
+        textLabel!.textColor = textColor
+        textLabel!.font = headerViewTitleFont
     }
 }

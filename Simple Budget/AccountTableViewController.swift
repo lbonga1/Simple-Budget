@@ -85,7 +85,7 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
         }
         
         // Submit add user request
-        PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text, password: passwordTextField.text, pin: pinTextField.text, instiution: institution!) {  (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+        PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) {  (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
             
             // Check response code
             if response != nil {
@@ -195,7 +195,7 @@ extension AccountTableViewController: UIPickerViewDataSource {
 extension AccountTableViewController: UIPickerViewDelegate {
    
     // Return row title.
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return instData[row]
     }
     
@@ -236,15 +236,15 @@ extension AccountTableViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         alertController.addTextFieldWithConfigurationHandler(addTextField)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
-            self.submitMfaResponse()
+            self.submitMfaQuestionsResponse()
             })
         alertController.addAction(okAction)
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     // Submit MFA answer
-    func submitMfaResponse() {
-        PlaidClient.sharedInstance().PS_submitMFAResponse(PlaidData.sharedInstance().accessToken, response: responseTextField!.text!) { (response, mfaType, mfa, accounts, transactions, error) -> () in
+    func submitMfaQuestionsResponse() {
+        PlaidClient.sharedInstance().PS_submitMFAResponse(PlaidData.sharedInstance().accessToken, code: false, response: responseTextField!.text!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
             // Check response code
             if response != nil {
                 let response = response as! NSHTTPURLResponse
@@ -252,7 +252,7 @@ extension AccountTableViewController {
                 switch response.statusCode {
                 // Successful
                 case 200:
-                    println("successful")
+                    print("successful")
                 // MFA response needed
                 case 201:
                     dispatch_async(dispatch_get_main_queue()) {

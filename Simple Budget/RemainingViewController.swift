@@ -23,8 +23,11 @@ class RemainingViewController: UIViewController {
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
-        // Fetched Results Controller
-        fetchedResultsController.performFetch(nil)
+        do {
+            // Fetched Results Controller
+            try fetchedResultsController.performFetch()
+        } catch _ {
+        }
         fetchedResultsController.delegate = self
     }
     
@@ -40,7 +43,7 @@ class RemainingViewController: UIViewController {
 // MARK: - Core Data Convenience
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -60,7 +63,6 @@ class RemainingViewController: UIViewController {
 // MARK: - Actions
     
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! NewTransTableViewController
         
         self.presentViewController(controller, animated: true, completion: nil)
@@ -120,7 +122,7 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
         // Set title label text
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
-            headerView?.textLabel.text = currentSection.name
+            headerView?.textLabel!.text = currentSection.name
         }
         
         return headerView

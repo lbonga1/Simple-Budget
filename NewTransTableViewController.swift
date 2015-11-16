@@ -58,7 +58,7 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
 // MARK: - Core Data Convenience
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
 
     
 // MARK: - Tableview Delegate
@@ -69,7 +69,6 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         // Present Category Chooser
-        let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CategoryChooser") as! UINavigationController
         self.presentViewController(controller, animated: true, completion: nil)
     }
@@ -110,8 +109,8 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
             // Init transaction object
             let newTransaction = Transaction(subcategory: selectedSubcategory,
                 date: dateButton.titleLabel!.text!,
-                title: merchantTextField.text,
-                amount: amountTextField.text,
+                title: merchantTextField.text!,
+                amount: amountTextField.text!,
                 notes: notesTextView.text,
                 context: self.sharedContext)
             
@@ -163,11 +162,11 @@ extension NewTransTableViewController {
     
     // Creates a string from NSDate to change dateButton title
     func setDate(newDate: NSDate) {
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         
-        var strDate = dateFormatter.stringFromDate(newDate)
+        let strDate = dateFormatter.stringFromDate(newDate)
         dateButton.setTitle(strDate, forState: .Normal)
     }
 }

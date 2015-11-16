@@ -18,7 +18,6 @@ class LoginViewController: UIViewController {
         
         // Redirect to CreateUserVC if app is being launched for the first time
         if NSUserDefaults.standardUserDefaults().valueForKey("username") == nil {
-            let storyboard = self.storyboard
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CreateUser") as! CreateUserViewController
             
             self.presentViewController(controller, animated: true, completion: nil)
@@ -28,12 +27,11 @@ class LoginViewController: UIViewController {
 // MARK: - Actions
     
     @IBAction func userLogin(sender: AnyObject) {
-        var checkUser = NSUserDefaults.standardUserDefaults().stringForKey("username")
-        var checkPassword = NSUserDefaults.standardUserDefaults().stringForKey("password")
+        let checkUser = NSUserDefaults.standardUserDefaults().stringForKey("username")
+        let checkPassword = NSUserDefaults.standardUserDefaults().stringForKey("password")
         
         // Present BudgetVC if username and password are correct
         if usernameField.text == checkUser && passwordField.text == checkPassword {
-            let storyboard = self.storyboard
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("Budget") as! BudgetViewController
             
             self.presentViewController(controller, animated: true, completion: nil)

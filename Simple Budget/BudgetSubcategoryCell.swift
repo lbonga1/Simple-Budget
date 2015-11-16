@@ -34,7 +34,7 @@ class BudgetSubcategoryCell: UITableViewCell, UITextFieldDelegate {
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         // Construct the text that will be in the field if this change is accepted
-        var oldText = textField.text as NSString
+        let oldText = textField.text! as NSString
         var newText = oldText.stringByReplacingCharactersInRange(range, withString: string) as NSString!
         var newTextString = String(newText)
         
@@ -49,7 +49,7 @@ class BudgetSubcategoryCell: UITableViewCell, UITextFieldDelegate {
         let formatter = NSNumberFormatter()
         formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
         formatter.locale = NSLocale(localeIdentifier: "en_US")
-        var numberFromField = (NSString(string: digitText).doubleValue)/100
+        let numberFromField = (NSString(string: digitText).doubleValue)/100
         newText = formatter.stringFromNumber(numberFromField)
         
         textField.text = newText as String
@@ -59,17 +59,16 @@ class BudgetSubcategoryCell: UITableViewCell, UITextFieldDelegate {
     
     // Update amount value in core data when text field ends editing
     func textFieldDidEndEditing(textField: UITextField) {
-        var batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
-        batchRequest.propertiesToUpdate = ["totalAmount": amountTextField.text]
+        let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
+        batchRequest.propertiesToUpdate = ["totalAmount": amountTextField.text!]
         //batchRequest.predicate = NSPredicate(format: "subcategory == %@", BudgetViewController().editingTextFieldSubcategory!)
         batchRequest.resultType = .UpdatedObjectsCountResultType
-        var error : NSError?
-        self.sharedContext.executeRequest(batchRequest, error: &error) as! NSBatchUpdateResult
+        (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
     }
     
 // MARK: - Core Data Convenience
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
 
 }

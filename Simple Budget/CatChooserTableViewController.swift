@@ -25,7 +25,10 @@ class CatChooserTableViewController: UITableViewController {
         super.viewDidLoad()
 
         // Fetched Results Controller
-        fetchedResultsController.performFetch(nil)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch _ {
+        }
         fetchedResultsController.delegate = self
         
         // Tableview is automatically in editing mode
@@ -40,7 +43,7 @@ class CatChooserTableViewController: UITableViewController {
 // MARK: - Core Data Convenience
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -126,7 +129,7 @@ class CatChooserTableViewController: UITableViewController {
         // Set title label text
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
-            headerView?.textLabel.text = currentSection.name
+            headerView?.textLabel!.text = currentSection.name
         }
         
         return headerView!
@@ -152,7 +155,7 @@ class CatChooserTableViewController: UITableViewController {
         }
         
         // Get index path for the selected subcategory
-        let selectedSubcategoryIndex = tableView.indexPathForSelectedRow()
+        let selectedSubcategoryIndex = tableView.indexPathForSelectedRow
         
         // Set selectedSubcategory to the correct value using fetchedResultsController
         selectedSubcategory = fetchedResultsController.objectAtIndexPath(selectedSubcategoryIndex!) as? Subcategory

@@ -19,49 +19,45 @@ public class PlaidClient: NSObject {
 // MARK: - Core Data Convenience
     
     // Shared context
-    var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
    
 // MARK: - Add Connect or Auth User
-    
-    func PS_addUser(userType: Type, username: String, password: String, pin: String?, instiution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
+    func PS_addUser(userType: Type, username: String, password: String, pin: String?, institution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
         let secret = Plaid.secret!
         
-        var institutionStr: String = institutionToString(institution: instiution)
+        let institutionStr: String = institutionToString(institution: institution)
         
+        let optionsDict: [String:AnyObject] =
+        [
+            "list":true
+        ]
         
-        if userType == .Auth {
-            //Fill in for Auth call
+        let optionsDictStr = dictToString(optionsDict)
+        
+        var urlString:String?
+        if pin != nil {
+            urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&pin=\(pin!)&type=\(institutionStr)&\(optionsDictStr.encodValue)"
+        }
+        else {
+            urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&type=\(institutionStr)&options=\(optionsDictStr.encodValue)"
+        }
+        
+        let url:NSURL! = NSURL(string: urlString!)
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {
+            data, response, error in
+            var type:String?
             
-        } else if userType == .Connect {
-            
-            var optionsDict: [String:AnyObject] = ["list": true]
-            
-            let optionsDictStr = dictToString(optionsDict)
-            
-            var urlString:String?
-            if pin != nil {
-                urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&pin=\(pin!)&type=\(institutionStr)&\(optionsDictStr.encodValue)"
-            } else {
-                urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&type=\(institutionStr)&options=\(optionsDictStr.encodValue)"
-            }
-            
-            //println("urlString: \(urlString!)")
-            
-            let url:NSURL! = NSURL(string: urlString!)
-            var request = NSMutableURLRequest(URL: url)
-            request.HTTPMethod = "POST"
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: {
-                data, response, error in
-                var error: NSError?
-                var mfaDict: [[String:AnyObject]]?
-                var type: String?
-                
-                let jsonResult: NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
-                
-                println(jsonResult!)
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+                guard jsonResult?.valueForKey("code") as? Int != 1303 else { throw PlaidError.InstitutionNotAvailable }
+                guard jsonResult!.valueForKey("code") as? Int != 1200 else {throw PlaidError.InvalidCredentials(jsonResult!.valueForKey("resolve") as! String)}
+                guard jsonResult!.valueForKey("code") as? Int != 1005 else {throw PlaidError.CredentialsMissing(jsonResult!.valueForKey("resolve") as! String)}
+                guard jsonResult!.valueForKey("code") as? Int != 1601 else {throw PlaidError.InstitutionNotAvailable}
                 
                 if let token = jsonResult?.valueForKey("access_token") as? String {
                     if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
@@ -78,114 +74,87 @@ public class PlaidClient: NSObject {
                     } else {
                         let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
                         let accts = acctsArray.map{Account(account: $0)}
+                        let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
+                        let trxns = trxnArray.map{Transactions(transactions: $0)}
                         
-                        if let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as? [[String:AnyObject]] {
-                            let transactions = trxnArray.map{Transactions(transactions: $0)}
-                            if let categoryArray = jsonResult?.valueForKey("category") as? NSArray {
-                                let categoryName = categoryArray[0] as! String
-                                PlaidData.sharedInstance().categoryName = categoryName
-                                
-                                let subcategoryName = categoryArray[1] as! String
-                                PlaidData.sharedInstance().subcategoryName = subcategoryName
-                            }
-                            
-                            if let transactionName = jsonResult?.valueForKey("name") as? String {
-                                PlaidData.sharedInstance().transactionName = transactionName
-                            }
-                            
-                            if let transactionAmount = jsonResult?.valueForKey("amount") as? String {
-                                PlaidData.sharedInstance().transactionAmount = transactionAmount
-                            }
-                            
-                            if let transactionDate = jsonResult?.valueForKey("date") as? String {
-                                PlaidData.sharedInstance().transactionDate = transactionDate
-                                
-                                
-                                let newCategory = Category(catTitle: PlaidData.sharedInstance().categoryName, context: self.sharedContext)
-                                
-                                let newSubcategory = Subcategory(category: newCategory, subTitle: PlaidData.sharedInstance().subcategoryName, totalAmount: "$0.00", context: self.sharedContext)
-                                
-                                let newTransaction = Transaction(subcategory: newSubcategory, date: PlaidData.sharedInstance().transactionDate, title: PlaidData.sharedInstance().transactionName, amount: PlaidData.sharedInstance().transactionAmount, notes: "", context: self.sharedContext)
-
-                                print(newTransaction)
-                                
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    CoreDataStackManager.sharedInstance().saveContext()
-                                }
-//                                        }
-//                                    }
-//                                }
-                            }
-                        
-                        completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: transactions, error: error)
-                        }
+                        completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
                     }
                 } else {
                     //Handle invalid cred login
-                    completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                 }
-            })
-            task.resume()
-        }
-    }
-    
-// MARK: - MFA funcs
-    
-    func PS_submitMFAResponse(accessToken: String, response: String, completion: (response: NSURLResponse?, mfaType: String?, mfa: String?,accounts: [Account]?, transactions: [Transactions]?, error: NSError?) -> ()) {
-        let baseURL = Plaid.baseURL!
-        let clientId = Plaid.clientId!
-        let secret = Plaid.secret!
-        
-        
-        let urlString:String = "\(baseURL)connect/step?client_id=\(clientId)&secret=\(secret)&access_token=\(accessToken)&mfa=\(response.encodValue)"
-        println("urlString: \(urlString)")
-        let url:NSURL! = NSURL(string: urlString)
-        var request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "POST"
-        println("MFA request: \(request)")
-        
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: {
-            data, response, error in
-            println("mfa response: \(response)")
-            println("mfa data: \(data)")
-            println(error)
-            var error:NSError?
-            var type: String?
-            
-            let jsonResult:NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
-            
-            if let token = jsonResult?.valueForKey("access_token") as? String {
-                if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
-                    if let questionDictionary = mfaResponse[0] as? NSDictionary {
-                        if let questionString = questionDictionary["question"] as? String {
-                            println(questionString)
-                            if let typeMfa = jsonResult?.valueForKey("type") as? String {
-                                type = typeMfa
-                                PlaidData.sharedInstance().accessToken = token
-                                completion(response: response, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
-                            }
-                        }
-                    }
-                }
-            } else if jsonResult?.valueForKey("accounts") != nil {
                 
-                let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
-                let accts = acctsArray.map{Account(account: $0)}
-                let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
-                let trxns = trxnArray.map{Transactions(transactions: $0)}
-                
-                completion(response: response, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+            } catch {
+                print("Error (PS_addUser): \(error)")
             }
             
-            //println("jsonResult: \(jsonResult!)")
         })
         task.resume()
     }
     
+// MARK: - MFA funcs
+    func PS_submitMFAResponse(accessToken: String, code: Bool?, response: String, completion: (response: NSURLResponse?, accessToken: String?, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error: NSError?) -> ()) {
+        let baseURL = Plaid.baseURL!
+        let clientId = Plaid.clientId!
+        let secret = Plaid.secret!
+        var urlString:String?
+        
+        let optionsDict: [String:AnyObject] =
+        [
+            "send_method":["type":response]
+        ]
+        
+        let optionsDictStr = dictToString(optionsDict)
+        
+        if code == true {
+            urlString = "\(baseURL)connect/step?client_id=\(clientId)&secret=\(secret)&access_token=\(accessToken)&options=\(optionsDictStr.encodValue)"
+            print("urlString: \(urlString!)")
+        } else {
+            urlString = "\(baseURL)connect/step?client_id=\(clientId)&secret=\(secret)&access_token=\(accessToken)&mfa=\(response.encodValue)"
+        }
+        
+        let url:NSURL! = NSURL(string: urlString!)
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {
+            data, response, error in
+            var type: String?
+            
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+                guard jsonResult?.valueForKey("code") as? Int != 1303 else { throw PlaidError.InstitutionNotAvailable }
+                guard jsonResult?.valueForKey("code") as? Int != 1203 else { throw PlaidError.IncorrectMfa(jsonResult!.valueForKey("resolve") as! String)}
+                guard jsonResult?.valueForKey("accounts") != nil else { throw JsonError.Empty }
+                
+                if let token = jsonResult?.valueForKey("access_token") as? String {
+                    if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
+                        if let questionDictionary = mfaResponse[0] as? NSDictionary {
+                            if let questionString = questionDictionary["question"] as? String {
+                                //println(questionString)
+                                if let typeMfa = jsonResult?.valueForKey("type") as? String {
+                                    type = typeMfa
+                                    PlaidData.sharedInstance().accessToken = token
+                                    completion(response: response, accessToken: token, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
+                    let accts = acctsArray.map{Account(account: $0)}
+                    let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
+                    let trxns = trxnArray.map{Transactions(transactions: $0)}
+                
+                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+                }
+            } catch {
+                print("MFA error (PS_submitMFAResponse): \(error)")
+            }
+        })
+        task.resume()
+    }
     
 // MARK: - Get balance
-    
     func PS_getUserBalance(accessToken: String, completion: (response: NSURLResponse?, accounts:[Account], error:NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
@@ -196,17 +165,24 @@ public class PlaidClient: NSObject {
         
         let task = session.dataTaskWithURL(url) {
             data, response, error in
-            var error: NSError?
-            let jsonResult:NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
-            let dataArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String : AnyObject]]
-            let userAccounts = dataArray.map{Account(account: $0)}
-            completion(response: response, accounts: userAccounts, error: error)
+            
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+                print("jsonResult: \(jsonResult!)")
+                guard jsonResult?.valueForKey("code") as? Int != 1303 else { throw PlaidError.InstitutionNotAvailable }
+                guard jsonResult?.valueForKey("code") as? Int != 1105 else { throw PlaidError.BadAccessToken }
+                guard let dataArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as? [[String : AnyObject]] else { throw JsonError.Empty }
+                let userAccounts = dataArray.map{Account(account: $0)}
+                completion(response: response, accounts: userAccounts, error: error)
+                
+            } catch {
+                print("JSON parsing error (PS_getUserBalance): \(error)")
+            }
         }
         task.resume()
     }
     
 // MARK: - Get transactions (Connect)
-    
     func PS_getUserTransactions(accessToken: String, showPending: Bool, beginDate: String?, endDate: String?, completion: (response: NSURLResponse?, transactions:[Transactions], error:NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
@@ -228,26 +204,43 @@ public class PlaidClient: NSObject {
         let optionsDictStr = dictToString(optionsDict)
         let urlString:String = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&access_token=\(accessToken)&\(optionsDictStr.encodValue)"
         let url:NSURL = NSURL(string: urlString)!
-        var request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         
         let task = NSURLSession.sharedSession().dataTaskWithURL(url) {
             data, response, error in
-            var error: NSError?
-            let jsonResult:NSDictionary? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
-            let dataArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
-            let userTransactions = dataArray.map{Transactions(transactions: $0)}
-            completion(response: response, transactions: userTransactions, error: error)
+            
+            do {
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+                guard jsonResult?.valueForKey("code") as? Int != 1303 else { throw PlaidError.InstitutionNotAvailable }
+                guard let dataArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as? [[String:AnyObject]] else { throw JsonError.Empty }
+                let userTransactions = dataArray.map{Transactions(transactions: $0)}
+                completion(response: response, transactions: userTransactions, error: error)
+            } catch {
+                print("JSON parsing error (PS_getUserTransactions: \(error)")
+            }
         }
         task.resume()
-        
     }
-    
     
 // MARK: - Helper funcs
     
+    enum JsonError:ErrorType {
+        case Writing
+        case Reading
+        case Empty
+    }
+    
+    enum PlaidError:ErrorType {
+        case BadAccessToken
+        case CredentialsMissing(String)
+        case InvalidCredentials(String)
+        case IncorrectMfa(String)
+        case InstitutionNotAvailable
+    }
+    
     func plaidDateFormatter(date: NSDate) -> String {
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let dateStr = dateFormatter.stringFromDate(date)
         return dateStr
@@ -255,7 +248,7 @@ public class PlaidClient: NSObject {
     
     func dictToString(value: AnyObject) -> NSString {
         if NSJSONSerialization.isValidJSONObject(value) {
-            if let data = NSJSONSerialization.dataWithJSONObject(value, options: nil, error: nil) {
+            if let data = try? NSJSONSerialization.dataWithJSONObject(value, options: []) {
                 if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
                     return string
                 }
@@ -264,7 +257,7 @@ public class PlaidClient: NSObject {
         return ""
     }
     
-    func institutionToString(#institution: Institution) -> String {
+    func institutionToString(institution institution: Institution) -> String {
         var institutionStr: String {
             switch institution {
             case .amex:
@@ -308,7 +301,7 @@ public class PlaidClient: NSObject {
 
 extension String {
     var encodValue:String {
-        return self.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        return self.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
     }
 }
     

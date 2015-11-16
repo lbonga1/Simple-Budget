@@ -26,11 +26,11 @@ class CreateUserViewController: UIViewController {
 // MARK: - Actions
 
     @IBAction func createUser(sender: AnyObject) {
-        if usernameField.text.isEmpty {
+        if usernameField.text!.isEmpty {
             // Display error message
             self.displayAlert()
         }
-        else if passwordField.text.isEmpty {
+        else if passwordField.text!.isEmpty {
             // Display error message
             self.displayAlert()
         } else {

@@ -29,8 +29,11 @@ class TransactionsViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem = cancelButton
         
-        // Fetched Results Controller
-        fetchedResultsController.performFetch(nil)
+        do {
+            // Fetched Results Controller
+            try fetchedResultsController.performFetch()
+        } catch _ {
+        }
         fetchedResultsController.delegate = self
         
         // Display no transactions label if there are no fetchedObjects
@@ -46,7 +49,7 @@ class TransactionsViewController: UIViewController {
 // MARK: - Core Data Convenience
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -72,7 +75,6 @@ class TransactionsViewController: UIViewController {
     
     // Present newTransVC to add a new transaction
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
         self.presentViewController(controller, animated: true, completion: nil)
@@ -142,7 +144,7 @@ extension TransactionsViewController {
     
     // Change date format to short style
     func changeDateFormat(dateString: String) {
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         
         dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
         

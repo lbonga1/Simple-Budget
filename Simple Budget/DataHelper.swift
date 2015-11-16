@@ -13,7 +13,7 @@ public class DataHelper {
     var error: NSError?
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     public func seedDataStore() {
         seedCategories()
@@ -37,13 +37,17 @@ public class DataHelper {
             //newCategory.totalAmount = category.totalAmount
         }
         
-        sharedContext.save(&error)
+        do {
+            try sharedContext.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
     }
     
     private func seedSubcategories() {
         
         let categoryFetchRequest = NSFetchRequest(entityName: "Category")
-        let allCategories = (sharedContext.executeFetchRequest(categoryFetchRequest, error: &error)) as! [Category]
+        let allCategories = (try! sharedContext.executeFetchRequest(categoryFetchRequest)) as! [Category]
         
         let savings = allCategories.filter({(c: Category) -> Bool in
             return c.catTitle == "Savings"
@@ -98,7 +102,11 @@ public class DataHelper {
             newSubcategory.totalAmount = subcategory.totalAmount
         }
         
-        sharedContext.save(&error)
+        do {
+            try sharedContext.save()
+        } catch let error1 as NSError {
+            error = error1
+        }
     }
     
     public func printAllCategories() {
@@ -107,10 +115,10 @@ public class DataHelper {
         
         categoryFetchRequest.sortDescriptors = [primarySortDescriptor]
         
-        let allCategories = (sharedContext.executeFetchRequest(categoryFetchRequest, error: &error)) as! [Category]
+        let allCategories = (try! sharedContext.executeFetchRequest(categoryFetchRequest)) as! [Category]
         
         for category in allCategories {
-            print("Category Title: \(category.catTitle)")
+            print("Category Title: \(category.catTitle)", terminator: "")
         }
     }
 
@@ -120,10 +128,10 @@ public class DataHelper {
         
         subcategoryFetchRequest.sortDescriptors = [primarySortDescriptor]
         
-        let allSubcategories = (sharedContext.executeFetchRequest(subcategoryFetchRequest, error: &error)) as! [Subcategory]
+        let allSubcategories = (try! sharedContext.executeFetchRequest(subcategoryFetchRequest)) as! [Subcategory]
         
         for subcategory in allSubcategories {
-            print("Subcategory Title: \(subcategory.subTitle)")
+            print("Subcategory Title: \(subcategory.subTitle)", terminator: "")
         }
     }
     
@@ -133,10 +141,10 @@ public class DataHelper {
         
         subcategoryFetchRequest.sortDescriptors = [primarySortDescriptor]
         
-        let allTransactions = (sharedContext.executeFetchRequest(subcategoryFetchRequest, error: &error)) as! [Transaction]
+        let allTransactions = (try! sharedContext.executeFetchRequest(subcategoryFetchRequest)) as! [Transaction]
         
         for transaction in allTransactions {
-            print("Transaction Title: \(transaction.title)")
+            print("Transaction Title: \(transaction.title)", terminator: "")
         }
     }
 }

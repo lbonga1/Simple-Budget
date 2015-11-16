@@ -23,8 +23,11 @@ class SpentViewController: UIViewController {
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
-        // Fetched Results Controller
-        fetchedResultsController.performFetch(nil)
+        do {
+            // Fetched Results Controller
+            try fetchedResultsController.performFetch()
+        } catch _ {
+        }
         fetchedResultsController.delegate = self
     }
     
@@ -40,7 +43,7 @@ class SpentViewController: UIViewController {
 // MARK: - Core Data Convenience
     
     // Shared context
-    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext!}()
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -61,7 +64,6 @@ class SpentViewController: UIViewController {
 // MARK: - Actions
     
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let storyboard = self.storyboard
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! NewTransTableViewController
         
         self.presentViewController(controller, animated: true, completion: nil)
@@ -100,29 +102,29 @@ extension SpentViewController: UITableViewDelegate {
         
         // Set title value
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-                
+        
         cell.subcatTitle.text = subcategory.subTitle
         
-//        // Cast transactions NSSet as an array
-//        let transactions = subcategory.transactions.allObjects as! [Transaction]
-//        
-//        // Convert amount strings to floats, then get the sum
-//        var sum: Float = 0
-//        for transaction in transactions {
-//            let transaction = transaction as Transaction
-//            let amountString = transaction.amount
-//            let amountFloat = (amountString as NSString).floatValue
-//            sum += amountFloat
-//        }
-//        
-//        // Format the sum back into a string
-//        let formatter = NSNumberFormatter()
-//        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-//        formatter.locale = NSLocale(localeIdentifier: "en_US")
-//        let sumAmountString = formatter.stringFromNumber(sum)
-//
-//        // Set amount label value
-//        cell.amountLabel.text = sumAmountString
+        // Cast transactions NSSet as an array
+        let transactions = subcategory.transactions.allObjects as! [Transaction]
+        
+        // Convert amount strings to floats, then get the sum
+        var sum: Float = 0
+        for transaction in transactions {
+            let transaction = transaction as Transaction
+            let amountString = transaction.amount
+            let amountFloat = (amountString as NSString).floatValue
+            sum += amountFloat
+        }
+        
+        // Format the sum back into a string
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        let sumAmountString = formatter.stringFromNumber(sum)
+
+        // Set amount label value
+        cell.amountLabel.text = sumAmountString
         
         return cell
     }
@@ -147,7 +149,7 @@ extension SpentViewController: UITableViewDelegate {
         // Set title label text
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
-            headerView?.textLabel.text = currentSection.name
+            headerView?.textLabel!.text = currentSection.name
         }
         
         return headerView
