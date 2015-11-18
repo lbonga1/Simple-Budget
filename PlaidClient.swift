@@ -72,12 +72,21 @@ public class PlaidClient: NSObject {
                             }
                         }
                     } else {
-                        let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
-                        let accts = acctsArray.map{Account(account: $0)}
-                        let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
-                        let trxns = trxnArray.map{Transactions(transactions: $0)}
+//                        let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
+//                        let accts = acctsArray.map{Account(account: $0)}
+//                        let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
+//                        let trxns = trxnArray.map{Transactions(transactions: $0)}
+//                        
+//                        completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
                         
-                        completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+                        let acctsArray = jsonResult?.valueForKey("accounts") as! NSArray
+                        //let accts = acctsArray.map{Account(account: $0)}
+                        print("Accounts: \(acctsArray)")
+                        let trxnArray = jsonResult?.valueForKey("transactions") as! NSArray
+                        //let trxns = trxnArray.map{Transactions(transactions: $0)}
+                        print("Transactions: \(trxnArray)")
+                        
+                        completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                     }
                 } else {
                     //Handle invalid cred login
@@ -140,12 +149,21 @@ public class PlaidClient: NSObject {
                         }
                     }
                 } else {
-                    let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
-                    let accts = acctsArray.map{Account(account: $0)}
-                    let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
-                    let trxns = trxnArray.map{Transactions(transactions: $0)}
-                
-                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+//                    let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
+//                    let accts = acctsArray.map{Account(account: $0)}
+//                    let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
+//                    let trxns = trxnArray.map{Transactions(transactions: $0)}
+//                
+//                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+                    
+                    let acctsArray = jsonResult?.valueForKey("accounts") as! NSArray
+                    //let accts = acctsArray.map{Account(account: $0)}
+                        print(acctsArray)
+                    let trxnArray = jsonResult?.valueForKey("transactions") as! NSArray
+                    //let trxns = trxnArray.map{Transactions(transactions: $0)}
+                        print(trxnArray)
+                    
+                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                 }
             } catch {
                 print("MFA error (PS_submitMFAResponse): \(error)")

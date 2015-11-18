@@ -15,6 +15,9 @@ class BudgetSubcategoryCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet weak var subcategoryTitle: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
     
+    
+    var amountUpdateHandler: ((BudgetSubcategoryCell) -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Set text field delegate
@@ -59,11 +62,13 @@ class BudgetSubcategoryCell: UITableViewCell, UITextFieldDelegate {
     
     // Update amount value in core data when text field ends editing
     func textFieldDidEndEditing(textField: UITextField) {
-        let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
-        batchRequest.propertiesToUpdate = ["totalAmount": amountTextField.text!]
-        //batchRequest.predicate = NSPredicate(format: "subcategory == %@", BudgetViewController().editingTextFieldSubcategory!)
-        batchRequest.resultType = .UpdatedObjectsCountResultType
-        (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
+        amountUpdateHandler?(self)
+        
+//                let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
+//                batchRequest.propertiesToUpdate = ["totalAmount": amountTextField.text!]
+//                //batchRequest.predicate = NSPredicate(format: "subcategory == %@", BudgetViewController().editingTextFieldSubcategory!)
+//                batchRequest.resultType = .UpdatedObjectsCountResultType
+//                (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
     }
     
 // MARK: - Core Data Convenience

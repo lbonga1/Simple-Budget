@@ -158,6 +158,19 @@ extension BudgetViewController: UITableViewDelegate {
             cell.subcategoryTitle.text = "New Subcategory"
             cell.amountTextField.text = "$0.00"
         }
+        
+        cell.amountUpdateHandler = { [unowned self] (currentCell: BudgetSubcategoryCell) -> Void in
+            guard let path = tableView.indexPathForRowAtPoint(currentCell.center) else { return }
+            let subcategory = self.fetchedResultsController.objectAtIndexPath(path) as! Subcategory
+            print("the selected item is \(subcategory.subTitle), currently \(subcategory.totalAmount), change to \(cell.amountTextField.text)")
+            
+            let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
+            batchRequest.propertiesToUpdate = ["totalAmount": cell.amountTextField.text!]
+            batchRequest.predicate = NSPredicate(format: "subTitle == %@", subcategory.subTitle)
+            batchRequest.resultType = .UpdatedObjectsCountResultType
+            (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
+        }
+        
         return cell
      }
     
