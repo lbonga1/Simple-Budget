@@ -17,16 +17,20 @@ class SpentViewController: UIViewController {
     @IBOutlet var addButton: UIBarButtonItem!
     @IBOutlet weak var savedLabel: UILabel!
     
+// MARK: - Variables
+    var amountFloatArray: NSMutableArray = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
+        // Fetched Results Controller
         do {
-            // Fetched Results Controller
             try fetchedResultsController.performFetch()
-        } catch _ {
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
         }
         fetchedResultsController.delegate = self
     }
@@ -79,7 +83,7 @@ extension SpentViewController: UITableViewDataSource {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
-        return 0
+        return 1
     }
     
     // Returns the number of rows in each section.
@@ -88,7 +92,7 @@ extension SpentViewController: UITableViewDataSource {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
         }
-        return 0
+        return 1
     }
 }
 
@@ -98,33 +102,39 @@ extension SpentViewController: UITableViewDelegate {
     
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpentSubcategoryCell", forIndexPath: indexPath) as! SpenRemSubcatCell
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("SpentSubcatCell", forIndexPath: indexPath) as! SpenRemSubcatCell
+    
         // Set title value
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         
         cell.subcatTitle.text = subcategory.subTitle
+//        cell.subcatTitle.text = "Test"
+//        cell.amountLabel.text = "$0.00"
         
-        // Cast transactions NSSet as an array
-        let transactions = subcategory.transactions.allObjects as! [Transaction]
-        
-        // Convert amount strings to floats, then get the sum
-        var sum: Float = 0
-        for transaction in transactions {
-            let transaction = transaction as Transaction
-            let amountString = transaction.amount
-            let amountFloat = (amountString as NSString).floatValue
-            sum += amountFloat
-        }
+//        // Cast transactions NSSet as an array
+//        let transactions = subcategory.transactions.allObjects as! [Transaction]
+//        
+//        // Convert amount strings to floats, then get the sum
+//        //var sum: Float = 0
+//        for transaction in transactions {
+//            let transaction = transaction as Transaction
+//            let amountString = transaction.amount
+//            print(amountString)
+//            let editedString = String(amountString.characters.dropFirst())
+//            //let amountFloat = (amountString as NSString).floatValue
+//            let amountFloat = Float(editedString)
+//            print(amountFloat)
+//        }
         
         // Format the sum back into a string
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
-        let sumAmountString = formatter.stringFromNumber(sum)
-
-        // Set amount label value
-        cell.amountLabel.text = sumAmountString
+//        let formatter = NSNumberFormatter()
+//        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+//        formatter.locale = NSLocale(localeIdentifier: "en_US")
+//        let sumAmountString = formatter.stringFromNumber(sum)
+//
+//        // Set amount label value
+//        cell.amountLabel.text = sumAmountString
+//        print(cell.amountLabel.text)
         
         return cell
     }
@@ -153,7 +163,6 @@ extension SpentViewController: UITableViewDelegate {
         }
         
         return headerView
-        
     }
     
     // Headerview height

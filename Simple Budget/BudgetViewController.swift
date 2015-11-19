@@ -73,7 +73,7 @@ class BudgetViewController: UIViewController {
         // Set current category to selected "add item" button's tag
         currentlyEditingCategory = sender.tag
         
-        self.tableView.beginUpdates()
+        //self.tableView.beginUpdates()
         
         self.addNewSubcategory()
         
@@ -81,7 +81,7 @@ class BudgetViewController: UIViewController {
         
         self.tableView.reloadData()
         
-        self.tableView.endUpdates()
+        //self.tableView.endUpdates()
     }
     
     @IBAction func cancelEditing(sender: AnyObject) {
@@ -290,6 +290,7 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
+    
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch type {
         case .Insert:
@@ -330,13 +331,13 @@ extension BudgetViewController {
     
     // Support for adding a new subcategory
     func addNewSubcategory() {
-        // Inserts new row into the table
-        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
-        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+//        // Inserts new row into the table
+//        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+//        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
+//        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         
         // Get Category data from existing subcategory
-        let existingRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 2
+        let existingRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory)
         let existingRowIndexPath = NSIndexPath(forRow: existingRowIndex, inSection: currentlyEditingCategory)
         let existingSubcategory = fetchedResultsController.objectAtIndexPath(existingRowIndexPath) as! Subcategory
         let category = existingSubcategory.category
