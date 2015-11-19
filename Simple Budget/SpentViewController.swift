@@ -12,13 +12,12 @@ import CoreData
 class SpentViewController: UIViewController {
 
 // MARK: - Outlets
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var addButton: UIBarButtonItem!
     @IBOutlet weak var savedLabel: UILabel!
     
 // MARK: - Variables
-    var amountFloatArray: NSMutableArray = []
+    var amountArray: [Float] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +67,7 @@ class SpentViewController: UIViewController {
 // MARK: - Actions
     
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! NewTransTableViewController
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
         self.presentViewController(controller, animated: true, completion: nil)
     }
@@ -83,7 +82,7 @@ extension SpentViewController: UITableViewDataSource {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
-        return 1
+        return 0
     }
     
     // Returns the number of rows in each section.
@@ -92,7 +91,7 @@ extension SpentViewController: UITableViewDataSource {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
         }
-        return 1
+        return 0
     }
 }
 
@@ -102,39 +101,46 @@ extension SpentViewController: UITableViewDelegate {
     
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpentSubcatCell", forIndexPath: indexPath) as! SpenRemSubcatCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("SpentSubcatCell", forIndexPath: indexPath)
     
-        // Set title value
+        // Define subcategory as Subcategory object
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         
-        cell.subcatTitle.text = subcategory.subTitle
-//        cell.subcatTitle.text = "Test"
-//        cell.amountLabel.text = "$0.00"
+        // Set title value
+        cell.textLabel!.text = subcategory.subTitle
         
-//        // Cast transactions NSSet as an array
-//        let transactions = subcategory.transactions.allObjects as! [Transaction]
-//        
-//        // Convert amount strings to floats, then get the sum
-//        //var sum: Float = 0
-//        for transaction in transactions {
-//            let transaction = transaction as Transaction
-//            let amountString = transaction.amount
-//            print(amountString)
-//            let editedString = String(amountString.characters.dropFirst())
-//            //let amountFloat = (amountString as NSString).floatValue
-//            let amountFloat = Float(editedString)
-//            print(amountFloat)
-//        }
+        // Cast transactions NSSet as an array
+        let transactions = subcategory.transactions.allObjects as! [Transaction]
+
+        // Convert amount strings to floats, then get the sum
+        for transaction in transactions {
+            // Define the transaction amount
+            let transaction = transaction as Transaction
+            let amountString = transaction.amount
+            // Remove the "$"
+            let editedString = String(amountString.characters.dropFirst())
+
+            // Convert to Float
+            let amountFloat = Float(editedString)
+            
+            // Add the value to the amountArray
+            amountArray.append(amountFloat!)
+            
+            // Find the sum of the values in the amountArray
+            let sum = amountArray.sum()
+            
+            //Format the sum back into a string
+            let formatter = NSNumberFormatter()
+            formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+            formatter.locale = NSLocale(localeIdentifier: "en_US")
+            let sumAmountString = formatter.stringFromNumber(sum)
+            
+            // Set amount label value
+            cell.detailTextLabel!.text = sumAmountString
+        }
         
-        // Format the sum back into a string
-//        let formatter = NSNumberFormatter()
-//        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-//        formatter.locale = NSLocale(localeIdentifier: "en_US")
-//        let sumAmountString = formatter.stringFromNumber(sum)
-//
-//        // Set amount label value
-//        cell.amountLabel.text = sumAmountString
-//        print(cell.amountLabel.text)
+        // Empty the amountArray for the next Transaction array values
+        amountArray.removeAll()
         
         return cell
     }
@@ -185,7 +191,6 @@ extension SpentViewController: UITableViewDelegate {
         
         return 25
     }
-
 }
 
 // MARK: - Fetched Results Controller Delegate
@@ -193,4 +198,17 @@ extension SpentViewController: UITableViewDelegate {
 extension SpentViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+}
+
+extension Array {
+    // Support to get the sum of float values in an array
+    func sumFloat() -> Float {return map{$0 as! Float}.reduce(0) { $0 + $1 }}
+    
+    // Make it type safe
+    func sum() -> Element {
+        if !isEmpty {
+            if self[0] is Float  { return (sumFloat() as! Element) }
+            }
+        return 0 as! Element
+    }
 }

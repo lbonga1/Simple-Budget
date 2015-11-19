@@ -97,14 +97,14 @@ class CatChooserTableViewController: UITableViewController {
 
     // Defines subcategory cells.
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChooserSubcategory", forIndexPath: indexPath) as! SpenRemSubcatCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ChooserSubcategory", forIndexPath: indexPath)
         
         // Set title and amount values
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-        cell.subcatTitle.text = subcategory.subTitle
+        cell.textLabel!.text = subcategory.subTitle
         
     // TODO: Change to remaining amount (budgeted - transactions)
-        cell.amountLabel.text = ""
+        cell.detailTextLabel!.text = ""
 
         return cell
     }

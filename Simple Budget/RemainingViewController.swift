@@ -12,10 +12,12 @@ import CoreData
 class RemainingViewController: UIViewController {
 
 // MARK: - Outlets
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var addButton: UIBarButtonItem!
     @IBOutlet weak var savedLabel: UILabel!
+    
+// MARK: - Variables
+    var amountArray: [Float] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +25,11 @@ class RemainingViewController: UIViewController {
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
+        // Fetched Results Controller
         do {
-            // Fetched Results Controller
             try fetchedResultsController.performFetch()
-        } catch _ {
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
         }
         fetchedResultsController.delegate = self
     }
@@ -63,7 +66,7 @@ class RemainingViewController: UIViewController {
 // MARK: - Actions
     
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! NewTransTableViewController
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
         self.presentViewController(controller, animated: true, completion: nil)
     }
@@ -90,14 +93,55 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Defines the budget item cells.
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("RemSubcategoryCell", forIndexPath: indexPath) as! SpenRemSubcatCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("RemSubcatCell", forIndexPath: indexPath)
         
         // Set title and amount values
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-        cell.subcatTitle.text = subcategory.subTitle
+        cell.textLabel!.text = subcategory.subTitle
         
-    // TODO: Change amount to budgeted amount - any transaction amounts
-        cell.amountLabel.text = subcategory.totalAmount
+        // Cast transactions NSSet as an array
+        let transactions = subcategory.transactions.allObjects as! [Transaction]
+        
+        // Convert amount strings to floats, then get the sum
+        for transaction in transactions {
+            // Define the transaction amount
+            let transaction = transaction as Transaction
+            let amountString = transaction.amount
+            // Remove the "$"
+            let editedString = String(amountString.characters.dropFirst())
+            // Convert to Float
+            let amountFloat = Float(editedString)
+            
+            // Add the value to the amountArray
+            amountArray.append(amountFloat!)
+        }
+        
+        if transactions.count != 0 {
+            // Find the sum of the values in the amountArray
+            let sum = amountArray.sum()
+
+            // Convert Subcategory budget amount to float
+            let subcatAmountString = subcategory.totalAmount
+            let subcatEditedString = String(subcatAmountString.characters.dropFirst())
+            let subcatAmountFloat = Float(subcatEditedString)
+        
+            // Find the remaining amount
+            let remainingAmount = (subcatAmountFloat! - sum)
+        
+            // Format the remaining amount back into a string
+            let formatter = NSNumberFormatter()
+            formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+            formatter.locale = NSLocale(localeIdentifier: "en_US")
+            let remAmountString = formatter.stringFromNumber(remainingAmount)
+        
+            // Set amount label value
+            cell.detailTextLabel!.text = remAmountString
+        } else {
+            cell.detailTextLabel!.text = "$0.00"
+        }
+        
+        // Empty the amountArray for the next Transaction array values
+        amountArray.removeAll()
         
         return cell
     }
@@ -155,4 +199,18 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
 extension RemainingViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+}
+
+// MARK: - Additional Methods
+
+extension RemainingViewController {
+    func floatToString(float: Float) -> String {
+        // Format the remaining amount back into a string
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        let remAmountString = formatter.stringFromNumber(float)
+        
+        return remAmountString!
+    }
 }

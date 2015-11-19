@@ -290,7 +290,6 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
-    
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch type {
         case .Insert:
