@@ -130,9 +130,11 @@
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpentSubcatCell" textLabel="x3f-Qm-UGu" detailTextLabel="wEc-M1-Y9H" style="IBUITableViewCellStyleValue1" id="D8c-zd-7FC" customClass="SpenRemSubcatCell" customModule="Simple_Budget" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D8c-zd-7FC" id="jGE-0X-Jgz">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subcategory Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="x3f-Qm-UGu">
+                                                    <rect key="frame" x="15" y="10" width="134" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -142,6 +144,7 @@
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wEc-M1-Y9H">
+                                                    <rect key="frame" x="182" y="10" width="43" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -180,12 +183,12 @@
                                 <exclude reference="fg2-yR-r7l"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="9Tc-3c-FpA"/>
-                                <exclude reference="J0j-KY-NeM"/>
-                                <exclude reference="hzV-Z6-T5d"/>
                                 <exclude reference="TYO-CO-dab"/>
                                 <exclude reference="uvi-gY-KaV"/>
                                 <exclude reference="sbF-1A-Y9g"/>
+                                <exclude reference="9Tc-3c-FpA"/>
+                                <exclude reference="J0j-KY-NeM"/>
+                                <exclude reference="hzV-Z6-T5d"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -194,12 +197,12 @@
                                 <include reference="fg2-yR-r7l"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="9Tc-3c-FpA"/>
-                                <include reference="J0j-KY-NeM"/>
-                                <include reference="hzV-Z6-T5d"/>
                                 <include reference="TYO-CO-dab"/>
                                 <include reference="uvi-gY-KaV"/>
                                 <include reference="sbF-1A-Y9g"/>
+                                <include reference="9Tc-3c-FpA"/>
+                                <include reference="J0j-KY-NeM"/>
+                                <include reference="hzV-Z6-T5d"/>
                             </mask>
                         </variation>
                     </view>
@@ -728,6 +731,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subcategory Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dna-sa-Ls1">
+                                            <rect key="frame" x="15" y="10" width="134" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -737,6 +741,7 @@
                                             </variation>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VoH-dH-DqN">
+                                            <rect key="frame" x="540" y="11" width="45" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
@@ -754,17 +759,11 @@
                             <outlet property="delegate" destination="jfs-j6-441" id="DDg-a9-qYi"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="aiw-gm-2c4">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="X9X-RK-u7B">
-                            <connections>
-                                <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
-                                <segue destination="Uxx-rI-Nla" kind="unwind" identifier="returnToNewTrans" unwindAction="unwindSegue:" id="JD6-D3-Zco"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="aiw-gm-2c4"/>
                     <connections>
                         <outlet property="cancelButton" destination="5mH-8e-Gcl" id="imy-QO-g9G"/>
                         <outlet property="doneButton" destination="X9X-RK-u7B" id="uTJ-Id-pVp"/>
+                        <outlet property="saveButton" destination="VAN-qG-JC7" id="gBt-On-EsG"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="whF-YD-KYl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -774,8 +773,19 @@
                         <action selector="cancelAction:" destination="jfs-j6-441" id="jat-Wk-mI8"/>
                     </connections>
                 </barButtonItem>
+                <barButtonItem style="done" systemItem="done" id="X9X-RK-u7B">
+                    <connections>
+                        <action selector="doneSelecting:" destination="jfs-j6-441" id="adS-hH-w1Z"/>
+                        <segue destination="Uxx-rI-Nla" kind="unwind" unwindAction="unwindSegue:" id="nLS-7m-KND"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem systemItem="save" id="VAN-qG-JC7">
+                    <connections>
+                        <segue destination="Uxx-rI-Nla" kind="unwind" unwindAction="unwindSegueCatChosen:" id="y24-vR-hdw"/>
+                    </connections>
+                </barButtonItem>
             </objects>
-            <point key="canvasLocation" x="1057.5" y="1998"/>
+            <point key="canvasLocation" x="4911" y="39"/>
         </scene>
         <!--Remaining-->
         <scene sceneID="akS-pM-6gF">
@@ -796,9 +806,11 @@
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RemSubcatCell" textLabel="EfL-yn-xvY" detailTextLabel="roe-Z5-xE4" style="IBUITableViewCellStyleValue1" id="M7x-X4-Z8G">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M7x-X4-Z8G" id="ksm-3A-Kis">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subcategory Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EfL-yn-xvY">
+                                                    <rect key="frame" x="15" y="10" width="134" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -808,6 +820,7 @@
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="roe-Z5-xE4">
+                                                    <rect key="frame" x="262" y="10" width="43" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -1574,6 +1587,7 @@
                         <outlet property="pinTextField" destination="0an-fe-vlC" id="ezC-8O-EyY"/>
                         <outlet property="saveButton" destination="K29-EL-1yI" id="jb4-fU-zlf"/>
                         <outlet property="usernameTextField" destination="zfj-No-tUy" id="8Ih-Zz-U6N"/>
+                        <segue destination="sGj-HM-IWx" kind="show" identifier="downloadedTransactions" id="Byy-y9-D4o"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pmb-sN-nzf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1594,6 +1608,206 @@
                 </barButtonItem>
             </objects>
             <point key="canvasLocation" x="3339" y="-46.5"/>
+        </scene>
+        <!--Assign a Category-->
+        <scene sceneID="tV7-Lu-Ugj">
+            <objects>
+                <viewController id="sGj-HM-IWx" customClass="DownloadedTransViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SHs-2Z-fAd"/>
+                        <viewControllerLayoutGuide type="bottom" id="amo-Lo-9Wb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gNs-jC-6nf">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4S3-or-dlD">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TransactionsCell" id="YGX-uN-zgF" customClass="TransactionCell" customModule="Simple_Budget" customModuleProvider="target">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YGX-uN-zgF" id="VDo-qP-OaI">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xLj-jU-hRd">
+                                                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="75" id="H2C-bN-e6e"/>
+                                                        <constraint firstAttribute="width" constant="75" id="oOp-Aj-vjQ"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                                    <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="H2C-bN-e6e"/>
+                                                            <exclude reference="oOp-Aj-vjQ"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <exclude reference="H2C-bN-e6e"/>
+                                                            <include reference="oOp-Aj-vjQ"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mSn-GK-GT7">
+                                                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" id="0hL-Vg-9Th"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="0hL-Vg-9Th"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="0hL-Vg-9Th"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transaction Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="145-LT-EMU">
+                                                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="145-LT-EMU" firstAttribute="leading" secondItem="xLj-jU-hRd" secondAttribute="trailing" constant="10" id="1Wr-mM-sAz"/>
+                                                <constraint firstItem="xLj-jU-hRd" firstAttribute="leading" secondItem="VDo-qP-OaI" secondAttribute="leadingMargin" id="5we-et-gXD"/>
+                                                <constraint firstItem="145-LT-EMU" firstAttribute="top" secondItem="VDo-qP-OaI" secondAttribute="topMargin" constant="3" id="6Ip-GS-HWU"/>
+                                                <constraint firstItem="145-LT-EMU" firstAttribute="leading" secondItem="xLj-jU-hRd" secondAttribute="trailing" constant="8" id="9Uw-OX-mUG"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="145-LT-EMU" secondAttribute="bottom" constant="3" id="Ceg-Vr-F14"/>
+                                                <constraint firstItem="mSn-GK-GT7" firstAttribute="top" secondItem="VDo-qP-OaI" secondAttribute="topMargin" constant="3" id="F6s-0h-QZH"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="xLj-jU-hRd" secondAttribute="bottom" constant="3" id="KHo-cv-YMn"/>
+                                                <constraint firstItem="mSn-GK-GT7" firstAttribute="leading" secondItem="145-LT-EMU" secondAttribute="trailing" constant="10" id="KeR-it-Wkn">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="8"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailingMargin" secondItem="xLj-jU-hRd" secondAttribute="trailing" constant="10" id="VCJ-TO-lny"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="xLj-jU-hRd" secondAttribute="bottom" constant="3" id="XzR-4p-lwO"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="mSn-GK-GT7" secondAttribute="bottom" constant="3" id="hbb-0X-AYe"/>
+                                                <constraint firstItem="xLj-jU-hRd" firstAttribute="top" secondItem="VDo-qP-OaI" secondAttribute="topMargin" constant="3" id="nTE-OL-Z7c"/>
+                                                <constraint firstItem="mSn-GK-GT7" firstAttribute="trailing" secondItem="VDo-qP-OaI" secondAttribute="trailingMargin" id="pAa-nN-aFr"/>
+                                                <constraint firstItem="xLj-jU-hRd" firstAttribute="leading" secondItem="VDo-qP-OaI" secondAttribute="leadingMargin" id="s72-D1-pgx"/>
+                                                <constraint firstItem="xLj-jU-hRd" firstAttribute="top" secondItem="VDo-qP-OaI" secondAttribute="topMargin" constant="3" id="zY1-nk-9yq"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="xLj-jU-hRd"/>
+                                                    <exclude reference="mSn-GK-GT7"/>
+                                                    <exclude reference="145-LT-EMU"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="5we-et-gXD"/>
+                                                    <exclude reference="KHo-cv-YMn"/>
+                                                    <exclude reference="VCJ-TO-lny"/>
+                                                    <exclude reference="XzR-4p-lwO"/>
+                                                    <exclude reference="nTE-OL-Z7c"/>
+                                                    <exclude reference="s72-D1-pgx"/>
+                                                    <exclude reference="zY1-nk-9yq"/>
+                                                    <exclude reference="1Wr-mM-sAz"/>
+                                                    <exclude reference="6Ip-GS-HWU"/>
+                                                    <exclude reference="9Uw-OX-mUG"/>
+                                                    <exclude reference="Ceg-Vr-F14"/>
+                                                    <exclude reference="F6s-0h-QZH"/>
+                                                    <exclude reference="KeR-it-Wkn"/>
+                                                    <exclude reference="hbb-0X-AYe"/>
+                                                    <exclude reference="pAa-nN-aFr"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="subviews">
+                                                    <include reference="xLj-jU-hRd"/>
+                                                    <include reference="mSn-GK-GT7"/>
+                                                    <include reference="145-LT-EMU"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="5we-et-gXD"/>
+                                                    <include reference="KHo-cv-YMn"/>
+                                                    <exclude reference="VCJ-TO-lny"/>
+                                                    <exclude reference="XzR-4p-lwO"/>
+                                                    <include reference="nTE-OL-Z7c"/>
+                                                    <include reference="s72-D1-pgx"/>
+                                                    <exclude reference="zY1-nk-9yq"/>
+                                                    <exclude reference="1Wr-mM-sAz"/>
+                                                    <include reference="6Ip-GS-HWU"/>
+                                                    <include reference="9Uw-OX-mUG"/>
+                                                    <include reference="Ceg-Vr-F14"/>
+                                                    <include reference="F6s-0h-QZH"/>
+                                                    <include reference="KeR-it-Wkn"/>
+                                                    <include reference="hbb-0X-AYe"/>
+                                                    <include reference="pAa-nN-aFr"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="amountLabel" destination="mSn-GK-GT7" id="q1I-Ad-7lG"/>
+                                            <outlet property="dateLabel" destination="xLj-jU-hRd" id="ztd-9j-g5B"/>
+                                            <outlet property="titleLabel" destination="145-LT-EMU" id="kqP-CX-27D"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="sGj-HM-IWx" id="2dv-jp-d1a"/>
+                                    <outlet property="delegate" destination="sGj-HM-IWx" id="pLi-EW-3wA"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="4S3-or-dlD" firstAttribute="leading" secondItem="gNs-jC-6nf" secondAttribute="leadingMargin" constant="-20" id="63u-mU-XP5"/>
+                            <constraint firstItem="amo-Lo-9Wb" firstAttribute="top" secondItem="4S3-or-dlD" secondAttribute="bottom" id="K7b-v3-34W"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4S3-or-dlD" secondAttribute="trailing" constant="-20" id="U24-uz-07N"/>
+                            <constraint firstItem="4S3-or-dlD" firstAttribute="top" secondItem="SHs-2Z-fAd" secondAttribute="bottom" id="WqM-bC-A29"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="4S3-or-dlD"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="63u-mU-XP5"/>
+                                <exclude reference="U24-uz-07N"/>
+                                <exclude reference="WqM-bC-A29"/>
+                                <exclude reference="K7b-v3-34W"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="4S3-or-dlD"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="63u-mU-XP5"/>
+                                <include reference="U24-uz-07N"/>
+                                <include reference="WqM-bC-A29"/>
+                                <include reference="K7b-v3-34W"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="Assign a Category" id="fuO-OW-6ON"/>
+                    <connections>
+                        <outlet property="cancelButton" destination="BD9-tJ-cUc" id="F1a-Rv-imv"/>
+                        <outlet property="saveButton" destination="MLc-cS-5r4" id="xh2-HV-i9z"/>
+                        <outlet property="tableView" destination="4S3-or-dlD" id="orZ-kM-dly"/>
+                        <segue destination="jfs-j6-441" kind="show" identifier="chooseCategory" id="aq0-PB-cqv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2hE-0m-3iZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem systemItem="cancel" id="BD9-tJ-cUc">
+                    <connections>
+                        <action selector="cancelAction:" destination="sGj-HM-IWx" id="GPD-r3-sgN"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem systemItem="save" id="MLc-cS-5r4">
+                    <connections>
+                        <action selector="saveAction:" destination="sGj-HM-IWx" id="FuZ-Hg-7nX"/>
+                    </connections>
+                </barButtonItem>
+            </objects>
+            <point key="canvasLocation" x="4137" y="-46.5"/>
         </scene>
         <!--Transactions-->
         <scene sceneID="5Lk-aQ-6bB">
@@ -1854,10 +2068,11 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="avE-bc-xi5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1057.5" y="1300.5"/>
+            <point key="canvasLocation" x="4057.5" y="657"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="aq0-PB-cqv"/>
         <segue reference="DTe-5A-uXi"/>
     </inferredMetricsTieBreakers>
 </document>

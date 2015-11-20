@@ -14,12 +14,13 @@ class CatChooserTableViewController: UITableViewController {
 // MARK: - Outlets
     @IBOutlet var doneButton: UIBarButtonItem!
     @IBOutlet var cancelButton: UIBarButtonItem!
-
+    @IBOutlet var saveButton: UIBarButtonItem!
     
 // MARK: - Variables
     var selectedSubcategory: Subcategory?
     var selectedIndexArray: NSMutableArray = []
     var selectedIndexPath: NSIndexPath?
+    var tag: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +35,15 @@ class CatChooserTableViewController: UITableViewController {
         // Tableview is automatically in editing mode
         self.tableView.setEditing(true, animated: false)
         self.tableView.allowsMultipleSelectionDuringEditing = true
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
         // Sets up navigation bar items
-        self.navigationItem.rightBarButtonItem = doneButton
+        if self.tag == 0 {
+            self.navigationItem.rightBarButtonItem = doneButton
+        } else {
+            self.navigationItem.rightBarButtonItem = saveButton
+        }
         self.navigationItem.leftBarButtonItem = cancelButton
     }
 

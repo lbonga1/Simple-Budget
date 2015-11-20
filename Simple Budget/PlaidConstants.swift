@@ -132,7 +132,5 @@ extension PlaidClient {
             
             category = transactions["category"] as? NSArray
         }
-        
     }
-
 }

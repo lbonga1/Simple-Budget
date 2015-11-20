@@ -25,6 +25,7 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
     var responseTextField: UITextField? = nil
     let textDelegate = TextFieldDelegate()
     let plaid = PlaidClient.Plaid()
+    var downloadedTransactions: [PlaidClient.Transactions]?
     let instData = ["American Express", "Bank of America", "Capital One 360", "Charles Schwab", "Chase", "Citi Bank", "Fidelity", "PNC", "US Bank", "USAA", "Wells Fargo"]
 
     override func viewDidLoad() {
@@ -85,7 +86,7 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
         }
         
         // Submit add user request
-        PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) {  (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+        PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
             
             // Check response code
             if response != nil {
@@ -94,38 +95,17 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
                 switch response.statusCode {
                 // Successful
                 case 200:
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.downloadedTransactions = transactions
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.performSegueWithIdentifier("downloadedTransactions", sender: self)
+                    }
                 // MFA response needed
                 case 201:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.checkMfaType(mfaType, mfa: mfa)
                     }
                 // User error
-                case 400:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 401:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 402:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 403:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 404:
+                case 400...404:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")
@@ -146,13 +126,6 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
             }
         }
     }
-    
-    
-//    @IBAction func doneAction(sender: AnyObject) {
-//        self.navigationItem.rightBarButtonItem = saveButton
-//        instPicker.hidden = true
-//    }
-    
     
 // MARK: - Tableview Delegate
     
@@ -208,6 +181,15 @@ extension AccountTableViewController: UIPickerViewDelegate {
 
 extension AccountTableViewController {
     
+    // Transfer downloaded transactions data to dowloadedTransVC
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "downloadedTransactions") {
+            let downloadedTransVC = segue.destinationViewController as!
+            DownloadedTransViewController
+            downloadedTransVC.transactions = self.downloadedTransactions
+        }
+    }
+    
     // Error alert
     func displayAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
@@ -244,7 +226,7 @@ extension AccountTableViewController {
     
     // Submit MFA answer
     func submitMfaQuestionsResponse() {
-        PlaidClient.sharedInstance().PS_submitMFAResponse(PlaidData.sharedInstance().accessToken, code: false, response: responseTextField!.text!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+        PlaidClient.sharedInstance().PS_submitMFAResponse(PlaidData.sharedInstance().accessToken!, code: false, response: responseTextField!.text!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
             // Check response code
             if response != nil {
                 let response = response as! NSHTTPURLResponse
@@ -259,31 +241,7 @@ extension AccountTableViewController {
                         self.checkMfaType(mfaType, mfa: mfa)
                     }
                 // User error
-                case 400:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 401:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 402:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 403:
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Could not log in",
-                            message: "Please check your credentials and try again.")
-                    }
-                // User error
-                case 404:
+                case 400...404:
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Could not log in",
                             message: "Please check your credentials and try again.")

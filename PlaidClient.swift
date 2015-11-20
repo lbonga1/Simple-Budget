@@ -13,9 +13,14 @@ public class PlaidClient: NSObject {
     
 // MARK: - Variables
     
-    var fetchedTransactions: Transactions? = nil
     let session = NSURLSession.sharedSession()
-
+//    var merchantName: String? = nil
+//    var amount: String? = nil
+//    var date: String? = nil
+//    var category: Int? = nil
+//    var catString: String? = nil
+//    var subcatString: String? = nil
+    
 // MARK: - Core Data Convenience
     
     // Shared context
@@ -27,7 +32,7 @@ public class PlaidClient: NSObject {
         let clientId = Plaid.clientId!
         let secret = Plaid.secret!
         
-        let institutionStr: String = institutionToString(institution: institution)
+        let institutionStr: String = institutionToString(institution)
         
         let optionsDict: [String:AnyObject] =
         [
@@ -63,7 +68,6 @@ public class PlaidClient: NSObject {
                     if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
                         if let questionDictionary = mfaResponse[0] as? NSDictionary {
                             if let questionString = questionDictionary["question"] as? String {
-                                //println(questionString)
                                 if let typeMfa = jsonResult?.valueForKey("type") as? String {
                                     type = typeMfa
                                     PlaidData.sharedInstance().accessToken = token
@@ -76,31 +80,56 @@ public class PlaidClient: NSObject {
                         let accts = acctsArray.map{Account(account: $0)}
                         let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
                         let trxns = trxnArray.map{Transactions(transactions: $0)}
+
+//                        // Extract transaction data
+//                        for tr in trxnArray {
+//                            // Transaction amount
+//                            let numberAmount = tr["amount"]
+//                            let stringAmount = numberAmount?.stringValue
+//                            self.amount = stringAmount!
+//                            
+//                            self.merchantName = tr["name"] as? String
+//                            
+//                            // Date
+//                            self.date = tr["date"] as? String
+//
+//                            // Category ID
+//                            if let categoryString = tr["category_id"] as? String {
+//                                if let categoryID = Int(categoryString) {
+//                                    self.category = categoryID
+//                                }
+//                            } else {
+//                                self.category = 0
+//                            }
+//                            
+//                            // Convert category ID to string
+//                            self.catString = self.catIdToCatString(self.category!)
+//                            
+//                            // Convert category ID to  subcategory string
+//                            self.subcatString = self.catIdToSubcatString(self.category!)
+//                            
+//                            let newCategory = Category(catTitle: self.catString!, context: self.sharedContext)
+//                            
+//                            let newSubcategory = Subcategory(category: newCategory, subTitle: self.subcatString!, totalAmount: "$0.00", context: self.sharedContext)
+//                            
+//                           let newTransaction = Transaction(subcategory: newSubcategory, date: self.date!, title: self.merchantName!, amount: self.amount!, notes: "", context: self.sharedContext)
+//                            
+//                            // Save to Core Data
+//                            dispatch_async(dispatch_get_main_queue()) {
+//                                newSubcategory.category = newCategory
+//                                newTransaction.subcategory = newSubcategory
+//                                CoreDataStackManager.sharedInstance().saveContext()
+//                            }
+//                        }
                         
                         completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
-                        
-//                        let acctsArray = jsonResult?.valueForKey("accounts") as! NSArray
-//                        //let accts = acctsArray.map{Account(account: $0)}
-//                        print("Accounts: \(acctsArray)")
-//                        let trxnArray = jsonResult?.valueForKey("transactions") as! NSArray
-//                        //let trxns = trxnArray.map{Transactions(transactions: $0)}
-//                        print("Transactions: \(trxnArray)")
-                        
-//                        [[String: AnyObject]]
-//                        let trxnArray = jsonResult?.valueForKey("transactions") as! [[String: AnyObject]]
-//                        for tr in trxnArray {
-//                            print(tr["amount"])
-//                        }
-                        completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                     }
                 } else {
-                    //Handle invalid cred login
+                    completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                 }
-                
             } catch {
                 print("Error (PS_addUser): \(error)")
             }
-            
         })
         task.resume()
     }
@@ -154,21 +183,21 @@ public class PlaidClient: NSObject {
                         }
                     }
                 } else {
-//                    let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
-//                    let accts = acctsArray.map{Account(account: $0)}
-//                    let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
-//                    let trxns = trxnArray.map{Transactions(transactions: $0)}
-//                
-//                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+                    let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
+                    let accts = acctsArray.map{Account(account: $0)}
+                    let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
+                    let trxns = trxnArray.map{Transactions(transactions: $0)}
+                
+                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
                     
-                    let acctsArray = jsonResult?.valueForKey("accounts") as! NSArray
-                    //let accts = acctsArray.map{Account(account: $0)}
-                        print(acctsArray)
-                    let trxnArray = jsonResult?.valueForKey("transactions") as! NSArray
-                    //let trxns = trxnArray.map{Transactions(transactions: $0)}
-                        print(trxnArray)
-                    
-                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
+//                    let acctsArray = jsonResult?.valueForKey("accounts") as! NSArray
+//                    //let accts = acctsArray.map{Account(account: $0)}
+//                        print(acctsArray)
+//                    let trxnArray = jsonResult?.valueForKey("transactions") as! NSArray
+//                    //let trxns = trxnArray.map{Transactions(transactions: $0)}
+//                        print(trxnArray)
+//                    
+//                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                 }
             } catch {
                 print("MFA error (PS_submitMFAResponse): \(error)")
@@ -280,7 +309,7 @@ public class PlaidClient: NSObject {
         return ""
     }
     
-    func institutionToString(institution institution: Institution) -> String {
+    func institutionToString(institution: Institution) -> String {
         var institutionStr: String {
             switch institution {
             case .amex:
@@ -309,6 +338,111 @@ public class PlaidClient: NSObject {
         }
         return institutionStr
     }
+    
+//    func catIdToCatString(id: Int) -> String {
+//        switch id {
+//        case 13001000...13003000, 13000000, 13005000...13005059, 19025000...19025004, 19047000:
+//            return "Food"
+//        case 18006000...18006009, 19005000...19005007, 19026000:
+//            return "Transportation"
+//        case 18030000, 20000000...20002000:
+//            return "Insurance & Tax"
+//        case 16002000, 18009000, 18031000, 18068000...18068005, 18050000...18050010:
+//            return "Housing"
+//        case 10000000...11000000, 12000000...12001000, 12003000, 12013000, 12015000...12017000, 12019000, 12019001, 12002000...12002002, 12006000, 12007000...14002020, 12005000, 12008000...12008011, 19029000, 12004000, 12009000...12012003, 12014000, 12018000...12018004, 13004000...13004006, 16002000...17001019, 17001000, 17002000...17022000, 17024000, 17026000, 17028000...17048000, 17023000...17023004, 17025000...17025005, 17027000...17027003, 18001000...18001010, 18007000...18008001, 18012000...18012002, 18020000...18020014, 18024000...18025000, 18045000...18045010, 19012000...19012008, 19013000...19013003, 19040000...19040008, 19043000, 19000000...19004000, 19006000...19011000, 19014000...19024000, 19027000...19039000, 19041000, 19042000, 19044000...19046000, 19048000...19054000, 22000000...22018000:
+//            return "Lifestyle"
+//        case 15000000...15002000, 16000000, 16001000, 16003000, 18013000...18013010, 18037000...18037020, 18000000, 18003000...18005000, 18010000, 18011000, 18014000...18019000, 18021000...18023000, 18026000...18029000, 18032000...18036000, 18038000...18044000, 18046000...18049000, 18051000...18067000, 18069000...18074000, 21000000...21013000:
+//            return "Other"
+//        default:
+//            return "Other"
+//        }
+//    }
+//    
+//    // Use category IDs to return a subcategory string
+//    func catIdToSubcatString(id: Int) -> String {
+//        switch id {
+//        case 10000000...11000000:
+//            return "Bank Fees"
+//        case 12000000...12001000, 12003000, 12013000, 12015000...12017000, 12019000, 12019001:
+//            return "Community"
+//        case 12002000...12002002, 12006000, 12007000...14002020:
+//            return "Healthcare"
+//        case 12005000, 12008000...12008011, 19029000:
+//            return "Education"
+//        case 12004000, 12009000...12012003, 12014000:
+//            return "Government"
+//        case 12018000...12018004:
+//            return "Religion"
+//        case 13001000...13003000:
+//            return "Bars & Breweries"
+//        case 13004000...13004006:
+//            return "Nightlife"
+//        case 13000000, 13005000...13005059:
+//            return "Restaurants"
+//        case 15000000...15002000:
+//            return "Interest"
+//        case 16000000, 16001000, 16003000:
+//            return "Payment"
+//        case 16002000:
+//            return "Mortgage & Rent"
+//        case 16002000...17001019:
+//            return "Arts & Entertainment"
+//        case 17001000, 17002000...17022000, 17024000, 17026000, 17028000...17048000:
+//            return "Recreation"
+//        case 17023000...17023004, 17025000...17025005, 17027000...17027003:
+//            return "Parks & Outdoors"
+//        case 18001000...18001010:
+//            return "Advertising & Marketing"
+//        case 18006000...18006009:
+//            return "Automotive Services"
+//        case 18007000...18008001:
+//            return "Business Services"
+//        case 18009000, 18031000, 18068000...18068005:
+//            return "Utilities"
+//        case 18012000...18012002:
+//            return "Computer Repair"
+//        case 18013000...18013010:
+//            return "Construction"
+//        case 18020000...18020014:
+//            return "Financial Services"
+//        case 18024000...18025000:
+//            return "Home Improvement"
+//        case 18030000:
+//            return "Insurance"
+//        case 18037000...18037020:
+//            return "Manufacturing"
+//        case 18045000...18045010:
+//            return "Personal Care"
+//        case 18050000...18050010:
+//            return "Real Estate"
+//        case 18000000, 18003000...18005000, 18010000, 18011000, 18014000...18019000, 18021000...18023000, 18026000...18029000, 18032000...18036000, 18038000...18044000, 18046000...18049000, 18051000...18067000, 18069000...18074000:
+//            return "Services"
+//        case 19005000...19005007:
+//            return "Automotive Purchases"
+//        case 19012000...19012008:
+//            return "Clothing & Accessories"
+//        case 19013000...19013003:
+//            return "Computers & Electronics"
+//        case 19025000...19025004, 19047000:
+//            return "Groceries"
+//        case 19040000...19040008:
+//            return "Outlets"
+//        case 19043000:
+//            return "Pharmacy"
+//        case 19000000...19004000, 19006000...19011000, 19014000...19024000, 19027000...19039000, 19041000, 19042000, 19044000...19046000, 19048000...19054000:
+//            return "Shopping"
+//        case 19026000:
+//            return "Auto Gas & Oil"
+//        case 20000000...20002000:
+//            return "Taxes"
+//        case 21000000...21013000:
+//            return "Transfer"
+//        case 22000000...22018000:
+//            return "Travel"
+//        default:
+//            return "Other"
+//        }
+//    }
     
 // MARK: - Shared Instance
     

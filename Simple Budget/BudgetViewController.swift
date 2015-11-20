@@ -22,6 +22,7 @@ class BudgetViewController: UIViewController {
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
     var newSubcategory: Subcategory?
+    var uniqueSubcategories: NSArray?
     
     override func viewDidLoad() {
         super.viewDidLoad()

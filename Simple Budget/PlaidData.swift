@@ -10,12 +10,13 @@ import UIKit
 
 class PlaidData: NSObject {
    
-    var accessToken: String!
-    var categoryName: String!
-    var subcategoryName: String!
-    var transactionName: String!
-    var transactionAmount: String!
-    var transactionDate: String!
+    var accessToken: String? = nil
+//    var merchantName: String? = nil
+//    var amount: String? = nil
+//    var date: String? = nil
+//    var category: Int? = nil
+//    var catString: String? = nil
+//    var subcatString: String? = nil
     
 
 // MARK: - Shared Instance
