@@ -152,9 +152,10 @@ extension BudgetViewController: UITableViewDelegate {
 
         // Set title and amount values
         if fetchedResultsController.fetchedObjects!.count != 0 {
-            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-            cell.subcategoryTitle.text = subcategory.subTitle
-            cell.amountTextField.text = subcategory.totalAmount
+            self.configureCell(cell, atIndexPath: indexPath)
+//            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+//            cell.subcategoryTitle.text = subcategory.subTitle
+//            cell.amountTextField.text = subcategory.totalAmount
         } else {
             cell.subcategoryTitle.text = "New Subcategory"
             cell.amountTextField.text = "$0.00"
@@ -174,6 +175,13 @@ extension BudgetViewController: UITableViewDelegate {
         
         return cell
      }
+    
+    func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
+        let cell = cell as! BudgetSubcategoryCell
+        let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+        cell.subcategoryTitle.text = subcategory.subTitle
+        cell.amountTextField.text = subcategory.totalAmount
+    }
     
     // Customize header text label before view is displayed
     func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
@@ -278,13 +286,14 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
-            if let updateIndexPath = indexPath {
-                let cell = self.tableView.cellForRowAtIndexPath(updateIndexPath) as! BudgetSubcategoryCell
-                let subcategory = self.fetchedResultsController.objectAtIndexPath(updateIndexPath) as? Subcategory
-                
-                cell.subcategoryTitle.text = subcategory?.subTitle
-                cell.amountTextField.text = subcategory?.totalAmount
-            }
+//            if let updateIndexPath = indexPath {
+                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
+                //let cell = self.tableView.cellForRowAtIndexPath(updateIndexPath)
+//                let subcategory = self.fetchedResultsController.objectAtIndexPath(updateIndexPath) as? Subcategory
+//                
+//                cell?.textLabel!.text = subcategory?.subTitle
+                //cell?.detailTextLabel!.text = subcategory?.totalAmount
+            //}
         case .Move:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)

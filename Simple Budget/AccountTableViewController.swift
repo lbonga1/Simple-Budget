@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AccountTableViewController: UITableViewController, UITextFieldDelegate {
     
@@ -43,7 +44,31 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
         // Text delegates
         usernameTextField.delegate = textDelegate
         passwordTextField.delegate = textDelegate
+        
+        // Fetched results controller
+        self.executeFetch()
+        fetchedResultsController.delegate = self
     }
+    
+// MARK: - Core Data Convenience
+    
+    // Shared context
+    lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
+    
+    // Fetched results controller
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        
+        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+            managedObjectContext: self.sharedContext,
+            sectionNameKeyPath: "category.catTitle",
+            cacheName: nil)
+        
+        return fetchedResultsController
+    }()
     
 // MARK: - Actions
     
@@ -95,10 +120,68 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
                 switch response.statusCode {
                 // Successful
                 case 200:
-                    self.downloadedTransactions = transactions
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.performSegueWithIdentifier("downloadedTransactions", sender: self)
+                    for transaction in transactions! {
+                        //Format the transaction amount into a currency string
+                        let formatter = NSNumberFormatter()
+                        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+                        formatter.locale = NSLocale(localeIdentifier: "en_US")
+                        let amountString = formatter.stringFromNumber(transaction.amount)
+                        
+                        if let categoryFirstIndex = transaction.category![1] as? String {
+                            let subcategory = self.fetchedResultsController.fetchedObjects as! [Subcategory]
+                            let foundSubcategory = subcategory.filter{$0.subTitle == categoryFirstIndex}.first
+                        
+                            if foundSubcategory != nil {
+                                let newTransaction = Transaction(subcategory: foundSubcategory!, date: transaction.date, title: transaction.name, amount: amountString!, notes: "", context: self.sharedContext)
+                            
+                                newTransaction.subcategory = foundSubcategory!
+                            
+                                // Save core data
+                                do {
+                                    try self.sharedContext.save()
+                                } catch let error as NSError {
+                                    print("Could not save \(error), \(error.userInfo)")
+                                }
+                            } else {
+                                let newCategory = Category(catTitle: "Other", context: self.sharedContext)
+                                let newSubcategory = Subcategory(category: newCategory, subTitle: categoryFirstIndex, totalAmount: "$0.00", context: self.sharedContext)
+                                let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.name, amount: amountString!, notes: "", context: self.sharedContext)
+                            
+                                newTransaction.subcategory = newSubcategory
+                            
+                                // Save core data
+                                do {
+                                    try self.sharedContext.save()
+                                } catch let error as NSError {
+                                    print("Could not save \(error), \(error.userInfo)")
+                                }
+                            
+                                self.executeFetch()
+                            }
+                        } else {
+                            let newCategory = Category(catTitle: "Other", context: self.sharedContext)
+                            let newSubcategory = Subcategory(category: newCategory, subTitle: "Other", totalAmount: "$0.00", context: self.sharedContext)
+                            let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.name, amount: amountString!, notes: "", context: self.sharedContext)
+                            
+                            newTransaction.subcategory = newSubcategory
+                            
+                            // Save core data
+                            do {
+                                try self.sharedContext.save()
+                            } catch let error as NSError {
+                                print("Could not save \(error), \(error.userInfo)")
+                            }
+                            
+                            self.executeFetch()
+                        }
                     }
+                    
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                    
+//                    self.downloadedTransactions = transactions
+//                    dispatch_async(dispatch_get_main_queue()) {
+//                        self.performSegueWithIdentifier("downloadedTransactions", sender: self)
+//                    }
                 // MFA response needed
                 case 201:
                     dispatch_async(dispatch_get_main_queue()) {
@@ -177,6 +260,13 @@ extension AccountTableViewController: UIPickerViewDelegate {
         institutionLabel.text = instData[row]
         instPicker.hidden = true
     }
+}
+
+// MARK: - Fetched Results Controller Delegate
+
+extension AccountTableViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) { }
 }
 
 extension AccountTableViewController {
@@ -260,6 +350,102 @@ extension AccountTableViewController {
                         message: "Please check your network connection and try again.")
                 }
             }
+        }
+    }
+    
+    // Execute fetch request
+    func executeFetch() {
+        do {
+            // Add subcategory to fetched objects
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    // Use category IDs to return a subcategory string
+    func catIdToSubcatString(id: Int) -> String {
+        switch id {
+        case 10000000...11000000:
+            return "Bank Fees"
+        case 12000000...12001000, 12003000, 12013000, 12015000...12017000, 12019000, 12019001:
+            return "Community"
+        case 12002000...12002002, 12006000, 12007000...14002020:
+            return "Healthcare"
+        case 12005000, 12008000...12008011, 19029000:
+            return "Education"
+        case 12004000, 12009000...12012003, 12014000:
+            return "Government"
+        case 12018000...12018004:
+            return "Religion"
+        case 13001000...13003000:
+            return "Bars & Breweries"
+        case 13004000...13004006:
+            return "Nightlife"
+        case 13000000, 13005000...13005059:
+            return "Restaurants"
+        case 15000000...15002000:
+            return "Interest"
+        case 16000000, 16001000, 16003000:
+            return "Payment"
+        case 16002000:
+            return "Mortgage & Rent"
+        case 16002000...17001019:
+            return "Arts & Entertainment"
+        case 17001000, 17002000...17022000, 17024000, 17026000, 17028000...17048000:
+            return "Recreation"
+        case 17023000...17023004, 17025000...17025005, 17027000...17027003:
+            return "Parks & Outdoors"
+        case 18001000...18001010:
+            return "Advertising & Marketing"
+        case 18006000...18006009:
+            return "Automotive Services"
+        case 18007000...18008001:
+            return "Business Services"
+        case 18009000, 18031000, 18068000...18068005:
+            return "Utilities"
+        case 18012000...18012002:
+            return "Computer Repair"
+        case 18013000...18013010:
+            return "Construction"
+        case 18020000...18020014:
+            return "Financial Services"
+        case 18024000...18025000:
+            return "Home Improvement"
+        case 18030000:
+            return "Insurance"
+        case 18037000...18037020:
+            return "Manufacturing"
+        case 18045000...18045010:
+            return "Personal Care"
+        case 18050000...18050010:
+            return "Real Estate"
+        case 18000000, 18003000...18005000, 18010000, 18011000, 18014000...18019000, 18021000...18023000, 18026000...18029000, 18032000...18036000, 18038000...18044000, 18046000...18049000, 18051000...18067000, 18069000...18074000:
+            return "Services"
+        case 19005000...19005007:
+            return "Automotive Purchases"
+        case 19012000...19012008:
+            return "Clothing & Accessories"
+        case 19013000...19013003:
+            return "Computers & Electronics"
+        case 19025000...19025004, 19047000:
+            return "Groceries"
+        case 19040000...19040008:
+            return "Outlets"
+        case 19043000:
+            return "Pharmacy"
+        case 19000000...19004000, 19006000...19011000, 19014000...19024000, 19027000...19039000, 19041000, 19042000, 19044000...19046000, 19048000...19054000:
+            return "Shopping"
+        case 19026000:
+            return "Auto Gas & Oil"
+        case 20000000...20002000:
+            return "Taxes"
+        case 21000000...21013000:
+            return "Transfer"
+        case 22000000...22018000:
+            return "Travel"
+        default:
+            return "Other"
         }
     }
 }
