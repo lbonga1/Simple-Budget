@@ -127,7 +127,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpentSubcatCell" textLabel="x3f-Qm-UGu" detailTextLabel="wEc-M1-Y9H" style="IBUITableViewCellStyleValue1" id="D8c-zd-7FC" customClass="SpenRemSubcatCell" customModule="Simple_Budget" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpentSubcatCell" textLabel="x3f-Qm-UGu" detailTextLabel="wEc-M1-Y9H" style="IBUITableViewCellStyleValue1" id="D8c-zd-7FC">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D8c-zd-7FC" id="jGE-0X-Jgz">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="43"/>
@@ -1230,24 +1230,12 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addButton" destination="p6U-QX-uWl" id="Z12-4J-g7H"/>
-                        <outlet property="cancelButton" destination="MBX-sL-HcO" id="Y5C-7c-5Is"/>
                         <outlet property="connectButton" destination="agr-y4-San" id="GeJ-dS-AMd"/>
-                        <outlet property="doneButton" destination="VC6-z4-OMe" id="Egf-90-jff"/>
                         <outlet property="tableView" destination="oOR-eb-WT8" id="Tte-UZ-JNC"/>
                         <segue destination="1Sd-Z0-8hd" kind="show" identifier="displayTransactions" id="sdy-wf-NGO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="56V-8X-KpY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem systemItem="done" id="VC6-z4-OMe">
-                    <connections>
-                        <action selector="doneEditing:" destination="sdX-uT-RGW" id="4hl-CB-YnM"/>
-                    </connections>
-                </barButtonItem>
-                <barButtonItem systemItem="cancel" id="MBX-sL-HcO">
-                    <connections>
-                        <action selector="cancelEditing:" destination="sdX-uT-RGW" id="7vz-p5-m9J"/>
-                    </connections>
-                </barButtonItem>
                 <barButtonItem systemItem="add" id="p6U-QX-uWl">
                     <connections>
                         <action selector="addNewTransaction:" destination="sdX-uT-RGW" id="ysy-xg-1Y9"/>

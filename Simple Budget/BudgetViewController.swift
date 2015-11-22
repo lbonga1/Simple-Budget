@@ -14,18 +14,19 @@ class BudgetViewController: UIViewController {
 // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var addButton: UIBarButtonItem!
-    @IBOutlet var cancelButton: UIBarButtonItem!
-    @IBOutlet var doneButton: UIBarButtonItem!
     @IBOutlet var connectButton: UIBarButtonItem!
     
 // MARK: - Variables
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
     var newSubcategory: Subcategory?
-    var uniqueSubcategories: NSArray?
+    var responseTextField: UITextField? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set navigation toolbar title
+        self.parentViewController!.navigationItem.title = "Budget"
         
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
@@ -67,49 +68,19 @@ class BudgetViewController: UIViewController {
     
     // Add new Subcategory
     @IBAction func addItemAction(sender: UIButton) {
-        // Change navigation items
-        self.parentViewController!.navigationItem.leftBarButtonItem = cancelButton
-        self.parentViewController!.navigationItem.rightBarButtonItem = doneButton
-        
         // Set current category to selected "add item" button's tag
         currentlyEditingCategory = sender.tag
         
-        //self.tableView.beginUpdates()
-        
+        // Add a blank subcategory object
         self.addNewSubcategory()
         
+        self.displayTitleAlert("Please enter a title for your new subcategory.")
+        
+        // Add new subcategory to fetched object
         self.executeFetch()
         
+        // Reload tableview data
         self.tableView.reloadData()
-        
-        //self.tableView.endUpdates()
-    }
-    
-    @IBAction func cancelEditing(sender: AnyObject) {
-        // Change navigation items
-        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
-        self.parentViewController!.navigationItem.leftBarButtonItem = connectButton
-        
-        self.tableView.beginUpdates()
-
-        self.deleteLastObject()
-        
-        self.executeFetch()
-        
-        self.tableView.reloadData()
-        
-        self.tableView.endUpdates()
-    }
-    
-    @IBAction func doneEditing(sender: AnyObject) {
-        // Change navigation items
-        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
-        self.parentViewController!.navigationItem.leftBarButtonItem = nil
-        
-        // Init new subcategory and save to core data
-        self.updateNewSubcategory()
-        
-        self.executeFetch()
     }
     
     // Add new bank account
@@ -234,21 +205,12 @@ extension BudgetViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
         
-        // Customize background color and button title
-        footerCell.addItemButton.setTitle("+ Add Item", forState: .Normal)
+        // Set section tag for "add item" button
+        footerCell.addItemButton.tag = section
+        
+        // Customize background color
         footerCell.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.01)
         
-        // Get index path of "add item" button
-        let pointInTable = footerCell.addItemButton.convertPoint(footerCell.addItemButton.bounds.origin, toView: self.tableView)
-        let indexPath = self.tableView.indexPathForRowAtPoint(pointInTable)
-        
-        // Add tag and action to "add item" button
-        if indexPath != nil {
-            let currentSection = indexPath!.section
-            footerCell.addItemButton.tag = currentSection
-            footerCell.addItemButton.addTarget(self, action: Selector("addItemAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        }
-            
         return footerCell
     }
     
@@ -287,11 +249,11 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
 //            if let updateIndexPath = indexPath {
-                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
-                //let cell = self.tableView.cellForRowAtIndexPath(updateIndexPath)
-//                let subcategory = self.fetchedResultsController.objectAtIndexPath(updateIndexPath) as? Subcategory
-//                
-//                cell?.textLabel!.text = subcategory?.subTitle
+//                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
+                let cell = self.tableView.cellForRowAtIndexPath(indexPath!)
+                let subcategory = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Subcategory
+//
+                cell?.textLabel!.text = subcategory?.subTitle
                 //cell?.detailTextLabel!.text = subcategory?.totalAmount
             //}
         case .Move:
@@ -340,13 +302,8 @@ extension BudgetViewController {
     
     // Support for adding a new subcategory
     func addNewSubcategory() {
-//        // Inserts new row into the table
-//        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
-//        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
-//        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        
         // Get Category data from existing subcategory
-        let existingRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory)
+        let existingRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
         let existingRowIndexPath = NSIndexPath(forRow: existingRowIndex, inSection: currentlyEditingCategory)
         let existingSubcategory = fetchedResultsController.objectAtIndexPath(existingRowIndexPath) as! Subcategory
         let category = existingSubcategory.category
@@ -375,29 +332,41 @@ extension BudgetViewController {
             "subTitle": cell.subcategoryTitle.text!,
             "totalAmount": cell.amountTextField.text!
         ]
-        batchRequest.predicate = NSPredicate(format: "subcategory == %@", newSubcategory!)
+        batchRequest.predicate = NSPredicate(format: "subTitle == %@", newSubcategory!.subTitle)
         batchRequest.resultType = .UpdatedObjectsCountResultType
         (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
         
     }
     
-    // Cancel adding a new subcategory, and delete the last object added
-    func deleteLastObject() {
-        // Delete the last row added
+    // Text field for subcategory title response
+    func addTextField(textField: UITextField!) {
+        responseTextField = textField
+        responseTextField!.placeholder = "Enter title here."
+    }
+    
+    // Display alert to set new subcategory title
+    func displayTitleAlert(message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        alertController.addTextFieldWithConfigurationHandler(addTextField)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
+            self.saveSubcatTitle()
+        })
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    // Support for saving subcategory title
+    func saveSubcatTitle() {
+        // Define the index path of the added Subcategory cell and cast as BudgetSubcategoryCell
         let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
         let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
-        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! BudgetSubcategoryCell
+
+        // Set cell's subtitle text
+        cell.subcategoryTitle.text = responseTextField!.text
         
-        // Define and delete the last subcategory object added
-        let objectToDelete = fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
-        self.sharedContext.deleteObject(objectToDelete)
-        
-        // Save core data
-        do {
-            try self.sharedContext.save()
-        } catch let error as NSError {
-            print("Could not save \(error), \(error.userInfo)")
-        }
+        // Update title in core data
+        self.updateNewSubcategory()
     }
     
     // Execute fetch request

@@ -22,6 +22,8 @@ class RemainingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.parentViewController!.navigationItem.title = "Remaining"
+        
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
