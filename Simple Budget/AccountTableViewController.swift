@@ -128,56 +128,97 @@ class AccountTableViewController: UITableViewController, UITextFieldDelegate {
                         formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
                         formatter.locale = NSLocale(localeIdentifier: "en_US")
                         let amountString = formatter.stringFromNumber(transaction.amount)
-                        
-                        if let categoryFirstIndex = transaction.category![1] as? String {
+                                                
+                        if transaction.category == nil {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                // Init new "Other" category
+                                let newCategory = Category(catTitle: "Other", context: self.sharedContext)
+                                
+                                // Init new "Other" subcategory
+                                let newSubcategory = Subcategory(category: newCategory,
+                                    subTitle: "Other",
+                                    totalAmount: "$0.00",
+                                    context: self.sharedContext)
+                                
+                                // Init new transaction
+                                let newTransaction = Transaction(subcategory: newSubcategory,
+                                    date: transaction.date,
+                                    title: transaction.name,
+                                    amount: amountString!,
+                                    notes: "",
+                                    context: self.sharedContext)
+                                
+                                newTransaction.subcategory = newSubcategory
+                                
+                                // Save core data
+                                do {
+                                    try self.sharedContext.save()
+                                } catch let error as NSError {
+                                    print("Could not save \(error), \(error.userInfo)")
+                                }
+                                
+                                // Add new objects to fetched objects
+                                self.executeFetch()
+                            }
+                        } else if let categoryFirstIndex = transaction.category![1] as? String {
                             let subcategory = self.fetchedResultsController.fetchedObjects as! [Subcategory]
                             let foundSubcategory = subcategory.filter{$0.subTitle == categoryFirstIndex}.first
                         
                             if foundSubcategory != nil {
-                                let newTransaction = Transaction(subcategory: foundSubcategory!, date: transaction.date, title: transaction.name, amount: amountString!, notes: "", context: self.sharedContext)
+                                // Init new transaction
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    let newTransaction = Transaction(subcategory: foundSubcategory!,
+                                        date: transaction.date,
+                                        title: transaction.name,
+                                        amount: amountString!,
+                                        notes: "",
+                                        context: self.sharedContext)
                             
-                                newTransaction.subcategory = foundSubcategory!
+                                    newTransaction.subcategory = foundSubcategory!
                             
-                                // Save core data
-                                do {
-                                    try self.sharedContext.save()
-                                } catch let error as NSError {
-                                    print("Could not save \(error), \(error.userInfo)")
+                                    // Save to Core Data
+                                    do {
+                                        try self.sharedContext.save()
+                                    } catch let error as NSError {
+                                        print("Could not save \(error), \(error.userInfo)")
+                                    }
                                 }
                             } else {
-                                let newCategory = Category(catTitle: "Other", context: self.sharedContext)
-                                let newSubcategory = Subcategory(category: newCategory, subTitle: categoryFirstIndex, totalAmount: "$0.00", context: self.sharedContext)
-                                let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.name, amount: amountString!, notes: "", context: self.sharedContext)
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    // Init new category
+                                    let newCategory = Category(catTitle: "Other", context: self.sharedContext)
+                                    
+                                    // Init new subcategory
+                                    let newSubcategory = Subcategory(category: newCategory,
+                                        subTitle: categoryFirstIndex,
+                                        totalAmount: "$0.00",
+                                        context: self.sharedContext)
+                                    
+                                    // Init new transaction
+                                    let newTransaction = Transaction(subcategory: newSubcategory,
+                                        date: transaction.date,
+                                        title: transaction.name,
+                                        amount: amountString!,
+                                        notes: "",
+                                        context: self.sharedContext)
                             
-                                newTransaction.subcategory = newSubcategory
+                                    newTransaction.subcategory = newSubcategory
                             
-                                // Save core data
-                                do {
-                                    try self.sharedContext.save()
-                                } catch let error as NSError {
-                                    print("Could not save \(error), \(error.userInfo)")
+                                    // Save core data
+                                    do {
+                                        try self.sharedContext.save()
+                                    } catch let error as NSError {
+                                        print("Could not save \(error), \(error.userInfo)")
+                                    }
+                            
+                                    // Add new objects to fetched objects
+                                    self.executeFetch()
                                 }
-                            
-                                self.executeFetch()
                             }
-                        } else {
-                            let newCategory = Category(catTitle: "Other", context: self.sharedContext)
-                            let newSubcategory = Subcategory(category: newCategory, subTitle: "Other", totalAmount: "$0.00", context: self.sharedContext)
-                            let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.name, amount: amountString!, notes: "", context: self.sharedContext)
-                            
-                            newTransaction.subcategory = newSubcategory
-                            
-                            // Save core data
-                            do {
-                                try self.sharedContext.save()
-                            } catch let error as NSError {
-                                print("Could not save \(error), \(error.userInfo)")
-                            }
-                            
-                            self.executeFetch()
                         }
                     }
                     
+                    // Return to Budget view
                     self.dismissViewControllerAnimated(true, completion: nil)
                     
 //                    self.downloadedTransactions = transactions

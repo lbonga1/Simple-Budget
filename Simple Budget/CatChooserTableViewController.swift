@@ -14,22 +14,17 @@ class CatChooserTableViewController: UITableViewController {
 // MARK: - Outlets
     @IBOutlet var doneButton: UIBarButtonItem!
     @IBOutlet var cancelButton: UIBarButtonItem!
-    @IBOutlet var saveButton: UIBarButtonItem!
     
 // MARK: - Variables
     var selectedSubcategory: Subcategory?
     var selectedIndexArray: NSMutableArray = []
     var selectedIndexPath: NSIndexPath?
-    var tag: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Fetched Results Controller
-        do {
-            try fetchedResultsController.performFetch()
-        } catch _ {
-        }
+        self.executeFetch()
         fetchedResultsController.delegate = self
         
         // Tableview is automatically in editing mode
@@ -38,12 +33,9 @@ class CatChooserTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        
         // Sets up navigation bar items
-        if self.tag == 0 {
-            self.navigationItem.rightBarButtonItem = doneButton
-        } else {
-            self.navigationItem.rightBarButtonItem = saveButton
-        }
+        self.navigationItem.rightBarButtonItem = doneButton
         self.navigationItem.leftBarButtonItem = cancelButton
     }
 
@@ -195,4 +187,18 @@ class CatChooserTableViewController: UITableViewController {
 extension CatChooserTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
+}
+
+// MARK: - Additional Methods 
+
+extension CatChooserTableViewController {
+    
+    // Execute fetch request
+    func executeFetch() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
 }

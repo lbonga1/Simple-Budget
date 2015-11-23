@@ -106,18 +106,23 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         // Check to make sure required fields have been completed
         if amountTextField.text != nil && merchantTextField.text != nil && categoryLabel.text != "Choose Budget Category" {
             
-            // Init transaction object
-            let newTransaction = Transaction(subcategory: selectedSubcategory,
-                date: dateButton.titleLabel!.text!,
-                title: merchantTextField.text!,
-                amount: amountTextField.text!,
-                notes: notesTextView.text,
-                context: self.sharedContext)
-            
-            // Save to Core Data
             dispatch_async(dispatch_get_main_queue()) {
+                // Init transaction object
+                let newTransaction = Transaction(subcategory: self.selectedSubcategory,
+                    date: self.dateButton.titleLabel!.text!,
+                    title: self.merchantTextField.text!,
+                    amount: self.amountTextField.text!,
+                    notes: self.notesTextView.text,
+                    context: self.sharedContext)
+            
                 newTransaction.subcategory = self.selectedSubcategory
-                CoreDataStackManager.sharedInstance().saveContext()
+                
+                // Save to Core Data
+                do {
+                    try self.sharedContext.save()
+                } catch let error as NSError {
+                    print("Could not save \(error), \(error.userInfo)")
+                }
             }
             // Dismiss view controller
             self.dismissViewControllerAnimated(true, completion: nil)

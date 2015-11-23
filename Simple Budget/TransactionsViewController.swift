@@ -29,11 +29,8 @@ class TransactionsViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = addButton
         self.navigationItem.leftBarButtonItem = cancelButton
         
-        do {
-            // Fetched Results Controller
-            try fetchedResultsController.performFetch()
-        } catch _ {
-        }
+        // Fetched Results Controller
+        self.executeFetch()
         fetchedResultsController.delegate = self
         
         // Display no transactions label if there are no fetchedObjects
@@ -95,7 +92,7 @@ extension TransactionsViewController: UITableViewDataSource {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
-        return 1
+        return 0
     }
     
     // Returns the number of rows in each section.
@@ -104,7 +101,7 @@ extension TransactionsViewController: UITableViewDataSource {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
         }
-        return 1
+        return 0
     }
 }
 
@@ -151,5 +148,14 @@ extension TransactionsViewController {
         let newDate = dateFormatter.dateFromString(dateString)
         
         newDateString = dateFormatter.stringFromDate(newDate!)
+    }
+    
+    // Execute fetch request
+    func executeFetch() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
     }
 }

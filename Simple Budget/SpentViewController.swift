@@ -21,18 +21,12 @@ class SpentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.parentViewController!.navigationItem.title = "Spent"
 
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
         // Fetched Results Controller
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
+        self.executeFetch()
         fetchedResultsController.delegate = self
     }
     
@@ -125,8 +119,6 @@ extension SpentViewController: UITableViewDelegate {
 
             // Convert to Float
             let amountFloat = Float(editedString)
-            print(editedString)
-            print(amountFloat)
             
             // Add the value to the amountArray
             amountArray.append(amountFloat!)
@@ -203,6 +195,20 @@ extension SpentViewController: UITableViewDelegate {
 extension SpentViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+}
+
+// MARK: - Additional Methods
+
+extension SpentViewController {
+    
+    // Execute fetch request
+    func executeFetch() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
 }
 
 extension Array {

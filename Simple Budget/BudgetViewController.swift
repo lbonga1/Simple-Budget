@@ -19,7 +19,6 @@ class BudgetViewController: UIViewController {
 // MARK: - Variables
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
-    var newSubcategory: Subcategory?
     var responseTextField: UITextField? = nil
     
     override func viewDidLoad() {
@@ -71,13 +70,8 @@ class BudgetViewController: UIViewController {
         // Set current category to selected "add item" button's tag
         currentlyEditingCategory = sender.tag
         
-//        // Add a blank subcategory object
-//        self.addNewSubcategory()
-        
+        // Display alert to save new subcategory title
         self.displayTitleAlert("Please enter a title for your new subcategory.")
-        
-        // Add new subcategory to fetched object
-        self.executeFetch()
         
         // Reload tableview data
         self.tableView.reloadData()
@@ -127,9 +121,6 @@ extension BudgetViewController: UITableViewDelegate {
 //            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
 //            cell.subcategoryTitle.text = subcategory.subTitle
 //            cell.amountTextField.text = subcategory.totalAmount
-        } else {
-            cell.subcategoryTitle.text = "New Subcategory"
-            cell.amountTextField.text = "$0.00"
         }
         
         cell.amountUpdateHandler = { [unowned self] (currentCell: BudgetSubcategoryCell) -> Void in
@@ -312,14 +303,21 @@ extension BudgetViewController {
         let existingSubcategory = fetchedResultsController.objectAtIndexPath(existingRowIndexPath) as! Subcategory
         let category = existingSubcategory.category
         
-        // Init new subcategory object
-        newSubcategory = Subcategory(category: category, subTitle: responseTextField!.text!, totalAmount: "$0.00", context: self.sharedContext)
+        dispatch_async(dispatch_get_main_queue()) {
+            // Init new subcategory object
+            let newSubcategory = Subcategory(category: category, subTitle: self.responseTextField!.text!, totalAmount: "$0.00", context: self.sharedContext)
         
-        // Save to core data
-        do {
-            try self.sharedContext.save()
-        } catch let error as NSError {
-            print("Could not save \(error), \(error.userInfo)")
+            newSubcategory.category = category
+            
+            // Save to core data
+            do {
+                try self.sharedContext.save()
+            } catch let error as NSError {
+                print("Could not save \(error), \(error.userInfo)")
+            }
+            
+            // Add new subcategory to fetched objects
+            self.executeFetch()
         }
     }
     
@@ -334,7 +332,6 @@ extension BudgetViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         alertController.addTextFieldWithConfigurationHandler(addTextField)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
-            //self.saveSubcatTitle()
             self.addNewSubcategory()
         })
         alertController.addAction(okAction)

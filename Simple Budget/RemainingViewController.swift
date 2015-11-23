@@ -22,17 +22,11 @@ class RemainingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.parentViewController!.navigationItem.title = "Remaining"
-        
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         
         // Fetched Results Controller
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
+        self.executeFetch()
         fetchedResultsController.delegate = self
     }
     
@@ -203,4 +197,18 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
 extension RemainingViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+}
+
+// MARK: - Additional Methods
+
+extension RemainingViewController {
+    
+    // Execute fetch request
+    func executeFetch() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
 }
