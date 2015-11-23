@@ -109,8 +109,9 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
             // Define the transaction amount
             let transaction = transaction as Transaction
             let amountString = transaction.amount
-            // Remove the "$"
-            let editedString = String(amountString.characters.dropFirst())
+            // Remove the "," and "$"
+            let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
+            let editedString = String(dropCommaInString.characters.dropFirst())
             // Convert to Float
             let amountFloat = Float(editedString)
             
@@ -124,7 +125,8 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
 
             // Convert Subcategory budget amount to float
             let subcatAmountString = subcategory.totalAmount
-            let subcatEditedString = String(subcatAmountString.characters.dropFirst())
+            let dropCommaInString = subcatAmountString.stringByReplacingOccurrencesOfString(",", withString: "")
+            let subcatEditedString = String(dropCommaInString.characters.dropFirst())
             let subcatAmountFloat = Float(subcatEditedString)
         
             // Find the remaining amount
@@ -180,7 +182,7 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
         return 44
     }
     
-    // Defines the custom footer cells.
+    // Defines the footer view.
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         // Create footer view
         let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
@@ -201,18 +203,4 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
 extension RemainingViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) { }
-}
-
-// MARK: - Additional Methods
-
-extension RemainingViewController {
-    func floatToString(float: Float) -> String {
-        // Format the remaining amount back into a string
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
-        let remAmountString = formatter.stringFromNumber(float)
-        
-        return remAmountString!
-    }
 }

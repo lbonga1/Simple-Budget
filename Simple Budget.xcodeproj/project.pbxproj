@@ -12,7 +12,6 @@
 		1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3D81BCB616500A38E45 /* Subcategory.swift */; };
 		1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DA1BCB617000A38E45 /* Transaction.swift */; };
 		1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */; };
-		1A37C8341BFA92AB000584B3 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A37C8331BFA92AA000584B3 /* SwiftyJSON.swift */; };
 		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */; };
 		1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */; };
 		1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */; };
@@ -56,7 +55,6 @@
 		1A19A3D81BCB616500A38E45 /* Subcategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subcategory.swift; sourceTree = "<group>"; };
 		1A19A3DA1BCB617000A38E45 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTransTableViewController.swift; path = ../NewTransTableViewController.swift; sourceTree = "<group>"; };
-		1A37C8331BFA92AA000584B3 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = ../SwiftyJSON.swift; sourceTree = "<group>"; };
 		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyTextDelegate.swift; sourceTree = "<group>"; };
 		1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatChooserTableViewController.swift; sourceTree = "<group>"; };
@@ -209,7 +207,6 @@
 				1AF578831BF597DE0058261A /* PlaidConstants.swift */,
 				1AF578811BF591720058261A /* PlaidClient.swift */,
 				1A9D67651BF16D0F006D2165 /* PlaidData.swift */,
-				1A37C8331BFA92AA000584B3 /* SwiftyJSON.swift */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -384,7 +381,6 @@
 				1AFF3DCB1BD9F883006B571F /* RemainingViewController.swift in Sources */,
 				1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */,
 				1A7E33511BEF0E0D0055D901 /* TransactionCell.swift in Sources */,
-				1A37C8341BFA92AB000584B3 /* SwiftyJSON.swift in Sources */,
 				1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */,
 				1AF578841BF597DE0058261A /* PlaidConstants.swift in Sources */,
 				1AF10AE91BCB18F400F493D0 /* Model.xcdatamodeld in Sources */,

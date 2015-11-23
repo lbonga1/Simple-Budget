@@ -71,8 +71,8 @@ class BudgetViewController: UIViewController {
         // Set current category to selected "add item" button's tag
         currentlyEditingCategory = sender.tag
         
-        // Add a blank subcategory object
-        self.addNewSubcategory()
+//        // Add a blank subcategory object
+//        self.addNewSubcategory()
         
         self.displayTitleAlert("Please enter a title for your new subcategory.")
         
@@ -190,8 +190,6 @@ extension BudgetViewController: UITableViewDelegate {
 //        plannedLabel.font = UIFont(name: "Avenir-Book", size: 17.0)
 //        plannedLabel.textAlignment = NSTextAlignment.Right
 //        
-//        // Add labels to header view
-//        headerView.contentView.addSubview(titleLabel)
 //        headerView.contentView.addSubview(plannedLabel)
     }
     
@@ -204,6 +202,10 @@ extension BudgetViewController: UITableViewDelegate {
     // Defines the custom footer cells.
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
+
+        let containerView = UIView(frame: footerCell.frame)
+        
+        footerCell.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         // Set section tag for "add item" button
         footerCell.addItemButton.tag = section
@@ -211,7 +213,9 @@ extension BudgetViewController: UITableViewDelegate {
         // Customize background color
         footerCell.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.01)
         
-        return footerCell
+        containerView.addSubview(footerCell)
+        
+        return containerView
     }
     
     // Footer cell height
@@ -309,33 +313,14 @@ extension BudgetViewController {
         let category = existingSubcategory.category
         
         // Init new subcategory object
-        newSubcategory = Subcategory(category: category, subTitle: "New Subcategory", totalAmount: "$0.00", context: self.sharedContext)
+        newSubcategory = Subcategory(category: category, subTitle: responseTextField!.text!, totalAmount: "$0.00", context: self.sharedContext)
         
+        // Save to core data
         do {
-            // Save to core data
             try self.sharedContext.save()
         } catch let error as NSError {
             print("Could not save \(error), \(error.userInfo)")
         }
-    }
-    
-    // Support for updating new subcategory object
-    func updateNewSubcategory() {
-        // Define the index path of the added Subcategory cell and cast as BudgetSubcategoryCell
-        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
-        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! BudgetSubcategoryCell
-        
-        // Perform batch update request
-        let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
-        batchRequest.propertiesToUpdate = [
-            "subTitle": cell.subcategoryTitle.text!,
-            "totalAmount": cell.amountTextField.text!
-        ]
-        batchRequest.predicate = NSPredicate(format: "subTitle == %@", newSubcategory!.subTitle)
-        batchRequest.resultType = .UpdatedObjectsCountResultType
-        (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
-        
     }
     
     // Text field for subcategory title response
@@ -349,30 +334,16 @@ extension BudgetViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         alertController.addTextFieldWithConfigurationHandler(addTextField)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
-            self.saveSubcatTitle()
+            //self.saveSubcatTitle()
+            self.addNewSubcategory()
         })
         alertController.addAction(okAction)
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    // Support for saving subcategory title
-    func saveSubcatTitle() {
-        // Define the index path of the added Subcategory cell and cast as BudgetSubcategoryCell
-        let lastRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
-        let indexPath = NSIndexPath(forRow: lastRowIndex, inSection: currentlyEditingCategory)
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! BudgetSubcategoryCell
-
-        // Set cell's subtitle text
-        cell.subcategoryTitle.text = responseTextField!.text
-        
-        // Update title in core data
-        self.updateNewSubcategory()
-    }
-    
     // Execute fetch request
     func executeFetch() {
         do {
-            // Add subcategory to fetched objects
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")

@@ -14,12 +14,6 @@ public class PlaidClient: NSObject {
 // MARK: - Variables
     
     let session = NSURLSession.sharedSession()
-//    var merchantName: String? = nil
-//    var amount: String? = nil
-//    var date: String? = nil
-//    var category: Int? = nil
-//    var catString: String? = nil
-//    var subcatString: String? = nil
     
 // MARK: - Core Data Convenience
     
@@ -80,47 +74,6 @@ public class PlaidClient: NSObject {
                         let accts = acctsArray.map{Account(account: $0)}
                         let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
                         let trxns = trxnArray.map{Transactions(transactions: $0)}
-
-//                        // Extract transaction data
-//                        for tr in trxnArray {
-//                            // Transaction amount
-//                            let numberAmount = tr["amount"]
-//                            let stringAmount = numberAmount?.stringValue
-//                            self.amount = stringAmount!
-//                            
-//                            self.merchantName = tr["name"] as? String
-//                            
-//                            // Date
-//                            self.date = tr["date"] as? String
-//
-//                            // Category ID
-//                            if let categoryString = tr["category_id"] as? String {
-//                                if let categoryID = Int(categoryString) {
-//                                    self.category = categoryID
-//                                }
-//                            } else {
-//                                self.category = 0
-//                            }
-//                            
-//                            // Convert category ID to string
-//                            self.catString = self.catIdToCatString(self.category!)
-//                            
-//                            // Convert category ID to  subcategory string
-//                            self.subcatString = self.catIdToSubcatString(self.category!)
-//                            
-//                            let newCategory = Category(catTitle: self.catString!, context: self.sharedContext)
-//                            
-//                            let newSubcategory = Subcategory(category: newCategory, subTitle: self.subcatString!, totalAmount: "$0.00", context: self.sharedContext)
-//                            
-//                           let newTransaction = Transaction(subcategory: newSubcategory, date: self.date!, title: self.merchantName!, amount: self.amount!, notes: "", context: self.sharedContext)
-//                            
-//                            // Save to Core Data
-//                            dispatch_async(dispatch_get_main_queue()) {
-//                                newSubcategory.category = newCategory
-//                                newTransaction.subcategory = newSubcategory
-//                                CoreDataStackManager.sharedInstance().saveContext()
-//                            }
-//                        }
                         
                         completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
                     }
@@ -189,15 +142,6 @@ public class PlaidClient: NSObject {
                     let trxns = trxnArray.map{Transactions(transactions: $0)}
                 
                     completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
-                    
-//                    let acctsArray = jsonResult?.valueForKey("accounts") as! NSArray
-//                    //let accts = acctsArray.map{Account(account: $0)}
-//                        print(acctsArray)
-//                    let trxnArray = jsonResult?.valueForKey("transactions") as! NSArray
-//                    //let trxns = trxnArray.map{Transactions(transactions: $0)}
-//                        print(trxnArray)
-//                    
-//                    completion(response: response, accessToken: nil, mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                 }
             } catch {
                 print("MFA error (PS_submitMFAResponse): \(error)")

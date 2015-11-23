@@ -88,7 +88,7 @@ class CatChooserTableViewController: UITableViewController {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
-        return 1
+        return 0
     }
 
     // Number of rows in section
@@ -97,7 +97,7 @@ class CatChooserTableViewController: UITableViewController {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
         }
-        return 1
+        return 0
     }
     
 // MARK: - Table view delegate
@@ -140,6 +140,27 @@ class CatChooserTableViewController: UITableViewController {
         }
         
         return headerView!
+    }
+    
+    // Height for headerview
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return 44
+    }
+    
+    // Defines the footer view.
+    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        // Create footer view
+        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
+        footerView.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.1)
+        
+        return footerView
+    }
+    
+    // Height for footerview
+    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        return 25
     }
     
     // Saves selectedSubcategory data when row is selected
