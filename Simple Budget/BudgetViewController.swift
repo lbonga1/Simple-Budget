@@ -118,16 +118,15 @@ extension BudgetViewController: UITableViewDelegate {
         // Set title and amount values
         if fetchedResultsController.fetchedObjects!.count != 0 {
             self.configureCell(cell, atIndexPath: indexPath)
-//            let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
-//            cell.subcategoryTitle.text = subcategory.subTitle
-//            cell.amountTextField.text = subcategory.totalAmount
         }
         
+        // Support for updating the budget amount in core data
         cell.amountUpdateHandler = { [unowned self] (currentCell: BudgetSubcategoryCell) -> Void in
             guard let path = tableView.indexPathForRowAtPoint(currentCell.center) else { return }
             let subcategory = self.fetchedResultsController.objectAtIndexPath(path) as! Subcategory
             print("the selected item is \(subcategory.subTitle), currently \(subcategory.totalAmount), change to \(cell.amountTextField.text)")
             
+            // Batch request
             let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
             batchRequest.propertiesToUpdate = ["totalAmount": cell.amountTextField.text!]
             batchRequest.predicate = NSPredicate(format: "subTitle == %@", subcategory.subTitle)
@@ -138,6 +137,7 @@ extension BudgetViewController: UITableViewDelegate {
         return cell
      }
     
+    // Configure subcategory cells
     func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
         let cell = cell as! BudgetSubcategoryCell
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
@@ -232,10 +232,12 @@ extension BudgetViewController: UITableViewDelegate {
 
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
+    // Begin updates
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.tableView.beginUpdates()
     }
     
+    // Changes to rows
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Insert:
@@ -243,20 +245,14 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
-//            if let updateIndexPath = indexPath {
-//                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
-                let cell = self.tableView.cellForRowAtIndexPath(indexPath!)
-                let subcategory = self.fetchedResultsController.objectAtIndexPath(indexPath!) as? Subcategory
-//
-                cell?.textLabel!.text = subcategory?.subTitle
-                //cell?.detailTextLabel!.text = subcategory?.totalAmount
-            //}
+                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
         case .Move:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         }
     }
     
+    // Changes to sections
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch type {
         case .Insert:
@@ -268,6 +264,7 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
+    // End updates
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }

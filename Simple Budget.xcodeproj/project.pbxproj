@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A1122F91BFED14500F177AA /* DownloadedTransViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1122F81BFED14500F177AA /* DownloadedTransViewController.swift */; };
 		1A19A3D71BCB614700A38E45 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3D61BCB614700A38E45 /* Category.swift */; };
 		1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3D81BCB616500A38E45 /* Subcategory.swift */; };
 		1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DA1BCB617000A38E45 /* Transaction.swift */; };
@@ -17,10 +16,10 @@
 		1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */; };
 		1A7E334F1BEED9310055D901 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */; };
 		1A7E33511BEF0E0D0055D901 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */; };
-		1A9D67661BF16D0F006D2165 /* PlaidData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67651BF16D0F006D2165 /* PlaidData.swift */; };
 		1A9D67681BF16F64006D2165 /* AccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */; };
 		1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */; };
 		1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */; };
+		1ABD4E641C044FC700BA35D5 /* AccountTableViewConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD4E631C044FC700BA35D5 /* AccountTableViewConvenience.swift */; };
 		1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC059741BDAE86E0075302E /* CoreDataStackManager.swift */; };
 		1AD04ADE1BEADB5F008F1A05 /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD04ADD1BEADB5F008F1A05 /* DataHelper.swift */; };
 		1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */; };
@@ -50,7 +49,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1A1122F81BFED14500F177AA /* DownloadedTransViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadedTransViewController.swift; sourceTree = "<group>"; };
 		1A19A3D61BCB614700A38E45 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		1A19A3D81BCB616500A38E45 /* Subcategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subcategory.swift; sourceTree = "<group>"; };
 		1A19A3DA1BCB617000A38E45 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
@@ -60,10 +58,10 @@
 		1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatChooserTableViewController.swift; sourceTree = "<group>"; };
 		1A7E334E1BEED9310055D901 /* TransactionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
-		1A9D67651BF16D0F006D2165 /* PlaidData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidData.swift; sourceTree = "<group>"; };
 		1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewController.swift; sourceTree = "<group>"; };
 		1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFooterCell.swift; sourceTree = "<group>"; };
 		1AA59F551BD4A04800704B98 /* BudgetSubcategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetSubcategoryCell.swift; sourceTree = "<group>"; };
+		1ABD4E631C044FC700BA35D5 /* AccountTableViewConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTableViewConvenience.swift; sourceTree = "<group>"; };
 		1AC059741BDAE86E0075302E /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 		1AD04ADD1BEADB5F008F1A05 /* DataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
 		1AF10AE01BCB18F400F493D0 /* Simple Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Budget.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,7 +204,6 @@
 			children = (
 				1AF578831BF597DE0058261A /* PlaidConstants.swift */,
 				1AF578811BF591720058261A /* PlaidClient.swift */,
-				1A9D67651BF16D0F006D2165 /* PlaidData.swift */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -236,7 +233,7 @@
 				1AF10AEA1BCB18F400F493D0 /* LoginViewController.swift */,
 				1AF10B0A1BCB1A2400F493D0 /* CreateUserViewController.swift */,
 				1A9D67671BF16F64006D2165 /* AccountTableViewController.swift */,
-				1A1122F81BFED14500F177AA /* DownloadedTransViewController.swift */,
+				1ABD4E631C044FC700BA35D5 /* AccountTableViewConvenience.swift */,
 				1AF10B0C1BCB2EBE00F493D0 /* BudgetViewController.swift */,
 				1AFF3DC81BD9F873006B571F /* SpentViewController.swift */,
 				1AFF3DCA1BD9F883006B571F /* RemainingViewController.swift */,
@@ -375,6 +372,7 @@
 				1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */,
 				1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */,
 				1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */,
+				1ABD4E641C044FC700BA35D5 /* AccountTableViewConvenience.swift in Sources */,
 				1AFF3DC91BD9F873006B571F /* SpentViewController.swift in Sources */,
 				1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */,
 				1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */,
@@ -389,9 +387,7 @@
 				1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */,
 				1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */,
 				1A19A3D91BCB616500A38E45 /* Subcategory.swift in Sources */,
-				1A9D67661BF16D0F006D2165 /* PlaidData.swift in Sources */,
 				1AF10AE61BCB18F400F493D0 /* AppDelegate.swift in Sources */,
-				1A1122F91BFED14500F177AA /* DownloadedTransViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

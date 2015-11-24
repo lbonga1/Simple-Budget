@@ -21,6 +21,7 @@ public class PlaidClient: NSObject {
     var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
    
 // MARK: - Add Connect or Auth User
+    
     func PS_addUser(userType: Type, username: String, password: String, pin: String?, institution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
@@ -28,18 +29,14 @@ public class PlaidClient: NSObject {
         
         let institutionStr: String = institutionToString(institution)
         
-        let optionsDict: [String:AnyObject] =
-        [
-            "list":true
-        ]
+        let optionsDict: [String:AnyObject] = ["list": true]
         
         let optionsDictStr = dictToString(optionsDict)
         
         var urlString:String?
         if pin != nil {
             urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&pin=\(pin!)&type=\(institutionStr)&\(optionsDictStr.encodValue)"
-        }
-        else {
+        } else {
             urlString = "\(baseURL)connect?client_id=\(clientId)&secret=\(secret)&username=\(username)&password=\(password.encodValue)&type=\(institutionStr)&options=\(optionsDictStr.encodValue)"
         }
         
@@ -53,10 +50,6 @@ public class PlaidClient: NSObject {
             
             do {
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
-                guard jsonResult?.valueForKey("code") as? Int != 1303 else { throw PlaidError.InstitutionNotAvailable }
-                guard jsonResult!.valueForKey("code") as? Int != 1200 else {throw PlaidError.InvalidCredentials(jsonResult!.valueForKey("resolve") as! String)}
-                guard jsonResult!.valueForKey("code") as? Int != 1005 else {throw PlaidError.CredentialsMissing(jsonResult!.valueForKey("resolve") as! String)}
-                guard jsonResult!.valueForKey("code") as? Int != 1601 else {throw PlaidError.InstitutionNotAvailable}
                 
                 if let token = jsonResult?.valueForKey("access_token") as? String {
                     if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
@@ -64,7 +57,7 @@ public class PlaidClient: NSObject {
                             if let questionString = questionDictionary["question"] as? String {
                                 if let typeMfa = jsonResult?.valueForKey("type") as? String {
                                     type = typeMfa
-                                    PlaidData.sharedInstance().accessToken = token
+
                                     completion(response: response, accessToken: token, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
                                 }
                             }
@@ -88,6 +81,7 @@ public class PlaidClient: NSObject {
     }
     
 // MARK: - MFA funcs
+    
     func PS_submitMFAResponse(accessToken: String, code: Bool?, response: String, completion: (response: NSURLResponse?, accessToken: String?, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error: NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
@@ -126,10 +120,9 @@ public class PlaidClient: NSObject {
                     if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
                         if let questionDictionary = mfaResponse[0] as? NSDictionary {
                             if let questionString = questionDictionary["question"] as? String {
-                                //println(questionString)
                                 if let typeMfa = jsonResult?.valueForKey("type") as? String {
                                     type = typeMfa
-                                    PlaidData.sharedInstance().accessToken = token
+                                    
                                     completion(response: response, accessToken: token, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
                                 }
                             }
@@ -151,6 +144,7 @@ public class PlaidClient: NSObject {
     }
     
 // MARK: - Get balance
+    
     func PS_getUserBalance(accessToken: String, completion: (response: NSURLResponse?, accounts:[Account], error:NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
@@ -179,6 +173,7 @@ public class PlaidClient: NSObject {
     }
     
 // MARK: - Get transactions (Connect)
+    
     func PS_getUserTransactions(accessToken: String, showPending: Bool, beginDate: String?, endDate: String?, completion: (response: NSURLResponse?, transactions:[Transactions], error:NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
@@ -282,27 +277,7 @@ public class PlaidClient: NSObject {
         }
         return institutionStr
     }
-    
-//    func catIdToCatString(id: Int) -> String {
-//        switch id {
-//        case 13001000...13003000, 13000000, 13005000...13005059, 19025000...19025004, 19047000:
-//            return "Food"
-//        case 18006000...18006009, 19005000...19005007, 19026000:
-//            return "Transportation"
-//        case 18030000, 20000000...20002000:
-//            return "Insurance & Tax"
-//        case 16002000, 18009000, 18031000, 18068000...18068005, 18050000...18050010:
-//            return "Housing"
-//        case 10000000...11000000, 12000000...12001000, 12003000, 12013000, 12015000...12017000, 12019000, 12019001, 12002000...12002002, 12006000, 12007000...14002020, 12005000, 12008000...12008011, 19029000, 12004000, 12009000...12012003, 12014000, 12018000...12018004, 13004000...13004006, 16002000...17001019, 17001000, 17002000...17022000, 17024000, 17026000, 17028000...17048000, 17023000...17023004, 17025000...17025005, 17027000...17027003, 18001000...18001010, 18007000...18008001, 18012000...18012002, 18020000...18020014, 18024000...18025000, 18045000...18045010, 19012000...19012008, 19013000...19013003, 19040000...19040008, 19043000, 19000000...19004000, 19006000...19011000, 19014000...19024000, 19027000...19039000, 19041000, 19042000, 19044000...19046000, 19048000...19054000, 22000000...22018000:
-//            return "Lifestyle"
-//        case 15000000...15002000, 16000000, 16001000, 16003000, 18013000...18013010, 18037000...18037020, 18000000, 18003000...18005000, 18010000, 18011000, 18014000...18019000, 18021000...18023000, 18026000...18029000, 18032000...18036000, 18038000...18044000, 18046000...18049000, 18051000...18067000, 18069000...18074000, 21000000...21013000:
-//            return "Other"
-//        default:
-//            return "Other"
-//        }
-//    }
-//    
-    
+        
 // MARK: - Shared Instance
     
     class func sharedInstance() -> PlaidClient {
@@ -314,6 +289,8 @@ public class PlaidClient: NSObject {
         return Singleton.sharedInstance
     }
 }
+
+// MARK: - Extensions
 
 extension String {
     var encodValue:String {

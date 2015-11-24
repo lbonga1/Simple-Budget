@@ -19,6 +19,7 @@ class CatChooserTableViewController: UITableViewController {
     var selectedSubcategory: Subcategory?
     var selectedIndexArray: NSMutableArray = []
     var selectedIndexPath: NSIndexPath?
+    var amountArray: [Float] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,12 +99,55 @@ class CatChooserTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ChooserSubcategory", forIndexPath: indexPath)
         
-        // Set title and amount values
+        // Set title value
         let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
         cell.textLabel!.text = subcategory.subTitle
         
-    // TODO: Change to remaining amount (budgeted - transactions)
-        cell.detailTextLabel!.text = ""
+        // Cast transactions NSSet as an array
+        let transactions = subcategory.transactions.allObjects as! [Transaction]
+        
+        // Convert amount strings to floats, then get the sum
+        for transaction in transactions {
+            // Define the transaction amount
+            let transaction = transaction as Transaction
+            let amountString = transaction.amount
+            // Remove the "," and "$"
+            let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
+            let editedString = String(dropCommaInString.characters.dropFirst())
+            // Convert to Float
+            let amountFloat = Float(editedString)
+            
+            // Add the value to the amountArray
+            amountArray.append(amountFloat!)
+        }
+        
+        if transactions.count != 0 {
+            // Find the sum of the values in the amountArray
+            let sum = amountArray.sum()
+            
+            // Convert Subcategory budget amount to float
+            let subcatAmountString = subcategory.totalAmount
+            let dropCommaInString = subcatAmountString.stringByReplacingOccurrencesOfString(",", withString: "")
+            let subcatEditedString = String(dropCommaInString.characters.dropFirst())
+            let subcatAmountFloat = Float(subcatEditedString)
+            
+            // Find the remaining amount
+            let remainingAmount = (subcatAmountFloat! - sum)
+            
+            // Format the remaining amount back into a string
+            let formatter = NSNumberFormatter()
+            formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+            formatter.locale = NSLocale(localeIdentifier: "en_US")
+            let remAmountString = formatter.stringFromNumber(remainingAmount)
+            
+            // Set amount label value
+            cell.detailTextLabel!.text = remAmountString
+        } else {
+            cell.detailTextLabel!.text = "$0.00"
+        }
+        
+        // Empty the amountArray for the next Transaction array values
+        amountArray.removeAll()
 
         return cell
     }
