@@ -41,6 +41,8 @@ class CreateUserViewController: UIViewController {
             NSUserDefaults.standardUserDefaults().setValue(newUsername, forKey: "username")
             NSUserDefaults.standardUserDefaults().setValue(newPassword, forKey: "password")
         }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
 // MARK: - Methods

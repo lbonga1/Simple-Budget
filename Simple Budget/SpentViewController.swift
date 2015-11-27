@@ -63,9 +63,11 @@ class SpentViewController: UIViewController {
 // MARK: - Actions
     
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
+        dispatch_async(dispatch_get_main_queue()) {
+            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
-        self.presentViewController(controller, animated: true, completion: nil)
+            self.presentViewController(controller, animated: true, completion: nil)
+        }
     }
 }
     
@@ -115,7 +117,7 @@ extension SpentViewController: UITableViewDelegate {
             let amountString = transaction.amount
             // Remove the "$" and ","
             let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
-            let editedString = String(dropCommaInString.characters.dropFirst())
+            let editedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
 
             // Convert to Float
             let amountFloat = Float(editedString)

@@ -113,7 +113,7 @@ class CatChooserTableViewController: UITableViewController {
             let amountString = transaction.amount
             // Remove the "," and "$"
             let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
-            let editedString = String(dropCommaInString.characters.dropFirst())
+            let editedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
             // Convert to Float
             let amountFloat = Float(editedString)
             
@@ -128,7 +128,7 @@ class CatChooserTableViewController: UITableViewController {
             // Convert Subcategory budget amount to float
             let subcatAmountString = subcategory.totalAmount
             let dropCommaInString = subcatAmountString.stringByReplacingOccurrencesOfString(",", withString: "")
-            let subcatEditedString = String(dropCommaInString.characters.dropFirst())
+            let subcatEditedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
             let subcatAmountFloat = Float(subcatEditedString)
             
             // Find the remaining amount

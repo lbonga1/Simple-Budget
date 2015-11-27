@@ -142,14 +142,9 @@ extension TransactionsViewController {
     // Change date format to short style
     func changeDateFormat(dateString: String) {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
+        dateFormatter.dateStyle = .ShortStyle
         let newDate = dateFormatter.dateFromString(dateString)
-
-        let newDateFormatter = NSDateFormatter()
-        newDateFormatter.dateStyle = .ShortStyle
-        
-        newDateString = newDateFormatter.stringFromDate(newDate!)
+        newDateString = dateFormatter.stringFromDate(newDate!)
     }
     
     // Execute fetch request

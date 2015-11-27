@@ -12,10 +12,8 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    
+    override func viewDidAppear(animated: Bool) {
         // Redirect to CreateUserVC if app is being launched for the first time
         if NSUserDefaults.standardUserDefaults().valueForKey("username") == nil {
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CreateUser") as! CreateUserViewController
@@ -32,7 +30,7 @@ class LoginViewController: UIViewController {
         
         // Present BudgetVC if username and password are correct
         if usernameField.text == checkUser && passwordField.text == checkPassword {
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("Budget") as! BudgetViewController
+            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
             
             self.presentViewController(controller, animated: true, completion: nil)
         } else {

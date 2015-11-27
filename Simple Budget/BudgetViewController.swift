@@ -24,9 +24,6 @@ class BudgetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set navigation toolbar title
-        self.parentViewController!.navigationItem.title = "Budget"
-        
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
         self.parentViewController!.navigationItem.leftBarButtonItem = connectButton
@@ -46,7 +43,9 @@ class BudgetViewController: UIViewController {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let subSortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor, subSortDescriptor]
+        //fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
@@ -60,9 +59,11 @@ class BudgetViewController: UIViewController {
     
     // Presents NewTransTableViewController to add a new transaction.
     @IBAction func addNewTransaction(sender: AnyObject) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
+        dispatch_async(dispatch_get_main_queue()) {
+            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
-        self.presentViewController(controller, animated: true, completion: nil)
+            self.presentViewController(controller, animated: true, completion: nil)
+        }
     }
     
     // Add new Subcategory
