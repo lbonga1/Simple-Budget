@@ -34,6 +34,9 @@ class BudgetViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        
+        //self.findDuplicates()
+        
         // Reload data in case a transaction was added manually
         self.tableView.reloadData()
     }
@@ -270,6 +273,56 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
 
 extension BudgetViewController {
     
+    func findDuplicates() {
+        var subcategories = fetchedResultsController.fetchedObjects as! [Subcategory]
+        
+        var crossReference = [String: [Subcategory]]()
+        for subcategory in subcategories {
+            let key = subcategory.subTitle
+            if crossReference.indexForKey(key) != nil {
+                crossReference[key]?.append(subcategory)
+            } else {
+                crossReference[key] = [subcategory]
+            }
+        }
+        
+        let duplicates = crossReference.map({ ($0, $1) })
+        let filtered = duplicates.filter({ $0.1.count > 1 })
+        let sorted = filtered.sort({ $0.1.count > $1.1.count })
+        
+        var flattenedDuplicates = [Subcategory]()
+        
+        for object in sorted {
+            for subcategory in object.1 {
+                flattenedDuplicates.append(subcategory)
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            for subcategory in flattenedDuplicates {
+                let transactions = subcategory.transactions.allObjects as! [Transaction]
+                let foundSubcategory = subcategories.filter{$0.subTitle == subcategory.subTitle}.first
+                
+                for transaction in transactions {
+                    let resavedTransaction = Transaction(subcategory: foundSubcategory!, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: transaction.notes, context: self.sharedContext)
+                    resavedTransaction.subcategory = foundSubcategory!
+                }
+                
+                let index = subcategories.indexOf({$0 === foundSubcategory})
+                subcategories.removeAtIndex(index!)
+                
+                self.sharedContext.deleteObject(subcategory)
+                
+                // Save to core data
+                do {
+                    try self.sharedContext.save()
+                } catch let error as NSError {
+                    print("Could not save \(error), \(error.userInfo)")
+                }
+            }
+        }
+    }
+    
     // Transfer chosen subcategory data to view transactions
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "displayTransactions") {
@@ -277,15 +330,6 @@ extension BudgetViewController {
             TransactionsViewController
             transactionsVC.chosenSubcategory = self.chosenSubcategory
         }
-    }
-    
-    // Support for finding selected Subcategory in core data
-    func searchForSubcategory(subTitle: String) -> Subcategory {
-        let subcategories = fetchedResultsController.fetchedObjects as! [Subcategory]
-        
-        return subcategories.filter { subcategory in
-            subcategory.subTitle == subTitle
-            }.first!
     }
     
     // Support for adding a new subcategory
