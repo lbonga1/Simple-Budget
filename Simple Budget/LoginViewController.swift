@@ -9,9 +9,21 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
+// MARK: - Outlets
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    
+// MARK: - Variable
+    var textDelegate = TextFieldDelegate()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Text delegates
+        self.usernameField.delegate = textDelegate
+        self.passwordField.delegate = textDelegate
+    }
     
     override func viewDidAppear(animated: Bool) {
         // Redirect to CreateUserVC if app is being launched for the first time
@@ -24,6 +36,7 @@ class LoginViewController: UIViewController {
 
 // MARK: - Actions
     
+    // Login button tapped
     @IBAction func userLogin(sender: AnyObject) {
         let checkUser = NSUserDefaults.standardUserDefaults().stringForKey("username")
         let checkPassword = NSUserDefaults.standardUserDefaults().stringForKey("password")
@@ -31,7 +44,6 @@ class LoginViewController: UIViewController {
         // Present BudgetVC if username and password are correct
         if usernameField.text == checkUser && passwordField.text == checkPassword {
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
-            
             self.presentViewController(controller, animated: true, completion: nil)
         } else {
             // Otherwise display error message

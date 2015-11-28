@@ -168,9 +168,7 @@ extension NewTransTableViewController {
     // Creates a string from NSDate to change dateButton title
     func setDate(newDate: NSDate) {
         let dateFormatter = NSDateFormatter()
-        
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        
         let strDate = dateFormatter.stringFromDate(newDate)
         dateButton.setTitle(strDate, forState: .Normal)
     }

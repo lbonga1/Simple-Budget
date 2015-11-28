@@ -10,21 +10,25 @@ import UIKit
 
 class CreateUserViewController: UIViewController {
 
+// MARK: - Outlets
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var createUserButton: UIButton!
     
+// MARK: - Variable
     var textDelegate = TextFieldDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Text delegates
         self.usernameField.delegate = textDelegate
         self.passwordField.delegate = textDelegate
     }
     
 // MARK: - Actions
-
+    
+    // Create user button tapped
     @IBAction func createUser(sender: AnyObject) {
         if usernameField.text!.isEmpty {
             // Display error message
@@ -42,7 +46,9 @@ class CreateUserViewController: UIViewController {
             NSUserDefaults.standardUserDefaults().setValue(newPassword, forKey: "password")
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        // Continue to Budget View Controller via navigation controller
+        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
+        self.presentViewController(controller, animated: true, completion: nil)
     }
     
 // MARK: - Methods

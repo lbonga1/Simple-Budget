@@ -33,6 +33,11 @@ class BudgetViewController: UIViewController {
         fetchedResultsController.delegate = self
     }
     
+    override func viewWillAppear(animated: Bool) {
+        // Reload data in case a transaction was added manually
+        self.tableView.reloadData()
+    }
+    
 // MARK: - Core Data Convenience
     
     // Shared context
@@ -173,16 +178,6 @@ extension BudgetViewController: UITableViewDelegate {
         }
         
         return headerView!
-
-//
-//        // Create "Planned" label
-//        var plannedLabel = UILabel(frame: CGRectMake(0, 0, 80, 27))
-//        plannedLabel.text = "Planned"
-//        plannedLabel.textColor = UIColor.lightGrayColor()
-//        plannedLabel.font = UIFont(name: "Avenir-Book", size: 17.0)
-//        plannedLabel.textAlignment = NSTextAlignment.Right
-//        
-//        headerView.contentView.addSubview(plannedLabel)
     }
     
     // Header view height

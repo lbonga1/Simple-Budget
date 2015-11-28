@@ -151,27 +151,38 @@ extension AccountTableViewController {
         return newTransaction
     }
     
+    // Double to currency style formatter
+    func doubleToCurrency(amount: Double) -> String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        let amountString = formatter.stringFromNumber(amount)
+        
+        return amountString!
+    }
+    
+    // Date formatter to short style
+    func dateFormatter(dateString: String) -> String {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let newDate = dateFormatter.dateFromString(dateString)
+        let newDateFormatter = NSDateFormatter()
+        newDateFormatter.dateStyle = .ShortStyle
+        let newDateString = newDateFormatter.stringFromDate(newDate!)
+        
+        return newDateString
+    }
+    
     // Sort and categorize transaction data
     func parseTransactions(transactions: [PlaidClient.Transactions]) {
         for transaction in transactions {
             let subcategories = self.fetchedResultsController.fetchedObjects as! [Subcategory]
             
             //Format the transaction amount into a currency string
-            let formatter = NSNumberFormatter()
-            formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-            formatter.locale = NSLocale(localeIdentifier: "en_US")
-            let amountString = formatter.stringFromNumber(transaction.amount)
+            let amountString = self.doubleToCurrency(transaction.amount)
             
             // Format the date style to short style
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            
-            let newDate = dateFormatter.dateFromString(transaction.date)
-            
-            let newDateFormatter = NSDateFormatter()
-            newDateFormatter.dateStyle = .ShortStyle
-            
-            let newDateString = newDateFormatter.stringFromDate(newDate!)
+            let newDateString = self.dateFormatter(transaction.date)
             
             dispatch_async(dispatch_get_main_queue()) {
                 // Downloaded transaction has no category data
@@ -183,7 +194,7 @@ extension AccountTableViewController {
                     // No "Other" category found
                     if foundCategory == nil {
                         // Init three objects
-                        self.initThreeObjects("Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString!)
+                        self.initThreeObjects("Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                         
                         self.saveAndFetch()
                         
@@ -195,16 +206,17 @@ extension AccountTableViewController {
                         // No "Other" subcategory found
                         if foundSubcategory == nil {
                             // Init two objects
-                            self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString!)
+                            self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                             
                             self.saveAndFetch()
+                            
                         // "Other" subcategory found
                         } else {
                             // Init new transaction
                             let newTransaction = self.initNewTransaction(foundSubcategory!,
                                 date: newDateString,
                                 title: transaction.name,
-                                amount: amountString!)
+                                amount: amountString)
                             
                             newTransaction.subcategory = foundSubcategory!
                             
@@ -224,7 +236,7 @@ extension AccountTableViewController {
                     // No category found
                     if foundCategory == nil {
                         // Init three objects
-                        self.initThreeObjects(newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString!)
+                        self.initThreeObjects(newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                         
                         self.saveAndFetch()
                     
@@ -236,7 +248,7 @@ extension AccountTableViewController {
                         // No "Other" subcategory found
                         if foundSubcategory == nil {
                             // Init two objects
-                            self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString!)
+                            self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                             
                             self.saveAndFetch()
                         
@@ -246,7 +258,7 @@ extension AccountTableViewController {
                             let newTransaction = self.initNewTransaction(foundSubcategory!,
                                 date: newDateString,
                                 title: transaction.name,
-                                amount: amountString!)
+                                amount: amountString)
                             
                             newTransaction.subcategory = foundSubcategory!
                             
@@ -269,7 +281,7 @@ extension AccountTableViewController {
                     // No category found
                     if foundCategory == nil {
                         // Init three objects
-                        self.initThreeObjects(newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString!)
+                        self.initThreeObjects(newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
                         
                         self.saveAndFetch()
                     
@@ -277,11 +289,11 @@ extension AccountTableViewController {
                     } else {
                         // Search for subcategory in core data
                         let foundSubcategory = subcategories.filter{$0.subTitle == newSubcatString}.first
-                        
+
                         // No subcategory found
                         if foundSubcategory == nil {
                             // Init two objects
-                            self.initTwoObjects(foundCategory!, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString!)
+                            self.initTwoObjects(foundCategory!, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
                             
                             self.saveAndFetch()
                         
@@ -291,7 +303,7 @@ extension AccountTableViewController {
                             let newTransaction = self.initNewTransaction(foundSubcategory!,
                                 date: newDateString,
                                 title: transaction.name,
-                                amount: amountString!)
+                                amount: amountString)
                             
                             newTransaction.subcategory = foundSubcategory!
                             

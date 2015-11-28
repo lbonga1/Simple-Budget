@@ -37,6 +37,9 @@ class RemainingViewController: UIViewController {
         } else {
             savedLabel.hidden = true
         }
+        
+        // Reload data in case transactions are added from another tab.
+        self.tableView.reloadData()
     }
     
 // MARK: - Core Data Convenience
@@ -61,6 +64,7 @@ class RemainingViewController: UIViewController {
 
 // MARK: - Actions
     
+    // Presents NewTransTableViewController to add a new transaction.
     @IBAction func addNewTransaction(sender: AnyObject) {
         dispatch_async(dispatch_get_main_queue()) {
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController

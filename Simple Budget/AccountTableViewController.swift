@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class AccountTableViewController: UITableViewController, UITextFieldDelegate {
+class AccountTableViewController: UITableViewController {
     
 // MARK: - Outlets
     @IBOutlet var cancelButton: UIBarButtonItem!
