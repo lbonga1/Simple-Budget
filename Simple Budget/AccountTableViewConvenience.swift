@@ -88,12 +88,12 @@ extension AccountTableViewController {
     }
     
     // Check response code and provide proper solution
-    func checkResponseCode(response: NSHTTPURLResponse, transactions: [PlaidClient.Transactions], mfaType: String?, mfa: String?) {
+    func checkResponseCode(response: NSHTTPURLResponse, transactions: [PlaidClient.Transactions]?, mfaType: String?, mfa: String?) {
         switch response.statusCode {
             // Successful
         case 200:
             // Sort/categorize downloaded transactions
-            self.parseTransactions(transactions)
+            self.createTempTransactions(transactions!)
             // Hide activity view
             self.activityView.stopAnimating()
             // Return to Budget view
@@ -176,96 +176,37 @@ extension AccountTableViewController {
         return newDateString
     }
     
+    struct TempTransaction {
+        let catTitle: String?
+        let subTitle: String?
+        let date: String
+        let title: String
+        let amount: String
+    }
+    
     // Sort and categorize transaction data
-    func parseTransactions(transactions: [PlaidClient.Transactions]) {
+    func createTempTransactions(transactions: [PlaidClient.Transactions]) {
         dispatch_async(dispatch_get_main_queue()) {
-        for transaction in transactions {
+            for transaction in transactions {
                 // Format the transaction amount into a currency string
                 let amountString = self.doubleToCurrency(transaction.amount)
-            
                 // Format the date style to short style
                 let newDateString = self.dateFormatter(transaction.date)
-            
-                let subcategories = self.fetchedResultsController.fetchedObjects as! [Subcategory]
+                
                 // Downloaded transaction has no category data
                 if transaction.category == nil {
-                    // Search core data to find existing "Other" category
-                    let categories = subcategories.map { $0.category }
-                    let foundCategory = categories.filter{$0.catTitle == "Other"}.first
-                    
-                    // No "Other" category found
-                    if foundCategory == nil {
-                        // Init three objects
-                        self.initThreeObjects("Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
-                        
-                        //self.saveAndFetch()
-                        
-                    // "Other" category found
-                    } else {
-                        // Search core data to find existing "Other" subcategory
-                        let foundSubcategory = subcategories.filter{$0.subTitle == "Other"}.first
-                        
-                        // No "Other" subcategory found
-                        if foundSubcategory == nil {
-                            // Init two objects
-                            self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
+                    let tempTransaction = TempTransaction(catTitle: "Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
+                    self.tempTransactions.append(tempTransaction)
                             
-                            //self.saveAndFetch()
-                            
-                        // "Other" subcategory found
-                        } else {
-                            // Init new transaction
-                            let newTransaction = self.initNewTransaction(foundSubcategory!,
-                                date: newDateString,
-                                title: transaction.name,
-                                amount: amountString)
-                            
-                            newTransaction.subcategory = foundSubcategory!
-                            
-                            //self.saveAndFetch()
-                        }
-                    }
                 // Transaction category array contains one value
                 } else if transaction.category!.count == 1 {
                     // Recategorize
                     let categoryFirstIndex = transaction.category![0] as! String
                     let newCatString = self.changeCatString(categoryFirstIndex)
                     
-                    // Search for category in core data
-                    let categories = subcategories.map { $0.category }
-                    let foundCategory = categories.filter{$0.catTitle == newCatString}.first
-                    
-                    // No category found
-                    if foundCategory == nil {
-                        // Init three objects
-                        self.initThreeObjects(newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
+                    let tempTransaction = TempTransaction(catTitle: newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
+                    self.tempTransactions.append(tempTransaction)
                         
-                        //self.saveAndFetch()
-                    // Category found
-                    } else {
-                        // Search for "Other" subcategory in core data
-                        let foundSubcategory = subcategories.filter{$0.subTitle == "Other"}.first
-                        
-                        // No "Other" subcategory found
-                        if foundSubcategory == nil {
-                            // Init two objects
-                            self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
-                            
-                            self.saveAndFetch()
-                        
-                        // "Other" subcategory found
-                        } else {
-                            // Init new transaction
-                            let newTransaction = self.initNewTransaction(foundSubcategory!,
-                                date: newDateString,
-                                title: transaction.name,
-                                amount: amountString)
-                            
-                            newTransaction.subcategory = foundSubcategory!
-                            
-                            //self.saveAndFetch()
-                        }
-                    }
                 // Transaction category array has more than one value
                 } else {
                     // Recategorize
@@ -274,48 +215,82 @@ extension AccountTableViewController {
                     // Regroup subcategories
                     let categorySecondIndex = transaction.category![1] as! String
                     let newSubcatString = self.changeSubcatString(categorySecondIndex)
-                    
-                    // Search for category in core data
-                    let categories = subcategories.map { $0.category }
-                    let foundCategory = categories.filter{$0.catTitle == newCatString}.first
-                    
-                    // No category found
-                    if foundCategory == nil {
-                        // Init three objects
-                        self.initThreeObjects(newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
-                        
-                        //self.saveAndFetch()
-                    
-                    // Category found
-                    } else {
-                        // Search for subcategory in core data
-                        let foundSubcategory = subcategories.filter{$0.subTitle == newSubcatString}.first
 
-                        // No subcategory found
-                        if foundSubcategory == nil {
-                            dispatch_async(dispatch_get_main_queue()) {
-                            // Init two objects
-                            self.initTwoObjects(foundCategory!, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
-                            
-                            //self.saveAndFetch()
-                            }
-                        
-                        // Subcategory found
-                        } else {
-                            // Init new transaction
-                            let newTransaction = self.initNewTransaction(foundSubcategory!,
-                                date: newDateString,
-                                title: transaction.name,
-                                amount: amountString)
-                            
-                            newTransaction.subcategory = foundSubcategory!
-                            
-                            //self.saveAndFetch()
-                        }
-                    }
+                    let tempTransaction = TempTransaction(catTitle: newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
+                    self.tempTransactions.append(tempTransaction)
                 }
             }
-            self.saveAndFetch()
+            self.sortTempTransactions()
+        }
+    }
+    
+    func sortTempTransactions() {
+        dispatch_async(dispatch_get_main_queue()){
+        let subcategories = self.fetchedResultsController.fetchedObjects as! [Subcategory]
+        let categories = subcategories.map { $0.category }
+        
+        for transaction in self.tempTransactions {
+            let foundCategory = categories.filter{$0.catTitle == transaction.catTitle}.first
+            let foundSubcategory = subcategories.filter{$0.subTitle == transaction.subTitle}.first
+            var category: Category? = nil
+            var subcategory: Subcategory? = nil
+            
+            if foundCategory == nil {
+                var counter = 0
+                var counter2 = 0
+                while counter == 0 {
+                    let newCategory = Category(catTitle: transaction.catTitle!, context: self.sharedContext)
+                    let newSubcategory = Subcategory(category: newCategory, subTitle: transaction.subTitle!, totalAmount: "$0.00", context: self.sharedContext)
+                    let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
+                    newTransaction.subcategory = newSubcategory
+                    category = newCategory
+                    print(newTransaction)
+                    
+                    counter++
+                    print(counter)
+                }
+                if counter > 0 {
+                    while counter2 == 0 {
+                        let newSubcategory = Subcategory(category: category!, subTitle: transaction.subTitle!, totalAmount: "$0.00", context: self.sharedContext)
+                        let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
+                        newTransaction.subcategory = newSubcategory
+                        subcategory = newSubcategory
+                        print(newTransaction)
+                    
+                        counter2++
+                    }
+                    if counter > 0 && counter2 > 0 {
+                        let newTransaction = Transaction(subcategory: subcategory!, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
+                        newTransaction.subcategory = subcategory!
+                        print(newTransaction)
+                    }
+                }
+            } else {
+                if foundSubcategory == nil {
+                    var counter = 0
+                    while counter == 0 {
+                        let newSubcategory = Subcategory(category: foundCategory!, subTitle: transaction.subTitle!, totalAmount: "$0.00", context: self.sharedContext)
+                        let newTransaction = Transaction(subcategory: newSubcategory, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
+                        newTransaction.subcategory = newSubcategory
+                        subcategory = newSubcategory
+                        print(newTransaction)
+                        
+                        counter++
+                    }
+                    if counter > 0 {
+                    let newTransaction = Transaction(subcategory: subcategory!, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
+                    newTransaction.subcategory = subcategory!
+                    print(newTransaction)
+                    }
+                } else {
+                    let newTransaction = Transaction(subcategory: foundSubcategory!, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
+                    newTransaction.subcategory = foundSubcategory!
+                    print(newTransaction)
+                }
+            }
+        }
+        
+        self.saveAndFetch()
         }
     }
     

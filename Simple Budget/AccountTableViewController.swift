@@ -28,6 +28,7 @@ class AccountTableViewController: UITableViewController {
     var accessToken: String? = nil
     let textDelegate = TextFieldDelegate()
     let plaid = PlaidClient.Plaid()
+    var tempTransactions: [TempTransaction] = []
     let instData = ["American Express", "Bank of America", "Capital One 360",
         "Charles Schwab", "Chase", "Citi Bank", "Fidelity",
         "PNC", "US Bank", "USAA", "Wells Fargo"]
@@ -98,7 +99,7 @@ class AccountTableViewController: UITableViewController {
             if response != nil {
                 let response = response as! NSHTTPURLResponse
                 // Check response code and give solution
-                self.checkResponseCode(response, transactions: transactions!, mfaType: mfaType, mfa: mfa)
+                self.checkResponseCode(response, transactions: transactions, mfaType: mfaType, mfa: mfa)
             // Network error
             } else {
                 dispatch_async(dispatch_get_main_queue()) {
