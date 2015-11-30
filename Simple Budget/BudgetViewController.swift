@@ -308,17 +308,19 @@ extension BudgetViewController {
                     resavedTransaction.subcategory = foundSubcategory!
                 }
                 
-                let index = subcategories.indexOf({$0 === foundSubcategory})
-                subcategories.removeAtIndex(index!)
-                
-                self.sharedContext.deleteObject(subcategory)
-                
                 // Save to core data
                 do {
                     try self.sharedContext.save()
                 } catch let error as NSError {
                     print("Could not save \(error), \(error.userInfo)")
                 }
+                
+                let index = subcategories.indexOf({$0 === foundSubcategory})
+                subcategories.removeAtIndex(index!)
+                
+                self.sharedContext.deleteObject(subcategory)
+                
+                self.executeFetch()
             }
         }
     }

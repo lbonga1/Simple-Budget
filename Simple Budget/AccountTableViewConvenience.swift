@@ -97,8 +97,11 @@ extension AccountTableViewController {
             // Hide activity view
             self.activityView.stopAnimating()
             // Return to Budget view
-            self.dismissViewControllerAnimated(true, completion: nil)
-            // MFA response needed
+            dispatch_async(dispatch_get_main_queue()) {
+                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(5), target: self, selector: "dismiss", userInfo: nil, repeats: false)
+            }
+
+        // MFA response needed
         case 201:
             dispatch_async(dispatch_get_main_queue()) {
                 // Hide activity view
@@ -175,16 +178,15 @@ extension AccountTableViewController {
     
     // Sort and categorize transaction data
     func parseTransactions(transactions: [PlaidClient.Transactions]) {
+        dispatch_async(dispatch_get_main_queue()) {
         for transaction in transactions {
-            let subcategories = self.fetchedResultsController.fetchedObjects as! [Subcategory]
+                // Format the transaction amount into a currency string
+                let amountString = self.doubleToCurrency(transaction.amount)
             
-            //Format the transaction amount into a currency string
-            let amountString = self.doubleToCurrency(transaction.amount)
+                // Format the date style to short style
+                let newDateString = self.dateFormatter(transaction.date)
             
-            // Format the date style to short style
-            let newDateString = self.dateFormatter(transaction.date)
-            
-            dispatch_async(dispatch_get_main_queue()) {
+                let subcategories = self.fetchedResultsController.fetchedObjects as! [Subcategory]
                 // Downloaded transaction has no category data
                 if transaction.category == nil {
                     // Search core data to find existing "Other" category
@@ -196,7 +198,7 @@ extension AccountTableViewController {
                         // Init three objects
                         self.initThreeObjects("Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                         
-                        self.saveAndFetch()
+                        //self.saveAndFetch()
                         
                     // "Other" category found
                     } else {
@@ -208,7 +210,7 @@ extension AccountTableViewController {
                             // Init two objects
                             self.initTwoObjects(foundCategory!, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                             
-                            self.saveAndFetch()
+                            //self.saveAndFetch()
                             
                         // "Other" subcategory found
                         } else {
@@ -220,7 +222,7 @@ extension AccountTableViewController {
                             
                             newTransaction.subcategory = foundSubcategory!
                             
-                            self.saveAndFetch()
+                            //self.saveAndFetch()
                         }
                     }
                 // Transaction category array contains one value
@@ -238,8 +240,7 @@ extension AccountTableViewController {
                         // Init three objects
                         self.initThreeObjects(newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                         
-                        self.saveAndFetch()
-                    
+                        //self.saveAndFetch()
                     // Category found
                     } else {
                         // Search for "Other" subcategory in core data
@@ -262,7 +263,7 @@ extension AccountTableViewController {
                             
                             newTransaction.subcategory = foundSubcategory!
                             
-                            self.saveAndFetch()
+                            //self.saveAndFetch()
                         }
                     }
                 // Transaction category array has more than one value
@@ -283,7 +284,7 @@ extension AccountTableViewController {
                         // Init three objects
                         self.initThreeObjects(newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
                         
-                        self.saveAndFetch()
+                        //self.saveAndFetch()
                     
                     // Category found
                     } else {
@@ -292,10 +293,12 @@ extension AccountTableViewController {
 
                         // No subcategory found
                         if foundSubcategory == nil {
+                            dispatch_async(dispatch_get_main_queue()) {
                             // Init two objects
                             self.initTwoObjects(foundCategory!, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
                             
-                            self.saveAndFetch()
+                            //self.saveAndFetch()
+                            }
                         
                         // Subcategory found
                         } else {
@@ -307,12 +310,17 @@ extension AccountTableViewController {
                             
                             newTransaction.subcategory = foundSubcategory!
                             
-                            self.saveAndFetch()
+                            //self.saveAndFetch()
                         }
                     }
                 }
             }
+            self.saveAndFetch()
         }
+    }
+    
+    func dismiss() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // Get institution type from selected string
