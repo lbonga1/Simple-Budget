@@ -29,6 +29,8 @@ class AccountTableViewController: UITableViewController {
     let textDelegate = TextFieldDelegate()
     let plaid = PlaidClient.Plaid()
     var tempTransactions: [TempTransaction] = []
+    var createdCategories: [Category] = []
+    var createdSubcategories: [Subcategory] = []
     let instData = ["American Express", "Bank of America", "Capital One 360",
         "Charles Schwab", "Chase", "Citi Bank", "Fidelity",
         "PNC", "US Bank", "USAA", "Wells Fargo"]
