@@ -19,12 +19,6 @@ class CustomHeaderView: UITableViewHeaderFooterView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    // We must implement this, since the designated init of the parent class
-//    // calls this by default!
-//    init(frame: CGRect) {
-//        super.init(frame: frame)
-//    }
     
     init(backgroundColor: UIColor, textColor: UIColor) {
         super.init(reuseIdentifier: headerViewReuseIdentifier)

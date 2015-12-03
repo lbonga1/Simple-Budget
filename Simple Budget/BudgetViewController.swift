@@ -35,9 +35,7 @@ class BudgetViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         
-        //self.findDuplicates()
-        
-        // Reload data in case a transaction was added manually
+        // Reload data in case a transaction was added manually/downloaded
         self.tableView.reloadData()
     }
     
@@ -53,7 +51,6 @@ class BudgetViewController: UIViewController {
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
         let subSortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor, subSortDescriptor]
-        //fetchRequest.sortDescriptors = [sortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
@@ -133,14 +130,16 @@ extension BudgetViewController: UITableViewDelegate {
         cell.amountUpdateHandler = { [unowned self] (currentCell: BudgetSubcategoryCell) -> Void in
             guard let path = tableView.indexPathForRowAtPoint(currentCell.center) else { return }
             let subcategory = self.fetchedResultsController.objectAtIndexPath(path) as! Subcategory
-            print("the selected item is \(subcategory.subTitle), currently \(subcategory.totalAmount), change to \(cell.amountTextField.text)")
             
-            // Batch request
-            let batchRequest = NSBatchUpdateRequest(entityName: "Subcategory")
-            batchRequest.propertiesToUpdate = ["totalAmount": cell.amountTextField.text!]
-            batchRequest.predicate = NSPredicate(format: "subTitle == %@", subcategory.subTitle)
-            batchRequest.resultType = .UpdatedObjectsCountResultType
-            (try! self.sharedContext.executeRequest(batchRequest)) as! NSBatchUpdateResult
+            // Set the new amount value
+            subcategory.setValue(cell.amountTextField.text!, forKey: "totalAmount")
+            
+            // Save updates to core data
+            do {
+                try self.sharedContext.save()
+            } catch let error as NSError {
+                print("Could not save \(error), \(error.userInfo)")
+            }
         }
         
         return cell
@@ -272,58 +271,6 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
 // MARK: - Additional Methods
 
 extension BudgetViewController {
-    
-    func findDuplicates() {
-        var subcategories = fetchedResultsController.fetchedObjects as! [Subcategory]
-        
-        var crossReference = [String: [Subcategory]]()
-        for subcategory in subcategories {
-            let key = subcategory.subTitle
-            if crossReference.indexForKey(key) != nil {
-                crossReference[key]?.append(subcategory)
-            } else {
-                crossReference[key] = [subcategory]
-            }
-        }
-        
-        let duplicates = crossReference.map({ ($0, $1) })
-        let filtered = duplicates.filter({ $0.1.count > 1 })
-        let sorted = filtered.sort({ $0.1.count > $1.1.count })
-        
-        var flattenedDuplicates = [Subcategory]()
-        
-        for object in sorted {
-            for subcategory in object.1 {
-                flattenedDuplicates.append(subcategory)
-            }
-        }
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            for subcategory in flattenedDuplicates {
-                let transactions = subcategory.transactions.allObjects as! [Transaction]
-                let foundSubcategory = subcategories.filter{$0.subTitle == subcategory.subTitle}.first
-                
-                for transaction in transactions {
-                    let resavedTransaction = Transaction(subcategory: foundSubcategory!, date: transaction.date, title: transaction.title, amount: transaction.amount, notes: transaction.notes, context: self.sharedContext)
-                    resavedTransaction.subcategory = foundSubcategory!
-                }
-                
-                // Save to core data
-                do {
-                    try self.sharedContext.save()
-                } catch let error as NSError {
-                    print("Could not save \(error), \(error.userInfo)")
-                }
-                
-                let index = subcategories.indexOf({$0 === foundSubcategory})
-                subcategories.removeAtIndex(index!)
-                
-                self.sharedContext.deleteObject(subcategory)
-                
-                self.executeFetch()
-            }
-        }
-    }
     
     // Transfer chosen subcategory data to view transactions
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

@@ -88,10 +88,7 @@ public class PlaidClient: NSObject {
         let secret = Plaid.secret!
         var urlString:String?
         
-        let optionsDict: [String:AnyObject] =
-        [
-            "send_method":["type":response]
-        ]
+        let optionsDict: [String:AnyObject] = ["send_method": ["type": response]]
         
         let optionsDictStr = dictToString(optionsDict)
         
@@ -179,10 +176,7 @@ public class PlaidClient: NSObject {
         let clientId = Plaid.clientId!
         let secret = Plaid.secret!
         
-        var optionsDict: [String:AnyObject] =
-        [
-            "pending": true
-        ]
+        var optionsDict: [String:AnyObject] = ["pending": true]
         
         if let beginDate = beginDate {
             optionsDict["gte"] = beginDate
@@ -214,70 +208,6 @@ public class PlaidClient: NSObject {
         task.resume()
     }
     
-// MARK: - Helper funcs
-    
-    enum JsonError:ErrorType {
-        case Writing
-        case Reading
-        case Empty
-    }
-    
-    enum PlaidError:ErrorType {
-        case BadAccessToken
-        case CredentialsMissing(String)
-        case InvalidCredentials(String)
-        case IncorrectMfa(String)
-        case InstitutionNotAvailable
-    }
-    
-    func plaidDateFormatter(date: NSDate) -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let dateStr = dateFormatter.stringFromDate(date)
-        return dateStr
-    }
-    
-    func dictToString(value: AnyObject) -> NSString {
-        if NSJSONSerialization.isValidJSONObject(value) {
-            if let data = try? NSJSONSerialization.dataWithJSONObject(value, options: []) {
-                if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                    return string
-                }
-            }
-        }
-        return ""
-    }
-    
-    func institutionToString(institution: Institution) -> String {
-        var institutionStr: String {
-            switch institution {
-            case .amex:
-                return "amex"
-            case .bofa:
-                return "bofa"
-            case .capone360:
-                return "capone360"
-            case .chase:
-                return "chase"
-            case .citi:
-                return "citi"
-            case .fidelity:
-                return "fidelity"
-            case .pnc:
-                return "pnc"
-            case .schwab:
-                return "schwab"
-            case .us:
-                return "us"
-            case .usaa:
-                return "usaa"
-            case .wells:
-                return "wells"
-            }
-        }
-        return institutionStr
-    }
-        
 // MARK: - Shared Instance
     
     class func sharedInstance() -> PlaidClient {

@@ -133,4 +133,12 @@ extension PlaidClient {
             category = transactions["category"] as? NSArray
         }
     }
+    
+    struct TempTransaction {
+        let catTitle: String?
+        let subTitle: String?
+        let date: String
+        let title: String
+        let amount: String
+    }
 }

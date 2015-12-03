@@ -52,7 +52,8 @@ class SpentViewController: UIViewController {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let subSortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor, subSortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
@@ -122,7 +123,6 @@ extension SpentViewController: UITableViewDelegate {
             // Remove the "$" and ","
             let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
             let editedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
-
             // Convert to Float
             let amountFloat = Float(editedString)
             

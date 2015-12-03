@@ -52,7 +52,8 @@ class RemainingViewController: UIViewController {
         
         let fetchRequest = NSFetchRequest(entityName: "Subcategory")
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        let subSortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor, subSortDescriptor]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
@@ -141,7 +142,7 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
             // Set amount label value
             cell.detailTextLabel!.text = remAmountString
         } else {
-            cell.detailTextLabel!.text = "$0.00"
+            cell.detailTextLabel!.text = subcategory.totalAmount
         }
         
         // Empty the amountArray for the next Transaction array values

@@ -10,34 +10,48 @@ import UIKit
 import CoreData
 
 extension AccountTableViewController {
-
-    // Execute fetch request
-    func executeFetch() {
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
-    }
     
-    // Save to core data and execute fetch request
-    func saveAndFetch() {
-        // Save core data
-        do {
-            try self.sharedContext.save()
-        } catch let error as NSError {
-            print("Could not save \(error), \(error.userInfo)")
+    // Check response code and provide proper solution
+    func checkResponseCode(response: NSHTTPURLResponse, transactions: [PlaidClient.Transactions]?, mfaType: String?, mfa: String?) {
+        switch response.statusCode {
+            // Successful
+        case 200:
+            // Sort/categorize downloaded transactions
+            self.createTempTransactions(transactions!)
+            // Hide activity view
+            self.activityView.stopAnimating()
+            // Return to Budget view
+            dispatch_async(dispatch_get_main_queue()) {
+                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(3), target: self, selector: "dismiss", userInfo: nil, repeats: false)
+            }
+            
+            // MFA response needed
+        case 201:
+            dispatch_async(dispatch_get_main_queue()) {
+                // Hide activity view
+                self.activityView.stopAnimating()
+                // Submit MFA responses
+                self.checkMfaType(mfaType, mfa: mfa)
+            }
+            // User error
+        case 400...404:
+            dispatch_async(dispatch_get_main_queue()) {
+                // Hide activity view
+                self.activityView.stopAnimating()
+                // Display alert
+                self.displayAlert("Could not log in",
+                    message: "Please check your credentials and try again.")
+            }
+            // Server error
+        default:
+            dispatch_async(dispatch_get_main_queue()) {
+                // Hide activity view
+                self.activityView.stopAnimating()
+                // Display alert
+                self.displayAlert("Server error",
+                    message: "Please try again at a later time.")
+            }
         }
-        // Execute fetch request
-        self.executeFetch()
-    }
-    
-    // Error alert
-    func displayAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
-        alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     // Check if MFA type is questions or code
@@ -47,23 +61,6 @@ extension AccountTableViewController {
         } else {
             // TODO: handle code based mfa
         }
-    }
-    
-    // Text field for MFA question response
-    func addTextField(textField: UITextField!) {
-        responseTextField = textField
-        responseTextField!.placeholder = "Enter your response."
-    }
-    
-    // Display alert with text field for MFA question response
-    func displayResponseAlert(message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        alertController.addTextFieldWithConfigurationHandler(addTextField)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
-            self.submitMfaQuestionsResponse()
-        })
-        alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     // Submit MFA answer
@@ -87,143 +84,41 @@ extension AccountTableViewController {
         }
     }
     
-    // Check response code and provide proper solution
-    func checkResponseCode(response: NSHTTPURLResponse, transactions: [PlaidClient.Transactions]?, mfaType: String?, mfa: String?) {
-        switch response.statusCode {
-        // Successful
-        case 200:
-            // Sort/categorize downloaded transactions
-            self.createTempTransactions(transactions!)
-            // Hide activity view
-            self.activityView.stopAnimating()
-            // Return to Budget view
-            dispatch_async(dispatch_get_main_queue()) {
-                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(5), target: self, selector: "dismiss", userInfo: nil, repeats: false)
-            }
-
-        // MFA response needed
-        case 201:
-            dispatch_async(dispatch_get_main_queue()) {
-                // Hide activity view
-                self.activityView.stopAnimating()
-                // Submit MFA responses
-                self.checkMfaType(mfaType, mfa: mfa)
-            }
-        // User error
-        case 400...404:
-            dispatch_async(dispatch_get_main_queue()) {
-                // Hide activity view
-                self.activityView.stopAnimating()
-                // Display alert
-                self.displayAlert("Could not log in",
-                    message: "Please check your credentials and try again.")
-            }
-        // Server error
-        default:
-            dispatch_async(dispatch_get_main_queue()) {
-                // Hide activity view
-                self.activityView.stopAnimating()
-                // Display alert
-                self.displayAlert("Server error",
-                    message: "Please try again at a later time.")
-            }
-        }
-    }
-    
-    // Support for dismissing view controller after time interval
-    func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    // Init new category, subcategory, and transaction
-    func initThreeObjects(catTitle: String, subTitle: String, date: String, title: String, amount: String) {
-        let newCategory = Category(catTitle: catTitle, context: self.sharedContext)
-        let newSubcategory = Subcategory(category: newCategory, subTitle: subTitle, totalAmount: "$0.00", context: self.sharedContext)
-        let newTransaction = Transaction(subcategory: newSubcategory, date: date, title: title, amount: amount, notes: "", context: self.sharedContext)
-        
-        newTransaction.subcategory = newSubcategory
-    }
-    
-    // Init new subcategory and transaction
-    func initTwoObjects(category: Category, subTitle: String, date: String, title: String, amount: String) {
-        let newSubcategory = Subcategory(category: category, subTitle: subTitle, totalAmount: "$0.00", context: self.sharedContext)
-        let newTransaction = Transaction(subcategory: newSubcategory, date: date, title: title, amount: amount, notes: "", context: self.sharedContext)
-        
-        newTransaction.subcategory = newSubcategory
-    }
-    
-    // Init a new transaction
-    func initNewTransaction(subcategory: Subcategory, date: String, title: String, amount: String) -> Transaction {
-        let newTransaction = Transaction(subcategory: subcategory, date: date, title: title, amount: amount, notes: "", context: self.sharedContext)
-        
-        return newTransaction
-    }
-    
-    // Double to currency style formatter
-    func doubleToCurrency(amount: Double) -> String {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
-        let amountString = formatter.stringFromNumber(amount)
-        
-        return amountString!
-    }
-    
-    // Date formatter to short style
-    func dateFormatter(dateString: String) -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let newDate = dateFormatter.dateFromString(dateString)
-        let newDateFormatter = NSDateFormatter()
-        newDateFormatter.dateStyle = .ShortStyle
-        let newDateString = newDateFormatter.stringFromDate(newDate!)
-        
-        return newDateString
-    }
-    
-    struct TempTransaction {
-        let catTitle: String?
-        let subTitle: String?
-        let date: String
-        let title: String
-        let amount: String
-    }
-    
     // Categorize transactions, and create array of temporary transactions
     func createTempTransactions(transactions: [PlaidClient.Transactions]) {
         dispatch_async(dispatch_get_main_queue()) {
             // Iterate through transactions
             for transaction in transactions {
                 // Format the transaction amount into a currency string
-                let amountString = self.doubleToCurrency(transaction.amount)
+                let amountString = PlaidClient().doubleToCurrency(transaction.amount)
                 // Format the date style to short style
-                let newDateString = self.dateFormatter(transaction.date)
+                let newDateString = PlaidClient().dateFormatter(transaction.date)
                 
                 // Downloaded transaction has no category data
                 if transaction.category == nil {
                     // Create temp transaction with "Other" category and subcategory
-                    let tempTransaction = TempTransaction(catTitle: "Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
+                    let tempTransaction = PlaidClient.TempTransaction(catTitle: "Other", subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                     self.tempTransactions.append(tempTransaction)
-                            
-                // Transaction category array contains one value
+                    
+                    // Transaction category array contains one value
                 } else if transaction.category!.count == 1 {
                     // Recategorize
                     let categoryFirstIndex = transaction.category![0] as! String
-                    let newCatString = self.changeCatString(categoryFirstIndex)
+                    let newCatString = PlaidClient().changeCatString(categoryFirstIndex)
                     // Create temp transaction with available category and "Other" subcategory
-                    let tempTransaction = TempTransaction(catTitle: newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
+                    let tempTransaction = PlaidClient.TempTransaction(catTitle: newCatString, subTitle: "Other", date: newDateString, title: transaction.name, amount: amountString)
                     self.tempTransactions.append(tempTransaction)
-                        
-                // Transaction category array has more than one value
+                    
+                    // Transaction category array has more than one value
                 } else {
                     // Recategorize
                     let categoryFirstIndex = transaction.category![0] as! String
-                    let newCatString = self.changeCatString(categoryFirstIndex)
+                    let newCatString = PlaidClient().changeCatString(categoryFirstIndex)
                     // Regroup subcategories
                     let categorySecondIndex = transaction.category![1] as! String
-                    let newSubcatString = self.changeSubcatString(categorySecondIndex)
+                    let newSubcatString = PlaidClient().changeSubcatString(categorySecondIndex)
                     // Create temp transaction with available category and subcategory
-                    let tempTransaction = TempTransaction(catTitle: newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
+                    let tempTransaction = PlaidClient.TempTransaction(catTitle: newCatString, subTitle: newSubcatString, date: newDateString, title: transaction.name, amount: amountString)
                     self.tempTransactions.append(tempTransaction)
                 }
             }
@@ -239,7 +134,6 @@ extension AccountTableViewController {
             let categories = subcategories.map { $0.category }
             // Iterate through temporary transactions
             for transaction in self.tempTransactions {
-                print(transaction.title)
                 // Search for Category in fetched objects
                 let foundCategory = categories.filter{$0.catTitle == transaction.catTitle}.first
                 // Search for Subcategory in fetched objects
@@ -272,7 +166,7 @@ extension AccountTableViewController {
                             // Append created category and subcategory to arrays
                             self.createdCategories.append(newCategory)
                             self.createdSubcategories.append(newSubcategory)
-                        // Category was found
+                            // Category was found
                         } else {
                             // Filter createdSubcategories by transaction's subTitle
                             var filteredSubcategories = self.createdSubcategories.filter({$0.subTitle == transaction.subTitle})
@@ -285,7 +179,7 @@ extension AccountTableViewController {
                                 
                                 // Append subcategory to array
                                 self.createdSubcategories.append(newSubcategory)
-                            // Subcategory was found
+                                // Subcategory was found
                             } else {
                                 // Category and subcategory have been created, init transaction with their data
                                 let newTransaction = Transaction(subcategory: filteredSubcategories[0], date: transaction.date, title: transaction.title, amount: transaction.amount, notes: "", context: self.sharedContext)
@@ -293,7 +187,7 @@ extension AccountTableViewController {
                             }
                         }
                     }
-                // Category was found in core data
+                    // Category was found in core data
                 } else {
                     // Subcategory was not found in core data
                     if foundSubcategory == nil {
@@ -319,6 +213,59 @@ extension AccountTableViewController {
             // Save to core data and perform fetch
             self.saveAndFetch()
         }
+    }
+    
+// MARK: - Helper Funcs
+
+    // Execute fetch request
+    func executeFetch() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    // Save to core data and execute fetch request
+    func saveAndFetch() {
+        // Save core data
+        do {
+            try self.sharedContext.save()
+        } catch let error as NSError {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+        // Execute fetch request
+        self.executeFetch()
+    }
+    
+    // Error alert
+    func displayAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    // Text field for MFA question response
+    func addTextField(textField: UITextField!) {
+        responseTextField = textField
+        responseTextField!.placeholder = "Enter your response."
+    }
+    
+    // Display alert with text field for MFA question response
+    func displayResponseAlert(message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        alertController.addTextFieldWithConfigurationHandler(addTextField)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
+            self.submitMfaQuestionsResponse()
+        })
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    // Support for dismissing view controller after time interval
+    func dismiss() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // Get institution type from selected string
@@ -351,107 +298,27 @@ extension AccountTableViewController {
         }
     }
     
-    // Change transaction category details to fit existing categories
-    func changeCatString(catString: String) -> String {
-        switch catString {
-        case "Food and Drink":
-            return "Food"
-        case "Travel":
-            return "Transportation"
-        case "Community", "Healthcare", "Recreation", "Service", "Shops":
-            return "Lifestyle"
-        case "Tax":
-            return "Insurance & Tax"
-        case "Payment":
-            return "Debt"
-        default:
-            return "Other"
-        }
+// MARK: - Formatters
+    
+    // Double to currency style formatter
+    func doubleToCurrency(amount: Double) -> String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        let amountString = formatter.stringFromNumber(amount)
+        
+        return amountString!
     }
     
-    // Regroup subcategories by changing transaction category string
-    func changeSubcatString(subcatString: String) -> String {
-        switch subcatString {
-        case "Overdraft", "ATM", "Late Payment", "Fraud Dispute", "Foreign Transaction", "Wire Transfer", "Insufficient Funds", "Cash Advance", "Excess Activity":
-            return "Bank Fees"
-        case "Animal Shelter", "Cemetary", "Libraries", "Organizations and Associations", "Post Offices", "Public and Social Services", "Senior Citizen Services":
-            return "Community"
-        case "Assisted Living Services", "Disabled Persons Services", "Drug and Alcohol Services", "Healthcare Services", "Physicians", "Glasses and Optometrist":
-            return "Healthcare"
-        case "Day Care and Preschools", "Education":
-            return "Education"
-        case "Courts", "Government Departments and Agencies", "Government Lobbyists", "Housing Assistance and Shelters", "Law Enforcement", "Military":
-            return "Government"
-        case "Religious":
-            return "Religion"
-        case "Bar", "Breweries", "Internet Cafes":
-            return "Bars & Breweries"
-        case "Nightlife":
-            return "Nightlife"
-        case "Restaurants":
-            return "Restaurants"
-        case "Interest Earned", "Interest Charged":
-            return "Interest"
-        case "Credit Card", "Loan":
-            return "Payment"
-        case "Rent":
-            return "Mortgage & Rent"
-        case "Arts and Entertainment":
-            return "Arts & Entertainment"
-        case "Athletic Fields", "Baseball", "Basketball", "Batting Cages", "Boating", "Campgrounds and RV Parks", "Canoes and Kayaks", "Combat Sports", "Cycling", "Dance", "Equestrian", "Football", "Go Carts", "Golf", "Gun Ranges", "Gymnastics", "Gyms and Fitness Centers", "Hiking", "Hockey", "Hot Air Balloons", "Hunting and Fishing", "Miniature Golf", "Paintball", "Personal Trainers", "Race Tracks", "Racquet Sports", "Racquetball", "Rafting", "Recreation Centers", "Rock Climbing", "Running", "Scuba Diving", "Skating", "Sky Diving", "Snow Sports", "Soccer", "Sports and Recreation Camps", "Sports Clubs", "Stadiums and Arenas", "Swimming", "Tennis", "Water Sports", "Yoga and Pilates", "Zoo":
-            return "Recreation"
-        case "Landmarks", "Outdoors", "Parks":
-            return "Parks & Outdoors"
-        case "Advertising and Marketing":
-            return "Advertising & Marketing"
-        case "Automotive":
-            return "Automotive Services"
-        case "Business and Strategy Consulting", "Business Services":
-            return "Business Services"
-        case "Cable", "Internet Services", "Utilities", "Oil and Gas":
-            return "Utilities"
-        case "Computers":
-            return "Computer Repair"
-        case "Construction":
-            return "Construction"
-        case "Financial", "Credit Counseling and Bankruptcy Services":
-            return "Financial Services"
-        case "Home Improvement", "Household":
-            return "Home Improvement"
-        case "Insurance":
-            return "Insurance"
-        case "Manufacturing":
-            return "Manufacturing"
-        case "Personal Care":
-            return "Personal Care"
-        case "Real Estate":
-            return "Real Estate"
-        case "Art Restoration", "Audio Visual", "Automation and Control Systems", "Chemicals and Gasses", "Cleaning", "Dating and Escort", "Employment Agencies", "Engineering", "Entertainment", "Events and Event Planning", "Food and Beverage", "Funeral Services", "Geological", "Human Resources", "Immigration", "Import and Export", "Industrial Machinery and Vehicles", "Leather", "Legal", "Logging and Sawmills", "Machine Shops", "Management", "Media Production", "Metals", "Mining", "News Reporting", "Packaging", "Paper", "Petroleum", "Photography", "Plastics", "Rail", "Refrigeration and Ice", "Renewable Energy", "Repair Services", "Research", "Rubber", "Scientific", "Security and Safety", "Shipping and Freight", "Software Development", "Storage", "Subscription", "Tailors", "Telecommunication Services", "Textiles", "Tourist Information and Services", "Travel Agents and Tour Operators", "Veterinarians", "Water and Waste Management", "Web Design and Development", "Welding", "Agriculture and Forestry":
-            return "Services"
-        case "Automotive":
-            return "Automotive Purchases"
-        case "Clothing and Accessories":
-            return "Clothing & Accessories"
-        case "Computers and Electronics":
-            return "Computers & Electronics"
-        case "Food and Beverage Store", "Supermarkets and Groceries":
-            return "Groceries"
-        case "Outlet":
-            return "Outlets"
-        case "Pharmacies":
-            return "Pharmacy"
-        case "Adult", "Antiques", "Arts and Crafts", "Auctions", "Beauty Products", "Bicycles", "Boat Dealers", "Book Stores", "Cards and Stationery", "Children", "Construction Supplies", "Convenience Stores", "Costumes", "Dance and Music", "Department Stores", "Digital Purchase", "Discount Stores", "Electrical Equipment", "Equipment Rental", "Flea Markets", "Florists", "Furniture and Home Decor", "Gift and Novelty", "Hobby and Collectibles", "Hardware Store", "Industrial Supplies", "Jewelry and Watches", "Luggage", "Marine Supplies", "Music, Video and DVD", "Musical Instruments", "Newstands", "Office Supplies", "Pawn Shops", "Pets", "Photos and Frames", "Shopping Centers and Malls", "Sporting Goods", "Tobacco", "Toys", "Vintage and Thrift", "Warehouses and Wholesale Stores", "Wedding and Bridal", "Wholesale", "Lawn and Garden":
-            return "Shopping"
-        case "Gas Stations", "Fuel Dealer":
-            return "Auto Gas & Oil"
-        case "Refund", "Payment":
-            return "Taxes"
-        case "Internal Account Transfer", "ACH", "Billpay", "Check", "Credit", "Debit", "Deposit", "Keep the Change Savings Program", "Payroll", "Third Party", "Wire", "Withdrawl", "Save As You Go":
-            return "Transfer"
-        case "Airlines and Aviation Services", "Airports", "Boat", "Bus Stations", "Car and Truck Rentals", "Car Service", "Charter Buses", "Cruises", "Heliports", "Limos and Chauffeurs", "Lodging", "Parking", "Public Transportation Services", "Rail", "Taxi", "Tolls and Fees", "Transportation", "Transportation Centers":
-            return "Travel"
-        default:
-            return "Other"
-        }
+    // Date formatter to short style
+    func dateFormatter(dateString: String) -> String {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let newDate = dateFormatter.dateFromString(dateString)
+        let newDateFormatter = NSDateFormatter()
+        newDateFormatter.dateStyle = .ShortStyle
+        let newDateString = newDateFormatter.stringFromDate(newDate!)
+        
+        return newDateString
     }
 }

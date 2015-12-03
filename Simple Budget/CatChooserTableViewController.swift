@@ -143,7 +143,7 @@ class CatChooserTableViewController: UITableViewController {
             // Set amount label value
             cell.detailTextLabel!.text = remAmountString
         } else {
-            cell.detailTextLabel!.text = "$0.00"
+            cell.detailTextLabel!.text = subcategory.totalAmount
         }
         
         // Empty the amountArray for the next Transaction array values

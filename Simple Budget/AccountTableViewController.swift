@@ -28,7 +28,7 @@ class AccountTableViewController: UITableViewController {
     var accessToken: String? = nil
     let textDelegate = TextFieldDelegate()
     let plaid = PlaidClient.Plaid()
-    var tempTransactions: [TempTransaction] = []
+    var tempTransactions: [PlaidClient.TempTransaction] = []
     var createdCategories: [Category] = []
     var createdSubcategories: [Subcategory] = []
     let instData = ["American Express", "Bank of America", "Capital One 360",
