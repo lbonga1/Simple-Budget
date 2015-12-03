@@ -37,6 +37,9 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         // Set text delegates
         self.amountTextField.delegate = currencyDelegate
         self.merchantTextField.delegate = textDelegate
+        
+        // Set date picker mode
+        datePicker.datePickerMode = .Date
 
         // Set date picker action target
         datePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
