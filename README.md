@@ -11,13 +11,16 @@ to the right of the navigation bar.
 ![image](https://cloud.githubusercontent.com/assets/11247733/11554181/a1d814ce-994a-11e5-9080-fd1df067054c.png)
 
 Here, the user can select the date the transaction occurred, the amount that was spent, the name of the merchant,
-and any notes they may want to add. By tapping the "choose budget category" row, a new view is displayed for choosing 
-a category to file the transaction under.
+and any notes they may want to add. 
+
+![image](https://cloud.githubusercontent.com/assets/11247733/11554183/a3645f78-994a-11e5-8e70-39989d6ce099.png)
+
+By tapping the "choose budget category" row, a new view is displayed for choosing a category to file 
+the transaction under. The category chooser displays all categories/subcategories that have already 
+been saved, and their remaining budget amounts (the amount budgeted, minus the total of any transactions).
 
 ![image](https://cloud.githubusercontent.com/assets/11247733/11554184/a4f66f3e-994a-11e5-83e9-71b25eeb4cff.png)
 
-The category chooser displays all categories/subcategories that have already been saved, and their remaining budget amounts
-(the amount budgeted, minus the total of any transactions).
 After the transaction is saved, the user is returned to the budget view, and the "spent" and "remaining" tabs can be viewed.
 The spent tab shows the total of the transactions in each subcategory.
 
