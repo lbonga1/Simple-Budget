@@ -22,7 +22,7 @@ public class PlaidClient: NSObject {
    
 // MARK: - Add Connect or Auth User
     
-    func PS_addUser(userType: Type, username: String, password: String, pin: String?, institution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error:NSError?) -> ()) {
+    func PS_addUser(userType: Type, username: String, password: String, pin: String?, institution: Institution, completion: (response: NSURLResponse?, accessToken: String, mfaType: String?, mfa: String?, accounts: [Account]?, transactions: [Transactions]?, error: NSError?) -> ()) {
         let baseURL = Plaid.baseURL!
         let clientId = Plaid.clientId!
         let secret = Plaid.secret!
@@ -48,33 +48,37 @@ public class PlaidClient: NSObject {
             data, response, error in
             var type:String?
             
-            do {
-                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+            if data == nil {
+                completion(response: nil, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: nil)
+            } else {
+                do {
+                    let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
                 
-                if let token = jsonResult?.valueForKey("access_token") as? String {
-                    if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
-                        if let questionDictionary = mfaResponse[0] as? NSDictionary {
-                            if let questionString = questionDictionary["question"] as? String {
-                                if let typeMfa = jsonResult?.valueForKey("type") as? String {
-                                    type = typeMfa
+                    if let token = jsonResult?.valueForKey("access_token") as? String {
+                        if let mfaResponse = jsonResult?.valueForKey("mfa") as? NSArray {
+                            if let questionDictionary = mfaResponse[0] as? NSDictionary {
+                                if let questionString = questionDictionary["question"] as? String {
+                                    if let typeMfa = jsonResult?.valueForKey("type") as? String {
+                                        type = typeMfa
 
-                                    completion(response: response, accessToken: token, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
+                                        completion(response: response, accessToken: token, mfaType: type, mfa: questionString, accounts: nil, transactions: nil, error: error)
+                                    }
                                 }
                             }
+                        } else {
+                            let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
+                            let accts = acctsArray.map{Account(account: $0)}
+                            let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
+                            let trxns = trxnArray.map{Transactions(transactions: $0)}
+                        
+                            completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
                         }
                     } else {
-                        let acctsArray:[[String:AnyObject]] = jsonResult?.valueForKey("accounts") as! [[String:AnyObject]]
-                        let accts = acctsArray.map{Account(account: $0)}
-                        let trxnArray:[[String:AnyObject]] = jsonResult?.valueForKey("transactions") as! [[String:AnyObject]]
-                        let trxns = trxnArray.map{Transactions(transactions: $0)}
-                        
-                        completion(response: response, accessToken: token, mfaType: nil, mfa: nil, accounts: accts, transactions: trxns, error: error)
+                        completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
                     }
-                } else {
-                    completion(response: response, accessToken: "", mfaType: nil, mfa: nil, accounts: nil, transactions: nil, error: error)
+                } catch {
+                    print("Error (PS_addUser): \(error)")
                 }
-            } catch {
-                print("Error (PS_addUser): \(error)")
             }
         })
         task.resume()
