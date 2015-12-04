@@ -85,33 +85,42 @@ class AccountTableViewController: UITableViewController {
     
     // Save new account
     @IBAction func saveAction(sender: AnyObject) {
-        // Activate activity indicator
-        self.activityView.startAnimating()
-        
-        // Get institution type from selected institution string
-        self.institutionFromString(institutionLabel.text!)
-        
-        // Submit add user request
-        PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
-            
-            // Set access token
-            self.accessToken = accessToken
-            
-            // Check response code
-            if response != nil {
-                let response = response as! NSHTTPURLResponse
-                // Check response code and give solution
-                self.checkResponseCode(response, transactions: transactions, mfaType: mfaType, mfa: mfa)
-            // Network error
+        if usernameTextField.text != nil && passwordTextField.text != nil && institutionLabel.text != "Choose Institution" {
+            if institutionLabel.text == "USAA" && pinTextField.text == "" {
+                self.displayAlert("Missing Credential(s)", message: "Please enter your pin.")
             } else {
-                dispatch_async(dispatch_get_main_queue()) {
-                    // Hide activity view
-                    self.activityView.stopAnimating()
-                    // Display alert
-                    self.displayAlert("Network error",
-                        message: "Please check your network connection and try again.")
+                // Activate activity indicator
+                self.activityView.startAnimating()
+        
+                // Get institution type from selected institution string
+                self.institutionFromString(institutionLabel.text!)
+        
+                // Submit add user request
+                PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+            
+                    // Set access token
+                    self.accessToken = accessToken
+            
+                    // Check response code
+                    if response != nil {
+                        let response = response as! NSHTTPURLResponse
+                        // Check response code and give solution
+                        self.checkResponseCode(response, transactions: transactions, mfaType: mfaType, mfa: mfa)
+                        // Network error
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            // Hide activity view
+                            self.activityView.stopAnimating()
+                            // Display alert
+                            self.displayAlert("Network error",
+                                message: "Please check your network connection and try again.")
+                        }
+                    }
                 }
             }
+        } else {
+            self.displayAlert("Missing credential(s)",
+                message: "Please enter a banking institution, username, and password. Pin also required for USAA.")
         }
     }
     
