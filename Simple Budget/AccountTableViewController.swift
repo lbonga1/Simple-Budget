@@ -106,7 +106,7 @@ class AccountTableViewController: UITableViewController {
                         let response = response as! NSHTTPURLResponse
                         // Check response code and give solution
                         self.checkResponseCode(response, transactions: transactions, mfaType: mfaType, mfa: mfa)
-                        // Network error
+                    // Network error
                     } else {
                         dispatch_async(dispatch_get_main_queue()) {
                             // Hide activity view
@@ -118,6 +118,7 @@ class AccountTableViewController: UITableViewController {
                     }
                 }
             }
+        // Missing credentials
         } else {
             self.displayAlert("Missing credential(s)",
                 message: "Please enter a banking institution, username, and password. Pin also required for USAA.")

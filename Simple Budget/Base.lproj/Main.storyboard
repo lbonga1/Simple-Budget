@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -140,10 +140,10 @@
                                 <exclude reference="rFi-0D-bgW"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Jvp-Ae-RNz"/>
                                 <exclude reference="7RE-Uk-feM"/>
                                 <exclude reference="NFp-LH-rlW"/>
                                 <exclude reference="T1M-rR-oPm"/>
-                                <exclude reference="Jvp-Ae-RNz"/>
                                 <exclude reference="1Qe-nu-KND"/>
                                 <exclude reference="OxT-Em-otG"/>
                                 <exclude reference="ehE-rx-Etv"/>
@@ -168,10 +168,10 @@
                                 <include reference="rFi-0D-bgW"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Jvp-Ae-RNz"/>
                                 <include reference="7RE-Uk-feM"/>
                                 <include reference="NFp-LH-rlW"/>
                                 <include reference="T1M-rR-oPm"/>
-                                <include reference="Jvp-Ae-RNz"/>
                                 <include reference="1Qe-nu-KND"/>
                                 <include reference="OxT-Em-otG"/>
                                 <include reference="ehE-rx-Etv"/>
@@ -339,10 +339,10 @@
                                 <exclude reference="Ajh-c5-ciQ"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="zle-FA-hBH"/>
                                 <exclude reference="AOc-ka-phO"/>
                                 <exclude reference="BrS-wH-3Oz"/>
                                 <exclude reference="yMX-Y8-jcq"/>
-                                <exclude reference="zle-FA-hBH"/>
                                 <exclude reference="J7B-dL-0zY"/>
                                 <exclude reference="LIO-Ic-QPb"/>
                                 <exclude reference="Nkf-cN-weR"/>
@@ -368,10 +368,10 @@
                                 <include reference="Ajh-c5-ciQ"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="zle-FA-hBH"/>
                                 <include reference="AOc-ka-phO"/>
                                 <include reference="BrS-wH-3Oz"/>
                                 <include reference="yMX-Y8-jcq"/>
-                                <include reference="zle-FA-hBH"/>
                                 <include reference="J7B-dL-0zY"/>
                                 <include reference="LIO-Ic-QPb"/>
                                 <include reference="Nkf-cN-weR"/>
@@ -2218,6 +2218,6 @@
         <image name="Login" width="285" height="288"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kC7-1v-Wv5"/>
+        <segue reference="sdy-wf-NGO"/>
     </inferredMetricsTieBreakers>
 </document>

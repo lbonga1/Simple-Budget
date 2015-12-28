@@ -20,6 +20,7 @@ class BudgetViewController: UIViewController {
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
     var responseTextField: UITextField? = nil
+    var subcatToDelete: Subcategory?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,7 +124,7 @@ extension BudgetViewController: UITableViewDelegate {
 
         // Set title and amount values
         if fetchedResultsController.fetchedObjects!.count != 0 {
-            self.configureCell(cell, atIndexPath: indexPath)
+            configureCell(cell, atIndexPath: indexPath)
         }
         
         // Support for updating the budget amount in core data
@@ -223,6 +224,14 @@ extension BudgetViewController: UITableViewDelegate {
         
         // Push TransacationsViewController
         self.performSegueWithIdentifier("displayTransactions", sender: chosenSubcategory)
+    }
+    
+    // Swipe to delete subcategories
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            subcatToDelete = fetchedResultsController.objectAtIndexPath(indexPath) as? Subcategory
+            confirmDelete()
+        }
     }
 }
 
@@ -331,5 +340,37 @@ extension BudgetViewController {
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+    }
+    
+    // Request confirmation to delete subcategory
+    func confirmDelete() {
+        let alert = UIAlertController(title: "Delete Subcategory", message: "All linked transactions will also be deleted.", preferredStyle: .ActionSheet)
+        
+        let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: handleDeleteSubcategory)
+        let CancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: cancelDeleteSubcategory)
+        
+        alert.addAction(DeleteAction)
+        alert.addAction(CancelAction)
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    // Subcategory deletion was confirmed
+    func handleDeleteSubcategory(alertAction: UIAlertAction!) -> Void {
+        // Delete subcategory on the main queue
+        dispatch_async(dispatch_get_main_queue()) {
+            self.sharedContext.deleteObject(self.subcatToDelete!)
+        
+            // Save updates
+            do {
+                try self.sharedContext.save()
+            } catch let error as NSError {
+                print("Could not save \(error), \(error.userInfo)")
+            }
+        }
+    }
+    
+    func cancelDeleteSubcategory(alertAction: UIAlertAction!) {
+        subcatToDelete = nil
     }
 }
