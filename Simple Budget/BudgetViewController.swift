@@ -17,6 +17,8 @@ class BudgetViewController: UIViewController {
     @IBOutlet var connectButton: UIBarButtonItem!
     
 // MARK: - Variables
+    var monthDropDown: UICollectionView!
+    var dropDownCanExpand: Bool = true
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
     var responseTextField: UITextField? = nil
@@ -26,18 +28,24 @@ class BudgetViewController: UIViewController {
         super.viewDidLoad()
         
         // Sets the add button on the right side of the navigation toolbar.
-        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
-        self.parentViewController!.navigationItem.leftBarButtonItem = connectButton
+        parentViewController!.navigationItem.rightBarButtonItem = addButton
+        parentViewController!.navigationItem.leftBarButtonItem = connectButton
+        
+        initCollectionView()
+        initNavigationItemTitleView()
+        
+        // Initially hide the month drop down
+        monthDropDown.hidden = true
         
         // Fetched results controller
-        self.executeFetch()
+        executeFetch()
         fetchedResultsController.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         
         // Reload data in case a transaction was added manually/downloaded
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
 // MARK: - Core Data Convenience
@@ -78,17 +86,17 @@ class BudgetViewController: UIViewController {
         currentlyEditingCategory = sender.tag
         
         // Display alert to save new subcategory title
-        self.displayTitleAlert("Please enter a title for your new subcategory.")
+        displayTitleAlert("Please enter a title for your new subcategory.")
         
         // Reload tableview data
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     // Add new bank account
     @IBAction func connectAction(sender: AnyObject) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewAccountNavController") as! UINavigationController
         
-        self.presentViewController(controller, animated: true, completion: nil)
+        presentViewController(controller, animated: true, completion: nil)
     }
 }
 
@@ -223,7 +231,7 @@ extension BudgetViewController: UITableViewDelegate {
         chosenSubcategory = fetchedResultsController.objectAtIndexPath(indexPath) as? Subcategory
         
         // Push TransacationsViewController
-        self.performSegueWithIdentifier("displayTransactions", sender: chosenSubcategory)
+        performSegueWithIdentifier("displayTransactions", sender: chosenSubcategory)
     }
     
     // Swipe to delete subcategories
@@ -235,13 +243,29 @@ extension BudgetViewController: UITableViewDelegate {
     }
 }
 
+extension BudgetViewController: UICollectionViewDataSource {
+  
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 12
+    }
+}
+
+extension BudgetViewController: UICollectionViewDelegate {
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! MonthCollectionViewCell
+        cell.backgroundColor = UIColor.greenColor()
+        return cell
+    }
+}
+
 // MARK: - Fetched Results Controller Delegate
 
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
     // Begin updates
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.beginUpdates()
+        tableView.beginUpdates()
     }
     
     // Changes to rows
@@ -252,7 +276,7 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
         case .Delete:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
-                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
+            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
         case .Move:
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
@@ -293,7 +317,7 @@ extension BudgetViewController {
     // Support for adding a new subcategory
     func addNewSubcategory() {
         // Get Category data from existing subcategory
-        let existingRowIndex = self.tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
+        let existingRowIndex = tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
         let existingRowIndexPath = NSIndexPath(forRow: existingRowIndex, inSection: currentlyEditingCategory)
         let existingSubcategory = fetchedResultsController.objectAtIndexPath(existingRowIndexPath) as! Subcategory
         let category = existingSubcategory.category
@@ -352,7 +376,7 @@ extension BudgetViewController {
         alert.addAction(DeleteAction)
         alert.addAction(CancelAction)
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     // Subcategory deletion was confirmed
@@ -372,5 +396,61 @@ extension BudgetViewController {
     
     func cancelDeleteSubcategory(alertAction: UIAlertAction!) {
         subcatToDelete = nil
+    }
+    
+    func initCollectionView() {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.scrollDirection = .Horizontal
+        
+        monthDropDown = UICollectionView(frame: CGRectMake(0, -30, self.view.frame.width, 60), collectionViewLayout: layout)
+        monthDropDown.dataSource = self
+        monthDropDown.delegate = self
+        monthDropDown.registerClass(MonthCollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
+        monthDropDown.backgroundColor = UIColor.whiteColor()
+        monthDropDown.showsHorizontalScrollIndicator = false
+        self.view.addSubview(monthDropDown)
+    }
+    
+    func initNavigationItemTitleView() {
+        let titleView = UILabel()
+        titleView.text = "Budget"
+        titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
+        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
+        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
+        parentViewController!.navigationItem.titleView = titleView
+        
+        let recognizer = UITapGestureRecognizer(target: self, action: "titleWasTapped")
+        recognizer.numberOfTapsRequired = 1
+        titleView.userInteractionEnabled = true
+        titleView.addGestureRecognizer(recognizer)
+    }
+    
+    func titleWasTapped() {
+        if monthDropDown.hidden == true {
+            self.view.bringSubviewToFront(monthDropDown)
+            monthDropDown.hidden = false
+            animateDropDown()
+        } else {
+            animateDropDown()
+        }
+    }
+    
+    func animateDropDown() {
+        if self.dropDownCanExpand == true {
+            UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
+                self.monthDropDown.center.y = 100
+                }, completion: { _ in
+                    self.dropDownCanExpand = false
+            })
+        } else {
+            UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
+                self.monthDropDown.center.y = -30
+                }, completion: { _ in
+                    self.dropDownCanExpand = true
+                    self.monthDropDown.hidden = true
+            })
+        }
     }
 }
