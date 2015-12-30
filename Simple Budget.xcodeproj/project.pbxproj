@@ -13,7 +13,7 @@
 		1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */; };
 		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */; };
 		1A4D5EA21C31F9D40078C078 /* NavigationDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA11C31F9D40078C078 /* NavigationDropdown.swift */; };
-		1A4D5EA41C3203F10078C078 /* MonthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA31C3203F10078C078 /* MonthCollectionViewCell.swift */; };
+		1A4D5EA61C33889A0078C078 /* CustomMonthCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */; };
 		1A5C4FAB1C0EC5D800EE979E /* PlaidConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C4FAA1C0EC5D800EE979E /* PlaidConvenience.swift */; };
 		1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */; };
 		1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */; };
@@ -58,7 +58,7 @@
 		1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTransTableViewController.swift; path = ../NewTransTableViewController.swift; sourceTree = "<group>"; };
 		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		1A4D5EA11C31F9D40078C078 /* NavigationDropdown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDropdown.swift; sourceTree = "<group>"; };
-		1A4D5EA31C3203F10078C078 /* MonthCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthCollectionViewCell.swift; sourceTree = "<group>"; };
+		1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMonthCell.swift; sourceTree = "<group>"; };
 		1A5C4FAA1C0EC5D800EE979E /* PlaidConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidConvenience.swift; sourceTree = "<group>"; };
 		1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyTextDelegate.swift; sourceTree = "<group>"; };
 		1A6BD27A1BDB4DA100CCD609 /* CatChooserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatChooserTableViewController.swift; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 				1A7E33501BEF0E0D0055D901 /* TransactionCell.swift */,
 				1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */,
 				1AA59F531BD49AB200704B98 /* CustomFooterCell.swift */,
-				1A4D5EA31C3203F10078C078 /* MonthCollectionViewCell.swift */,
+				1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */,
 			);
 			name = "Custom Cells";
 			sourceTree = "<group>";
@@ -377,6 +377,7 @@
 				1AF10AEB1BCB18F400F493D0 /* LoginViewController.swift in Sources */,
 				1AD04ADE1BEADB5F008F1A05 /* DataHelper.swift in Sources */,
 				1AF578821BF591720058261A /* PlaidClient.swift in Sources */,
+				1A4D5EA61C33889A0078C078 /* CustomMonthCell.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Category.swift in Sources */,
 				1A4D5EA21C31F9D40078C078 /* NavigationDropdown.swift in Sources */,
 				1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */,
@@ -385,7 +386,6 @@
 				1ABD4E641C044FC700BA35D5 /* AccountTableViewConvenience.swift in Sources */,
 				1AFF3DC91BD9F873006B571F /* SpentViewController.swift in Sources */,
 				1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */,
-				1A4D5EA41C3203F10078C078 /* MonthCollectionViewCell.swift in Sources */,
 				1A6BD27B1BDB4DA100CCD609 /* CatChooserTableViewController.swift in Sources */,
 				1AFF3DCB1BD9F883006B571F /* RemainingViewController.swift in Sources */,
 				1AF10B0B1BCB1A2400F493D0 /* CreateUserViewController.swift in Sources */,

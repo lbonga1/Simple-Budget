@@ -1507,13 +1507,13 @@
                                 <exclude reference="oOR-eb-WT8"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="B6A-Lq-LbU"/>
                                 <exclude reference="GBn-uy-cVj"/>
                                 <exclude reference="Q8x-Xr-LOh"/>
                                 <exclude reference="aFy-K0-894"/>
                                 <exclude reference="c37-yP-fDK"/>
                                 <exclude reference="giC-n7-Gv5"/>
                                 <exclude reference="xvM-zw-0S6"/>
-                                <exclude reference="B6A-Lq-LbU"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -1521,13 +1521,13 @@
                                 <include reference="oOR-eb-WT8"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="B6A-Lq-LbU"/>
                                 <exclude reference="GBn-uy-cVj"/>
                                 <exclude reference="Q8x-Xr-LOh"/>
                                 <include reference="aFy-K0-894"/>
                                 <exclude reference="c37-yP-fDK"/>
                                 <include reference="giC-n7-Gv5"/>
                                 <include reference="xvM-zw-0S6"/>
-                                <include reference="B6A-Lq-LbU"/>
                             </mask>
                         </variation>
                     </view>

@@ -18,11 +18,15 @@ class BudgetViewController: UIViewController {
     
 // MARK: - Variables
     var monthDropDown: UICollectionView!
+    var monthArray: [Int] = []
+    var currentMonth: String!
+    var currentYear: Int!
     var dropDownCanExpand: Bool = true
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
     var responseTextField: UITextField? = nil
     var subcatToDelete: Subcategory?
+    let titleView = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +34,10 @@ class BudgetViewController: UIViewController {
         // Sets the add button on the right side of the navigation toolbar.
         parentViewController!.navigationItem.rightBarButtonItem = addButton
         parentViewController!.navigationItem.leftBarButtonItem = connectButton
+        
+        monthArray = NSUserDefaults.standardUserDefaults().objectForKey("monthArray") as! [Int]
+        currentMonth = NSUserDefaults.standardUserDefaults().valueForKey("currentMonth") as! String
+        currentYear = NSUserDefaults.standardUserDefaults().valueForKey("currentYear") as! Int
         
         initCollectionView()
         initNavigationItemTitleView()
@@ -46,6 +54,12 @@ class BudgetViewController: UIViewController {
         
         // Reload data in case a transaction was added manually/downloaded
         tableView.reloadData()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        
+        let indexPath = NSIndexPath(forItem: 12, inSection: 0)
+        monthDropDown.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: false)
     }
     
 // MARK: - Core Data Convenience
@@ -244,20 +258,53 @@ extension BudgetViewController: UITableViewDelegate {
 }
 
 extension BudgetViewController: UICollectionViewDataSource {
-  
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return monthArray.count
     }
 }
-
+    
 extension BudgetViewController: UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! MonthCollectionViewCell
-        cell.backgroundColor = UIColor.greenColor()
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
+        
+        let centerPoint = CGPointMake(collectionView.center.x + collectionView.contentOffset.x,
+            collectionView.center.y + collectionView.contentOffset.y)
+        let centerIndexPath = collectionView.indexPathForItemAtPoint(centerPoint)
+        
+        if indexPath == centerIndexPath {
+            cell.addDashedBorder()
+        } else {
+            //TODO: - add solid border
+        }
+        
+        cell.layer.cornerRadius = 7.0
+        cell.backgroundColor = UIColor.whiteColor()
+        cell.alpha = 0.75
+        
+        cell.monthLabel.text = NavigationDropdown().intToString(monthArray[indexPath.row])
+        
+        if monthArray[indexPath.row] > 12 && monthArray[indexPath.row] < 25 {
+            cell.yearLabel.text = String(currentYear)
+        } else if monthArray[indexPath.row] < 13 {
+            cell.yearLabel.text = String(currentYear - 1)
+        } else {
+            cell.yearLabel.text = String(currentYear + 1)
+        }
+        
         return cell
     }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomMonthCell
+        //selectedCell.addDashedBorder()
+        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: true)
+        titleView.text = selectedCell.monthLabel.text!
+    }
 }
+
+
 
 // MARK: - Fetched Results Controller Delegate
 
@@ -394,6 +441,7 @@ extension BudgetViewController {
         }
     }
     
+    // Delete Subcategory cancelled
     func cancelDeleteSubcategory(alertAction: UIAlertAction!) {
         subcatToDelete = nil
     }
@@ -407,15 +455,19 @@ extension BudgetViewController {
         monthDropDown = UICollectionView(frame: CGRectMake(0, -30, self.view.frame.width, 60), collectionViewLayout: layout)
         monthDropDown.dataSource = self
         monthDropDown.delegate = self
-        monthDropDown.registerClass(MonthCollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
+        monthDropDown.registerClass(CustomMonthCell.self, forCellWithReuseIdentifier: "MonthCell")
         monthDropDown.backgroundColor = UIColor.whiteColor()
         monthDropDown.showsHorizontalScrollIndicator = false
+        
+        let view = UIView(frame: CGRectMake(0, -30, self.view.frame.width, 60))
+        view.backgroundColor = UIColor(patternImage:UIImage(named:"Login")!)
+        monthDropDown.backgroundView = view
+        
         self.view.addSubview(monthDropDown)
     }
     
     func initNavigationItemTitleView() {
-        let titleView = UILabel()
-        titleView.text = "Budget"
+        titleView.text = currentMonth
         titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
         let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
         titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
@@ -440,7 +492,7 @@ extension BudgetViewController {
     func animateDropDown() {
         if self.dropDownCanExpand == true {
             UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
-                self.monthDropDown.center.y = 100
+                self.monthDropDown.center.y = 95
                 }, completion: { _ in
                     self.dropDownCanExpand = false
             })
@@ -452,5 +504,27 @@ extension BudgetViewController {
                     self.monthDropDown.hidden = true
             })
         }
+    }
+}
+
+extension UICollectionViewCell {
+    func addDashedBorder() {
+        let color = UIColor.blackColor().CGColor
+        
+        let shapeLayer:CAShapeLayer = CAShapeLayer()
+        let frameSize = self.frame.size
+        let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
+        
+        shapeLayer.bounds = shapeRect
+        shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
+        shapeLayer.fillColor = UIColor.clearColor().CGColor
+        shapeLayer.strokeColor = color
+        shapeLayer.lineWidth = 1.5
+        shapeLayer.lineJoin = kCALineJoinRound
+        shapeLayer.lineDashPattern = [6,3]
+        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).CGPath
+        
+        self.layer.addSublayer(shapeLayer)
+        
     }
 }

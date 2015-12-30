@@ -20,6 +20,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NavigationDropdown().getCurrentMonthYear()
+        
         // Text delegates
         self.usernameField.delegate = textDelegate
         self.passwordField.delegate = textDelegate
