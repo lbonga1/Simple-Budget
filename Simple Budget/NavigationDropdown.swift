@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NavigationDropdown: NSObject {
+class NavigationDropdown {
     
     func getCurrentMonthYear() {
         let calendar = NSCalendar.currentCalendar()
@@ -52,6 +52,37 @@ class NavigationDropdown: NSObject {
             return "Nov"
         case 12, 24, 36:
             return "Dec"
+        default:
+            return "Error"
+        }
+    }
+    
+    func getFullMonthString(month: String) -> String {
+        switch month {
+        case "Jan":
+            return "January"
+        case "Feb":
+            return "February"
+        case "Mar":
+            return "March"
+        case "Apr":
+            return "April"
+        case "May":
+            return "May"
+        case "Jun":
+            return "June"
+        case "Jul":
+            return "July"
+        case "Aug":
+            return "August"
+        case "Sep":
+            return "September"
+        case "Oct":
+            return "October"
+        case "Nov":
+            return "November"
+        case "Dec":
+            return "December"
         default:
             return "Error"
         }

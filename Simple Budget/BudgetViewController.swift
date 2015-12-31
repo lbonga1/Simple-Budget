@@ -26,7 +26,9 @@ class BudgetViewController: UIViewController {
     var chosenSubcategory: Subcategory?
     var responseTextField: UITextField? = nil
     var subcatToDelete: Subcategory?
+    var accessoryView = UIImageView()
     let titleView = UILabel()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -269,16 +271,6 @@ extension BudgetViewController: UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
         
-        let centerPoint = CGPointMake(collectionView.center.x + collectionView.contentOffset.x,
-            collectionView.center.y + collectionView.contentOffset.y)
-        let centerIndexPath = collectionView.indexPathForItemAtPoint(centerPoint)
-        
-        if indexPath == centerIndexPath {
-            cell.addDashedBorder()
-        } else {
-            //TODO: - add solid border
-        }
-        
         cell.layer.cornerRadius = 7.0
         cell.backgroundColor = UIColor.whiteColor()
         cell.alpha = 0.75
@@ -298,9 +290,23 @@ extension BudgetViewController: UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let selectedCell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomMonthCell
-        //selectedCell.addDashedBorder()
+        //selectedCell.alpha = 0.95
         collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: true)
-        titleView.text = selectedCell.monthLabel.text!
+        titleView.text = NavigationDropdown().getFullMonthString(selectedCell.monthLabel.text!)
+        
+        var newTitleFrame = titleView.frame
+        newTitleFrame.size.width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width + 15
+        print(newTitleFrame.size.width)
+        newTitleFrame.size.height = 40
+        titleView.frame = newTitleFrame
+        titleView.center.x = self.view.center.x
+        print(titleView.frame.size.width)
+        print(self.view.center.x)
+        print(titleView.center.x)
+        
+        var newAccessoryFrame = accessoryView.frame
+        newAccessoryFrame = CGRectMake(newTitleFrame.size.width - 3, 16, 11, 11)
+        accessoryView.frame = newAccessoryFrame
     }
 }
 
@@ -464,14 +470,26 @@ extension BudgetViewController {
         monthDropDown.backgroundView = view
         
         self.view.addSubview(monthDropDown)
+        
+        monthDropDown.layer.shadowColor = UIColor.blackColor().CGColor
+        monthDropDown.layer.shadowOffset = CGSizeMake(0, 1)
+        monthDropDown.layer.shadowOpacity = 0.75
+        monthDropDown.layer.shadowRadius = 1.0
+        monthDropDown.clipsToBounds = false
+        monthDropDown.layer.masksToBounds = false
     }
     
     func initNavigationItemTitleView() {
-        titleView.text = currentMonth
+        titleView.text = NavigationDropdown().getFullMonthString(currentMonth)
         titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
-        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width
-        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 500))
+        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width + 15
+        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 40))
+        titleView.center.x = self.view.center.x
         parentViewController!.navigationItem.titleView = titleView
+        
+        accessoryView = UIImageView(frame: CGRectMake(width - 3, 16, 11, 11))
+        accessoryView.image = UIImage(named: "AccessoryDown")
+        titleView.addSubview(accessoryView)
         
         let recognizer = UITapGestureRecognizer(target: self, action: "titleWasTapped")
         recognizer.numberOfTapsRequired = 1
@@ -483,8 +501,10 @@ extension BudgetViewController {
         if monthDropDown.hidden == true {
             self.view.bringSubviewToFront(monthDropDown)
             monthDropDown.hidden = false
+            accessoryView.image = UIImage(named: "AccessoryUp")
             animateDropDown()
         } else {
+            accessoryView.image = UIImage(named: "AccessoryDown")
             animateDropDown()
         }
     }
@@ -508,10 +528,10 @@ extension BudgetViewController {
 }
 
 extension UICollectionViewCell {
-    func addDashedBorder() {
+    func addRemoveDashedBorder() {
         let color = UIColor.blackColor().CGColor
         
-        let shapeLayer:CAShapeLayer = CAShapeLayer()
+        let shapeLayer: CAShapeLayer = CAShapeLayer()
         let frameSize = self.frame.size
         let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
         
@@ -525,6 +545,5 @@ extension UICollectionViewCell {
         shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).CGPath
         
         self.layer.addSublayer(shapeLayer)
-        
     }
 }
