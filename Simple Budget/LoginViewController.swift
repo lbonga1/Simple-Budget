@@ -45,7 +45,7 @@ class LoginViewController: UIViewController {
         
         // Present BudgetVC if username and password are correct
         if usernameField.text == checkUser && passwordField.text == checkPassword {
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("ParentViewController") as! ParentViewController
+            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
             self.presentViewController(controller, animated: true, completion: nil)
         } else {
             // Otherwise display error message

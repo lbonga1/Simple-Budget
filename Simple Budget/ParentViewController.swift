@@ -8,13 +8,7 @@
 
 import UIKit
 
-@objc
-protocol ParentViewControllerDelegate {
-    optional func toggleDropDown()
-    optional func collapseDropDown()
-}
-
-class ParentViewController: UIViewController {
+class ParentViewController: DropDownViewController {
     
     enum TabIndex : Int {
         case FirstChildTab = 0
@@ -23,11 +17,12 @@ class ParentViewController: UIViewController {
     }
     
 // MARK: - Outlets
+    
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var contentView: UIView!
     
 // MARK: - Variables
-    var delegate: ParentViewControllerDelegate?
+    
     var currentViewController: UIViewController?
     lazy var firstChildTabVC: UIViewController? = {
         let firstChildTabVC = self.storyboard?.instantiateViewControllerWithIdentifier("Budget")
@@ -49,6 +44,25 @@ class ParentViewController: UIViewController {
         //segmentedControl.initUI()
         segmentedControl.selectedSegmentIndex = TabIndex.FirstChildTab.rawValue
         displayCurrentTab(TabIndex.FirstChildTab.rawValue)
+        
+        // Set variables from NSUserDefaults data
+        monthArray = NSUserDefaults.standardUserDefaults().objectForKey("monthArray") as! [Int]
+        currentMonth = NSUserDefaults.standardUserDefaults().valueForKey("currentMonth") as! String
+        currentYear = NSUserDefaults.standardUserDefaults().valueForKey("currentYear") as! Int
+        
+        // Set up title view and month drop down view
+        initNavigationItemTitleView()
+        initCollectionView(self, delegate: self)
+        monthDropDown.reloadData()
+        
+        // Initially hide the month drop down
+        monthDropDown.hidden = true
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // Scroll to current month collection view cell
+        let indexPath = NSIndexPath(forItem: 12, inSection: 0)
+        monthDropDown.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: false)
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -67,6 +81,44 @@ class ParentViewController: UIViewController {
         displayCurrentTab(sender.selectedSegmentIndex)
     }
 }
+
+extension ParentViewController: UICollectionViewDataSource {
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+       
+        return monthArray.count
+    }
+}
+
+extension ParentViewController: UICollectionViewDelegate {
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
+        
+        configureCell(cell, indexPath: indexPath, monthArray: monthArray, currentYear: currentYear)
+        
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if selectedIndex != nil {
+            collectionView.deselectItemAtIndexPath(selectedIndex!, animated: true)
+        }
+        
+        changeVisualSelection(selectedIndex, indexPath: indexPath, collectionView: collectionView, titleView: titleView)
+        
+        adjustTitleView(titleView, accessoryView: accessoryView, parentView: self.view)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        let cellToDeselect = collectionView.cellForItemAtIndexPath(indexPath)
+        cellToDeselect?.alpha = 0.75
+    }
+}
+
     
 // MARK: Changing segment tab functions
 

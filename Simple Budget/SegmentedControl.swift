@@ -11,7 +11,7 @@ import UIKit
 class SegmentedControl: UISegmentedControl {
 
     func initUI(){
-        //setupBackground()
+        setupBackground()
         setupFonts()
     }
     

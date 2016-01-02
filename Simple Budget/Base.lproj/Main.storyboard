@@ -1209,6 +1209,22 @@
             </objects>
             <point key="canvasLocation" x="1803" y="1300.5"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="aAj-RR-cR2">
+            <objects>
+                <navigationController storyboardIdentifier="BudgetNavController" id="Yfp-xA-dAM" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="yge-PX-hjx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="tLY-zJ-i3v" kind="relationship" relationship="rootViewController" id="Sqw-aY-OAd"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D0d-UX-wZo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="339" y="615.75"/>
+        </scene>
         <!--Parent View-->
         <scene sceneID="yHu-CN-2Hy">
             <objects>
@@ -1218,14 +1234,12 @@
                         <viewControllerLayoutGuide type="bottom" id="elC-n2-kLf"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="eNA-PD-AQA">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Obh-q8-HBJ">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="100" width="400" height="700"/>
-                                </variation>
                             </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="itv-9N-1Nu">
                                 <rect key="frame" x="-60" y="-14" width="121" height="29"/>
@@ -1268,13 +1282,13 @@
                                 <exclude reference="itv-9N-1Nu"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="asx-IB-JSU"/>
-                                <exclude reference="br0-hv-xby"/>
-                                <exclude reference="oyj-P4-kPD"/>
+                                <exclude reference="x9C-L6-NZY"/>
                                 <exclude reference="8Jd-0d-DB3"/>
                                 <exclude reference="hpE-e1-iEn"/>
                                 <exclude reference="kMK-ug-Ofh"/>
-                                <exclude reference="x9C-L6-NZY"/>
+                                <exclude reference="asx-IB-JSU"/>
+                                <exclude reference="br0-hv-xby"/>
+                                <exclude reference="oyj-P4-kPD"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -1283,13 +1297,13 @@
                                 <include reference="itv-9N-1Nu"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="asx-IB-JSU"/>
-                                <include reference="br0-hv-xby"/>
-                                <include reference="oyj-P4-kPD"/>
+                                <include reference="x9C-L6-NZY"/>
                                 <include reference="8Jd-0d-DB3"/>
                                 <include reference="hpE-e1-iEn"/>
                                 <include reference="kMK-ug-Ofh"/>
-                                <include reference="x9C-L6-NZY"/>
+                                <include reference="asx-IB-JSU"/>
+                                <include reference="br0-hv-xby"/>
+                                <include reference="oyj-P4-kPD"/>
                             </mask>
                         </variation>
                     </view>
@@ -1357,8 +1371,7 @@
                                                             <exclude reference="URj-oE-wHi"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="232" y="8" width="80" height="27"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="URj-oE-wHi"/>
                                                         </mask>
@@ -1448,8 +1461,7 @@
                                                             <exclude reference="r4w-Xy-j9R"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="212" y="7" width="100" height="30"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="r4w-Xy-j9R"/>
                                                         </mask>
@@ -1563,9 +1575,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="4" y="64" width="392" height="692"/>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="sdX-uT-RGW" id="4Wj-b8-6Rv"/>
                                     <outlet property="delegate" destination="sdX-uT-RGW" id="FM4-IC-u1a"/>

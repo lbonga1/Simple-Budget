@@ -29,18 +29,6 @@ class BudgetViewController: DropDownViewController {
         parentViewController!.navigationItem.rightBarButtonItem = addButton
         parentViewController!.navigationItem.leftBarButtonItem = connectButton
         
-        // Set variables from NSUserDefaults data
-        monthArray = NSUserDefaults.standardUserDefaults().objectForKey("monthArray") as! [Int]
-        currentMonth = NSUserDefaults.standardUserDefaults().valueForKey("currentMonth") as! String
-        currentYear = NSUserDefaults.standardUserDefaults().valueForKey("currentYear") as! Int
-        
-        // Set up month view drop down and title view
-        initCollectionView(self, delegate: self)
-        initNavigationItemTitleView()
-        
-        // Initially hide the month drop down
-        monthDropDown.hidden = true
-        
         // Fetched results controller
         executeFetch()
         fetchedResultsController.delegate = self
@@ -50,12 +38,6 @@ class BudgetViewController: DropDownViewController {
         
         // Reload data in case a transaction was added manually/downloaded
         tableView.reloadData()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        
-        let indexPath = NSIndexPath(forItem: 12, inSection: 0)
-        monthDropDown.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: false)
     }
     
 // MARK: - Core Data Convenience
@@ -250,43 +232,6 @@ extension BudgetViewController: UITableViewDelegate {
             subcatToDelete = fetchedResultsController.objectAtIndexPath(indexPath) as? Subcategory
             confirmDelete()
         }
-    }
-}
-
-extension BudgetViewController: UICollectionViewDataSource {
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return monthArray.count
-    }
-}
-    
-extension BudgetViewController: UICollectionViewDelegate {
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
-        
-        configureCell(cell, indexPath: indexPath, monthArray: monthArray, currentYear: currentYear)
-        
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
-        if selectedIndex != nil {
-            collectionView.deselectItemAtIndexPath(selectedIndex!, animated: true)
-        }
-        
-        changeVisualSelection(selectedIndex, indexPath: indexPath, collectionView: collectionView, titleView: titleView)
-        
-        adjustTitleView(titleView, accessoryView: accessoryView, parentView: self.view)
-    }
-    
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        
-        let cellToDeselect = collectionView.cellForItemAtIndexPath(indexPath)
-        cellToDeselect?.alpha = 0.75
     }
 }
 
