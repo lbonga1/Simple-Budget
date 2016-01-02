@@ -8,6 +8,12 @@
 
 import UIKit
 
+@objc
+protocol ParentViewControllerDelegate {
+    optional func toggleDropDown()
+    optional func collapseDropDown()
+}
+
 class ParentViewController: UIViewController {
     
     enum TabIndex : Int {
@@ -21,6 +27,7 @@ class ParentViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!
     
 // MARK: - Variables
+    var delegate: ParentViewControllerDelegate?
     var currentViewController: UIViewController?
     lazy var firstChildTabVC: UIViewController? = {
         let firstChildTabVC = self.storyboard?.instantiateViewControllerWithIdentifier("Budget")

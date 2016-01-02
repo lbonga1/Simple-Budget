@@ -14,6 +14,7 @@
 		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */; };
 		1A476A4B1C379CA8004914AB /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A476A4A1C379CA8004914AB /* ParentViewController.swift */; };
 		1A476A4D1C37A4E1004914AB /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A476A4C1C37A4E1004914AB /* SegmentedControl.swift */; };
+		1A476A4F1C37B1C7004914AB /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A476A4E1C37B1C7004914AB /* ContainerViewController.swift */; };
 		1A4D5EA21C31F9D40078C078 /* DropDownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA11C31F9D40078C078 /* DropDownViewController.swift */; };
 		1A4D5EA61C33889A0078C078 /* CustomMonthCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */; };
 		1A5C4FAB1C0EC5D800EE979E /* PlaidConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C4FAA1C0EC5D800EE979E /* PlaidConvenience.swift */; };
@@ -61,6 +62,7 @@
 		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		1A476A4A1C379CA8004914AB /* ParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		1A476A4C1C37A4E1004914AB /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
+		1A476A4E1C37B1C7004914AB /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		1A4D5EA11C31F9D40078C078 /* DropDownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownViewController.swift; sourceTree = "<group>"; };
 		1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMonthCell.swift; sourceTree = "<group>"; };
 		1A5C4FAA1C0EC5D800EE979E /* PlaidConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidConvenience.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 		1A476A491C378717004914AB /* Parent View Contollers */ = {
 			isa = PBXGroup;
 			children = (
+				1A476A4E1C37B1C7004914AB /* ContainerViewController.swift */,
 				1A476A4A1C379CA8004914AB /* ParentViewController.swift */,
 				1A4D5EA11C31F9D40078C078 /* DropDownViewController.swift */,
 			);
@@ -398,6 +401,7 @@
 				1A476A4B1C379CA8004914AB /* ParentViewController.swift in Sources */,
 				1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */,
 				1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */,
+				1A476A4F1C37B1C7004914AB /* ContainerViewController.swift in Sources */,
 				1ABD4E641C044FC700BA35D5 /* AccountTableViewConvenience.swift in Sources */,
 				1AFF3DC91BD9F873006B571F /* SpentViewController.swift in Sources */,
 				1AA59F561BD4A04800704B98 /* BudgetSubcategoryCell.swift in Sources */,
