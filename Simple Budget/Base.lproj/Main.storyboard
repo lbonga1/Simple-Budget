@@ -402,27 +402,10 @@
             </objects>
             <point key="canvasLocation" x="1057.5" y="-46.5"/>
         </scene>
-        <!--Item-->
-        <scene sceneID="9kj-ij-GEO">
-            <objects>
-                <navigationController storyboardIdentifier="BudgetNavController" id="uCc-0B-iqL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="4Lo-mv-qs2"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fOo-I0-XDf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="SQC-gm-JKi" kind="relationship" relationship="rootViewController" id="uFS-Tu-zCU"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RNz-BA-oJz" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="339" y="615.75"/>
-        </scene>
         <!--Spent-->
         <scene sceneID="MGU-HI-LuQ">
             <objects>
-                <viewController title="Spent" id="KiJ-ox-rae" customClass="SpentViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Spent" title="Spent" id="KiJ-ox-rae" customClass="SpentViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TTl-NC-uyJ"/>
                         <viewControllerLayoutGuide type="bottom" id="olX-17-oBo"/>
@@ -1096,7 +1079,7 @@
         <!--Remaining-->
         <scene sceneID="akS-pM-6gF">
             <objects>
-                <viewController title="Remaining" id="oja-ve-kAv" customClass="RemainingViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Remaining" title="Remaining" id="oja-ve-kAv" customClass="RemainingViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Svm-6d-8Ca"/>
                         <viewControllerLayoutGuide type="bottom" id="jy4-ar-Z54"/>
@@ -1225,6 +1208,100 @@
                 </barButtonItem>
             </objects>
             <point key="canvasLocation" x="1803" y="1300.5"/>
+        </scene>
+        <!--Parent View-->
+        <scene sceneID="yHu-CN-2Hy">
+            <objects>
+                <viewController storyboardIdentifier="ParentViewController" title="Parent View" id="tLY-zJ-i3v" customClass="ParentViewController" customModule="Simple_Budget" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bef-6v-Jcc"/>
+                        <viewControllerLayoutGuide type="bottom" id="elC-n2-kLf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eNA-PD-AQA">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Obh-q8-HBJ">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="100" width="400" height="700"/>
+                                </variation>
+                            </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="itv-9N-1Nu">
+                                <rect key="frame" x="-60" y="-14" width="121" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="Gx3-gq-xZW"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Budget"/>
+                                    <segment title="Spent"/>
+                                    <segment title="Remaining"/>
+                                </segments>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Gx3-gq-xZW"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Gx3-gq-xZW"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="changeSegmentTab:" destination="tLY-zJ-i3v" eventType="valueChanged" id="hDy-VU-4WE"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="itv-9N-1Nu" firstAttribute="leading" secondItem="eNA-PD-AQA" secondAttribute="leadingMargin" constant="54" id="8Jd-0d-DB3"/>
+                            <constraint firstItem="Obh-q8-HBJ" firstAttribute="leading" secondItem="eNA-PD-AQA" secondAttribute="leadingMargin" id="asx-IB-JSU"/>
+                            <constraint firstItem="Obh-q8-HBJ" firstAttribute="top" secondItem="itv-9N-1Nu" secondAttribute="bottom" constant="8" id="br0-hv-xby"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="itv-9N-1Nu" secondAttribute="trailing" constant="54" id="hpE-e1-iEn"/>
+                            <constraint firstItem="itv-9N-1Nu" firstAttribute="top" secondItem="bef-6v-Jcc" secondAttribute="bottom" id="kMK-ug-Ofh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Obh-q8-HBJ" secondAttribute="trailing" id="oyj-P4-kPD"/>
+                            <constraint firstItem="elC-n2-kLf" firstAttribute="top" secondItem="Obh-q8-HBJ" secondAttribute="bottom" id="x9C-L6-NZY"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="Obh-q8-HBJ"/>
+                                <exclude reference="itv-9N-1Nu"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="asx-IB-JSU"/>
+                                <exclude reference="br0-hv-xby"/>
+                                <exclude reference="oyj-P4-kPD"/>
+                                <exclude reference="8Jd-0d-DB3"/>
+                                <exclude reference="hpE-e1-iEn"/>
+                                <exclude reference="kMK-ug-Ofh"/>
+                                <exclude reference="x9C-L6-NZY"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="Obh-q8-HBJ"/>
+                                <include reference="itv-9N-1Nu"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="asx-IB-JSU"/>
+                                <include reference="br0-hv-xby"/>
+                                <include reference="oyj-P4-kPD"/>
+                                <include reference="8Jd-0d-DB3"/>
+                                <include reference="hpE-e1-iEn"/>
+                                <include reference="kMK-ug-Ofh"/>
+                                <include reference="x9C-L6-NZY"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" id="fO1-n8-eid"/>
+                    <connections>
+                        <outlet property="contentView" destination="Obh-q8-HBJ" id="3yQ-ZX-x75"/>
+                        <outlet property="segmentedControl" destination="itv-9N-1Nu" id="HMu-iG-oyN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ihX-Wx-Mfu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1057.5" y="615.75"/>
         </scene>
         <!--Budget-->
         <scene sceneID="Gy4-KK-vFB">
@@ -1486,6 +1563,9 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="4" y="64" width="392" height="692"/>
+                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="sdX-uT-RGW" id="4Wj-b8-6Rv"/>
                                     <outlet property="delegate" destination="sdX-uT-RGW" id="FM4-IC-u1a"/>
@@ -2174,27 +2254,6 @@
             </objects>
             <point key="canvasLocation" x="2586" y="615.75"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="Ewg-CE-dsU">
-            <objects>
-                <tabBarController id="SQC-gm-JKi" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="3B4-yc-1cc"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="AI5-oV-SVV">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="sdX-uT-RGW" kind="relationship" relationship="viewControllers" id="NP1-Yb-Z3b"/>
-                        <segue destination="KiJ-ox-rae" kind="relationship" relationship="viewControllers" id="7Mv-1d-I8w"/>
-                        <segue destination="oja-ve-kAv" kind="relationship" relationship="viewControllers" id="CJy-y0-iqm"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WJ8-n2-bqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1057.5" y="615.75"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="kP9-86-wgM">
             <objects>
@@ -2218,6 +2277,6 @@
         <image name="Login" width="285" height="288"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sdy-wf-NGO"/>
+        <segue reference="kC7-1v-Wv5"/>
     </inferredMetricsTieBreakers>
 </document>
