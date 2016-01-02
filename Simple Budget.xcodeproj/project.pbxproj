@@ -12,7 +12,7 @@
 		1A19A3DB1BCB617000A38E45 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DA1BCB617000A38E45 /* Transaction.swift */; };
 		1A19A3DD1BCC454F00A38E45 /* NewTransTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */; };
 		1A42D4CF1BD45B7A00F85A1D /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */; };
-		1A4D5EA21C31F9D40078C078 /* NavigationDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA11C31F9D40078C078 /* NavigationDropdown.swift */; };
+		1A4D5EA21C31F9D40078C078 /* DropDownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA11C31F9D40078C078 /* DropDownViewController.swift */; };
 		1A4D5EA61C33889A0078C078 /* CustomMonthCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */; };
 		1A5C4FAB1C0EC5D800EE979E /* PlaidConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C4FAA1C0EC5D800EE979E /* PlaidConvenience.swift */; };
 		1A5CE9741BEC0DC600CA1E55 /* CurrencyTextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */; };
@@ -57,7 +57,7 @@
 		1A19A3DA1BCB617000A38E45 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		1A19A3DC1BCC454F00A38E45 /* NewTransTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTransTableViewController.swift; path = ../NewTransTableViewController.swift; sourceTree = "<group>"; };
 		1A42D4CE1BD45B7A00F85A1D /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
-		1A4D5EA11C31F9D40078C078 /* NavigationDropdown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDropdown.swift; sourceTree = "<group>"; };
+		1A4D5EA11C31F9D40078C078 /* DropDownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownViewController.swift; sourceTree = "<group>"; };
 		1A4D5EA51C33889A0078C078 /* CustomMonthCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMonthCell.swift; sourceTree = "<group>"; };
 		1A5C4FAA1C0EC5D800EE979E /* PlaidConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidConvenience.swift; sourceTree = "<group>"; };
 		1A5CE9731BEC0DC600CA1E55 /* CurrencyTextDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyTextDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +111,7 @@
 		1A19A3D31BCB60FC00A38E45 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1A476A491C378717004914AB /* Parent View Contollers */,
 				1AFF3DC61BD9F1B9006B571F /* View Controllers */,
 			);
 			name = Controller;
@@ -130,12 +131,19 @@
 			children = (
 				1AF10AE51BCB18F400F493D0 /* AppDelegate.swift */,
 				1AD04ADD1BEADB5F008F1A05 /* DataHelper.swift */,
-				1A4D5EA11C31F9D40078C078 /* NavigationDropdown.swift */,
 				1AF578861BF5A57D0058261A /* Text Delegates */,
 				1AF578851BF5A5710058261A /* Network */,
 				1AFF3DC71BD9F1D3006B571F /* Core Data */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		1A476A491C378717004914AB /* Parent View Contollers */ = {
+			isa = PBXGroup;
+			children = (
+				1A4D5EA11C31F9D40078C078 /* DropDownViewController.swift */,
+			);
+			name = "Parent View Contollers";
 			sourceTree = "<group>";
 		};
 		1AA59F571BD4A05700704B98 /* Custom Cells */ = {
@@ -379,7 +387,7 @@
 				1AF578821BF591720058261A /* PlaidClient.swift in Sources */,
 				1A4D5EA61C33889A0078C078 /* CustomMonthCell.swift in Sources */,
 				1A19A3D71BCB614700A38E45 /* Category.swift in Sources */,
-				1A4D5EA21C31F9D40078C078 /* NavigationDropdown.swift in Sources */,
+				1A4D5EA21C31F9D40078C078 /* DropDownViewController.swift in Sources */,
 				1AC059751BDAE86E0075302E /* CoreDataStackManager.swift in Sources */,
 				1AA59F541BD49AB200704B98 /* CustomFooterCell.swift in Sources */,
 				1AF10B0D1BCB2EBE00F493D0 /* BudgetViewController.swift in Sources */,

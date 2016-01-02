@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class RemainingViewController: UIViewController {
+class RemainingViewController: DropDownViewController {
 
 // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -24,6 +24,12 @@ class RemainingViewController: UIViewController {
         
         // Sets the add button on the right side of the navigation toolbar.
         self.parentViewController!.navigationItem.rightBarButtonItem = addButton
+        
+        // Set up month view drop down
+        initCollectionView(self, delegate: self)
+        
+        // Initially hide the month drop down
+        monthDropDown.hidden = true
         
         // Fetched Results Controller
         self.executeFetch()
@@ -196,6 +202,43 @@ extension RemainingViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 25
+    }
+}
+
+extension RemainingViewController: UICollectionViewDataSource {
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return monthArray.count
+    }
+}
+
+extension RemainingViewController: UICollectionViewDelegate {
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
+        
+        configureCell(cell, indexPath: indexPath, monthArray: monthArray, currentYear: currentYear)
+        
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if selectedIndex != nil {
+            collectionView.deselectItemAtIndexPath(selectedIndex!, animated: true)
+        }
+        
+        changeVisualSelection(selectedIndex, indexPath: indexPath, collectionView: collectionView, titleView: titleView)
+        
+        adjustTitleView(titleView, accessoryView: accessoryView, parentView: self.view)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        let cellToDeselect = collectionView.cellForItemAtIndexPath(indexPath)
+        cellToDeselect?.alpha = 0.75
     }
 }
 

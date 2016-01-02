@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class BudgetViewController: UIViewController {
+class BudgetViewController: DropDownViewController {
 
 // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -17,18 +17,10 @@ class BudgetViewController: UIViewController {
     @IBOutlet var connectButton: UIBarButtonItem!
     
 // MARK: - Variables
-    var monthDropDown: UICollectionView!
-    var monthArray: [Int] = []
-    var currentMonth: String!
-    var currentYear: Int!
-    var dropDownCanExpand: Bool = true
     var currentlyEditingCategory = 0
     var chosenSubcategory: Subcategory?
     var responseTextField: UITextField? = nil
     var subcatToDelete: Subcategory?
-    var accessoryView = UIImageView()
-    let titleView = UILabel()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,11 +29,13 @@ class BudgetViewController: UIViewController {
         parentViewController!.navigationItem.rightBarButtonItem = addButton
         parentViewController!.navigationItem.leftBarButtonItem = connectButton
         
+        // Set variables from NSUserDefaults data
         monthArray = NSUserDefaults.standardUserDefaults().objectForKey("monthArray") as! [Int]
         currentMonth = NSUserDefaults.standardUserDefaults().valueForKey("currentMonth") as! String
         currentYear = NSUserDefaults.standardUserDefaults().valueForKey("currentYear") as! Int
         
-        initCollectionView()
+        // Set up month view drop down and title view
+        initCollectionView(self, delegate: self)
         initNavigationItemTitleView()
         
         // Initially hide the month drop down
@@ -262,6 +256,7 @@ extension BudgetViewController: UITableViewDelegate {
 extension BudgetViewController: UICollectionViewDataSource {
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         return monthArray.count
     }
 }
@@ -269,48 +264,31 @@ extension BudgetViewController: UICollectionViewDataSource {
 extension BudgetViewController: UICollectionViewDelegate {
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
         
-        cell.layer.cornerRadius = 7.0
-        cell.backgroundColor = UIColor.whiteColor()
-        cell.alpha = 0.75
-        
-        cell.monthLabel.text = NavigationDropdown().intToString(monthArray[indexPath.row])
-        
-        if monthArray[indexPath.row] > 12 && monthArray[indexPath.row] < 25 {
-            cell.yearLabel.text = String(currentYear)
-        } else if monthArray[indexPath.row] < 13 {
-            cell.yearLabel.text = String(currentYear - 1)
-        } else {
-            cell.yearLabel.text = String(currentYear + 1)
-        }
+        configureCell(cell, indexPath: indexPath, monthArray: monthArray, currentYear: currentYear)
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let selectedCell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomMonthCell
-        //selectedCell.alpha = 0.95
-        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: true)
-        titleView.text = NavigationDropdown().getFullMonthString(selectedCell.monthLabel.text!)
         
-        var newTitleFrame = titleView.frame
-        newTitleFrame.size.width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width + 15
-        print(newTitleFrame.size.width)
-        newTitleFrame.size.height = 40
-        titleView.frame = newTitleFrame
-        titleView.center.x = self.view.center.x
-        print(titleView.frame.size.width)
-        print(self.view.center.x)
-        print(titleView.center.x)
+        if selectedIndex != nil {
+            collectionView.deselectItemAtIndexPath(selectedIndex!, animated: true)
+        }
         
-        var newAccessoryFrame = accessoryView.frame
-        newAccessoryFrame = CGRectMake(newTitleFrame.size.width - 3, 16, 11, 11)
-        accessoryView.frame = newAccessoryFrame
+        changeVisualSelection(selectedIndex, indexPath: indexPath, collectionView: collectionView, titleView: titleView)
+        
+        adjustTitleView(titleView, accessoryView: accessoryView, parentView: self.view)
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        let cellToDeselect = collectionView.cellForItemAtIndexPath(indexPath)
+        cellToDeselect?.alpha = 0.75
     }
 }
-
-
 
 // MARK: - Fetched Results Controller Delegate
 
@@ -451,99 +429,5 @@ extension BudgetViewController {
     func cancelDeleteSubcategory(alertAction: UIAlertAction!) {
         subcatToDelete = nil
     }
-    
-    func initCollectionView() {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        layout.itemSize = CGSize(width: 50, height: 50)
-        layout.scrollDirection = .Horizontal
-        
-        monthDropDown = UICollectionView(frame: CGRectMake(0, -30, self.view.frame.width, 60), collectionViewLayout: layout)
-        monthDropDown.dataSource = self
-        monthDropDown.delegate = self
-        monthDropDown.registerClass(CustomMonthCell.self, forCellWithReuseIdentifier: "MonthCell")
-        monthDropDown.backgroundColor = UIColor.whiteColor()
-        monthDropDown.showsHorizontalScrollIndicator = false
-        
-        let view = UIView(frame: CGRectMake(0, -30, self.view.frame.width, 60))
-        view.backgroundColor = UIColor(patternImage:UIImage(named:"Login")!)
-        monthDropDown.backgroundView = view
-        
-        self.view.addSubview(monthDropDown)
-        
-        monthDropDown.layer.shadowColor = UIColor.blackColor().CGColor
-        monthDropDown.layer.shadowOffset = CGSizeMake(0, 1)
-        monthDropDown.layer.shadowOpacity = 0.75
-        monthDropDown.layer.shadowRadius = 1.0
-        monthDropDown.clipsToBounds = false
-        monthDropDown.layer.masksToBounds = false
-    }
-    
-    func initNavigationItemTitleView() {
-        titleView.text = NavigationDropdown().getFullMonthString(currentMonth)
-        titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
-        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width + 15
-        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 40))
-        titleView.center.x = self.view.center.x
-        parentViewController!.navigationItem.titleView = titleView
-        
-        accessoryView = UIImageView(frame: CGRectMake(width - 3, 16, 11, 11))
-        accessoryView.image = UIImage(named: "AccessoryDown")
-        titleView.addSubview(accessoryView)
-        
-        let recognizer = UITapGestureRecognizer(target: self, action: "titleWasTapped")
-        recognizer.numberOfTapsRequired = 1
-        titleView.userInteractionEnabled = true
-        titleView.addGestureRecognizer(recognizer)
-    }
-    
-    func titleWasTapped() {
-        if monthDropDown.hidden == true {
-            self.view.bringSubviewToFront(monthDropDown)
-            monthDropDown.hidden = false
-            accessoryView.image = UIImage(named: "AccessoryUp")
-            animateDropDown()
-        } else {
-            accessoryView.image = UIImage(named: "AccessoryDown")
-            animateDropDown()
-        }
-    }
-    
-    func animateDropDown() {
-        if self.dropDownCanExpand == true {
-            UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
-                self.monthDropDown.center.y = 95
-                }, completion: { _ in
-                    self.dropDownCanExpand = false
-            })
-        } else {
-            UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
-                self.monthDropDown.center.y = -30
-                }, completion: { _ in
-                    self.dropDownCanExpand = true
-                    self.monthDropDown.hidden = true
-            })
-        }
-    }
 }
 
-extension UICollectionViewCell {
-    func addRemoveDashedBorder() {
-        let color = UIColor.blackColor().CGColor
-        
-        let shapeLayer: CAShapeLayer = CAShapeLayer()
-        let frameSize = self.frame.size
-        let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
-        
-        shapeLayer.bounds = shapeRect
-        shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
-        shapeLayer.fillColor = UIColor.clearColor().CGColor
-        shapeLayer.strokeColor = color
-        shapeLayer.lineWidth = 1.5
-        shapeLayer.lineJoin = kCALineJoinRound
-        shapeLayer.lineDashPattern = [6,3]
-        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).CGPath
-        
-        self.layer.addSublayer(shapeLayer)
-    }
-}
