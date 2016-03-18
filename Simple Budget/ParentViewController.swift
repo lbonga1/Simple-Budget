@@ -24,6 +24,7 @@ class ParentViewController: DropDownViewController {
 // MARK: - Variables
     
     var currentViewController: UIViewController?
+    
     lazy var firstChildTabVC: UIViewController? = {
         let firstChildTabVC = self.storyboard?.instantiateViewControllerWithIdentifier("Budget")
         return firstChildTabVC
@@ -41,7 +42,9 @@ class ParentViewController: DropDownViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //segmentedControl.initUI()
+        //initBackgroundGradient()
+        initBackgroundImage()
+        segmentedControl.initUI()
         segmentedControl.selectedSegmentIndex = TabIndex.FirstChildTab.rawValue
         displayCurrentTab(TabIndex.FirstChildTab.rawValue)
         
@@ -75,8 +78,8 @@ class ParentViewController: DropDownViewController {
 // MARK: - Actions
     
     @IBAction func changeSegmentTab(sender: UISegmentedControl) {
-        self.currentViewController!.view.removeFromSuperview()
-        self.currentViewController!.removeFromParentViewController()
+        currentViewController!.view.removeFromSuperview()
+        currentViewController!.removeFromParentViewController()
         
         displayCurrentTab(sender.selectedSegmentIndex)
     }
@@ -124,15 +127,37 @@ extension ParentViewController: UICollectionViewDelegate {
 
 extension ParentViewController {
     
+    func initBackgroundGradient() {
+        var backgroundGradient: CAGradientLayer
+        let colorTop = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0).CGColor
+        let colorBottom = UIColor.whiteColor().CGColor
+        backgroundGradient = CAGradientLayer()
+        backgroundGradient.colors = [colorTop, colorBottom]
+        backgroundGradient.locations = [0.0, 1.0]
+        backgroundGradient.frame = view.frame
+        view.layer.insertSublayer(backgroundGradient, atIndex: 2)
+    }
+    
+    func initBackgroundImage() {
+        let titleBackgroundView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 60))
+        titleBackgroundView.backgroundColor = UIColor(patternImage: UIImage(named: "Login")!)
+        view.addSubview(titleBackgroundView)
+        view.sendSubviewToBack(titleBackgroundView)
+        
+        let tableBackgroundView = UIView(frame: CGRectMake(0, 100, self.view.frame.width, contentView.frame.height))
+        tableBackgroundView.backgroundColor = UIColor(patternImage: UIImage(named: "Login")!)
+        view.insertSubview(tableBackgroundView, belowSubview: contentView)
+    }
+    
     func displayCurrentTab(tabIndex: Int){
         if let vc = viewControllerForSelectedSegmentIndex(tabIndex) {
             
-            self.addChildViewController(vc)
+            addChildViewController(vc)
             vc.didMoveToParentViewController(self)
             
             vc.view.frame = self.contentView.bounds
-            self.contentView.addSubview(vc.view)
-            self.currentViewController = vc
+            contentView.addSubview(vc.view)
+            currentViewController = vc
         }
     }
     

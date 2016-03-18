@@ -23,8 +23,8 @@ class LoginViewController: UIViewController {
         DropDownViewController().getCurrentMonthYear()
         
         // Text delegates
-        self.usernameField.delegate = textDelegate
-        self.passwordField.delegate = textDelegate
+        usernameField.delegate = textDelegate
+        passwordField.delegate = textDelegate
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -32,7 +32,7 @@ class LoginViewController: UIViewController {
         if NSUserDefaults.standardUserDefaults().valueForKey("username") == nil {
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CreateUser") as! CreateUserViewController
             
-            self.presentViewController(controller, animated: true, completion: nil)
+            presentViewController(controller, animated: true, completion: nil)
         }
     }
 
@@ -46,10 +46,10 @@ class LoginViewController: UIViewController {
         // Present BudgetVC if username and password are correct
         if usernameField.text == checkUser && passwordField.text == checkPassword {
             let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
-            self.presentViewController(controller, animated: true, completion: nil)
+            presentViewController(controller, animated: true, completion: nil)
         } else {
             // Otherwise display error message
-            self.displayAlert()
+            displayAlert()
         }
     }
 
@@ -60,7 +60,7 @@ class LoginViewController: UIViewController {
         let alertController = UIAlertController(title: "Username/password incorrect", message: "Please try again.", preferredStyle: .Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }
 

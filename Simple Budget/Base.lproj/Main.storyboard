@@ -1241,7 +1241,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="itv-9N-1Nu">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="itv-9N-1Nu" customClass="SegmentedControl" customModule="Simple_Budget" customModuleProvider="target">
                                 <rect key="frame" x="-60" y="-14" width="121" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="Gx3-gq-xZW"/>
@@ -1268,13 +1268,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="itv-9N-1Nu" firstAttribute="leading" secondItem="eNA-PD-AQA" secondAttribute="leadingMargin" constant="54" id="8Jd-0d-DB3"/>
+                            <constraint firstItem="itv-9N-1Nu" firstAttribute="trailing" secondItem="eNA-PD-AQA" secondAttribute="trailingMargin" id="4Fe-bt-KtC"/>
                             <constraint firstItem="Obh-q8-HBJ" firstAttribute="leading" secondItem="eNA-PD-AQA" secondAttribute="leadingMargin" id="asx-IB-JSU"/>
                             <constraint firstItem="Obh-q8-HBJ" firstAttribute="top" secondItem="itv-9N-1Nu" secondAttribute="bottom" constant="8" id="br0-hv-xby"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="itv-9N-1Nu" secondAttribute="trailing" constant="54" id="hpE-e1-iEn"/>
                             <constraint firstItem="itv-9N-1Nu" firstAttribute="top" secondItem="bef-6v-Jcc" secondAttribute="bottom" id="kMK-ug-Ofh"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Obh-q8-HBJ" secondAttribute="trailing" id="oyj-P4-kPD"/>
                             <constraint firstItem="elC-n2-kLf" firstAttribute="top" secondItem="Obh-q8-HBJ" secondAttribute="bottom" id="x9C-L6-NZY"/>
+                            <constraint firstItem="itv-9N-1Nu" firstAttribute="leading" secondItem="eNA-PD-AQA" secondAttribute="leadingMargin" id="z6l-kO-qCP"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -1282,13 +1282,13 @@
                                 <exclude reference="itv-9N-1Nu"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="x9C-L6-NZY"/>
-                                <exclude reference="8Jd-0d-DB3"/>
-                                <exclude reference="hpE-e1-iEn"/>
+                                <exclude reference="4Fe-bt-KtC"/>
                                 <exclude reference="kMK-ug-Ofh"/>
+                                <exclude reference="z6l-kO-qCP"/>
                                 <exclude reference="asx-IB-JSU"/>
                                 <exclude reference="br0-hv-xby"/>
                                 <exclude reference="oyj-P4-kPD"/>
+                                <exclude reference="x9C-L6-NZY"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -1297,13 +1297,13 @@
                                 <include reference="itv-9N-1Nu"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="x9C-L6-NZY"/>
-                                <include reference="8Jd-0d-DB3"/>
-                                <include reference="hpE-e1-iEn"/>
+                                <include reference="4Fe-bt-KtC"/>
                                 <include reference="kMK-ug-Ofh"/>
+                                <include reference="z6l-kO-qCP"/>
                                 <include reference="asx-IB-JSU"/>
                                 <include reference="br0-hv-xby"/>
                                 <include reference="oyj-P4-kPD"/>
+                                <include reference="x9C-L6-NZY"/>
                             </mask>
                         </variation>
                     </view>
@@ -1371,7 +1371,8 @@
                                                             <exclude reference="URj-oE-wHi"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="232" y="8" width="80" height="27"/>
                                                         <mask key="constraints">
                                                             <include reference="URj-oE-wHi"/>
                                                         </mask>
@@ -1461,7 +1462,8 @@
                                                             <exclude reference="r4w-Xy-j9R"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="212" y="7" width="100" height="30"/>
                                                         <mask key="constraints">
                                                             <include reference="r4w-Xy-j9R"/>
                                                         </mask>

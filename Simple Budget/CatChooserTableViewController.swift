@@ -25,19 +25,19 @@ class CatChooserTableViewController: UITableViewController {
         super.viewDidLoad()
 
         // Fetched Results Controller
-        self.executeFetch()
+        executeFetch()
         fetchedResultsController.delegate = self
         
         // Tableview is automatically in editing mode
-        self.tableView.setEditing(true, animated: false)
-        self.tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.setEditing(true, animated: false)
+        tableView.allowsMultipleSelectionDuringEditing = true
     }
     
     override func viewWillAppear(animated: Bool) {
         
         // Sets up navigation bar items
-        self.navigationItem.rightBarButtonItem = doneButton
-        self.navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = cancelButton
     }
 
 // MARK: - Core Data Convenience

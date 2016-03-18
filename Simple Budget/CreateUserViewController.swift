@@ -22,8 +22,8 @@ class CreateUserViewController: UIViewController {
         super.viewDidLoad()
         
         // Text delegates
-        self.usernameField.delegate = textDelegate
-        self.passwordField.delegate = textDelegate
+        usernameField.delegate = textDelegate
+        passwordField.delegate = textDelegate
     }
     
 // MARK: - Actions
@@ -32,11 +32,11 @@ class CreateUserViewController: UIViewController {
     @IBAction func createUser(sender: AnyObject) {
         if usernameField.text!.isEmpty {
             // Display error message
-            self.displayAlert()
+            displayAlert()
         }
         else if passwordField.text!.isEmpty {
             // Display error message
-            self.displayAlert()
+            displayAlert()
         } else {
             let newUsername = usernameField.text
             let newPassword = passwordField.text
@@ -48,7 +48,7 @@ class CreateUserViewController: UIViewController {
         
         // Continue to Budget View Controller via navigation controller
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
-        self.presentViewController(controller, animated: true, completion: nil)
+        presentViewController(controller, animated: true, completion: nil)
     }
     
 // MARK: - Methods
@@ -58,6 +58,6 @@ class CreateUserViewController: UIViewController {
         let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }

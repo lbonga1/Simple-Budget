@@ -23,16 +23,10 @@ class SpentViewController: DropDownViewController {
         super.viewDidLoad()
 
         // Sets the add button on the right side of the navigation toolbar.
-        self.parentViewController!.navigationItem.rightBarButtonItem = addButton
-        
-        // Set up month view drop down
-        initCollectionView(self, delegate: self)
-        
-        // Initially hide the month drop down
-        monthDropDown.hidden = true
+        parentViewController!.navigationItem.rightBarButtonItem = addButton
         
         // Fetched Results Controller
-        self.executeFetch()
+        executeFetch()
         fetchedResultsController.delegate = self
     }
     
@@ -45,7 +39,7 @@ class SpentViewController: DropDownViewController {
         }
         
         // Reload data in case transactions are added from another tab.
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
 // MARK: - Core Data Convenience

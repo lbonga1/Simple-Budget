@@ -39,8 +39,8 @@ class AccountTableViewController: UITableViewController {
         super.viewDidLoad()
 
         // Set up navigation bar button items
-        self.navigationItem.rightBarButtonItem = saveButton
-        self.navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = saveButton
+        navigationItem.leftBarButtonItem = cancelButton
         
         // Insitution Picker View
         instPicker.hidden = true
@@ -52,7 +52,7 @@ class AccountTableViewController: UITableViewController {
         passwordTextField.delegate = textDelegate
         
         // Fetched results controller
-        self.executeFetch()
+        executeFetch()
         fetchedResultsController.delegate = self
     }
     
@@ -87,13 +87,13 @@ class AccountTableViewController: UITableViewController {
     @IBAction func saveAction(sender: AnyObject) {
         if usernameTextField.text != nil && passwordTextField.text != nil && institutionLabel.text != "Choose Institution" {
             if institutionLabel.text == "USAA" && pinTextField.text == "" {
-                self.displayAlert("Missing Credential(s)", message: "Please enter your pin.")
+                displayAlert("Missing Credential(s)", message: "Please enter your pin.")
             } else {
                 // Activate activity indicator
-                self.activityView.startAnimating()
+                activityView.startAnimating()
         
                 // Get institution type from selected institution string
-                self.institutionFromString(institutionLabel.text!)
+                institutionFromString(institutionLabel.text!)
         
                 // Submit add user request
                 PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
@@ -120,7 +120,7 @@ class AccountTableViewController: UITableViewController {
             }
         // Missing credentials
         } else {
-            self.displayAlert("Missing credential(s)",
+            displayAlert("Missing credential(s)",
                 message: "Please enter a banking institution, username, and password. Pin also required for USAA.")
         }
     }
@@ -132,7 +132,7 @@ class AccountTableViewController: UITableViewController {
         // Deselect row to make it visually reselectable.
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        //self.navigationItem.rightBarButtonItem = doneButton
+        //navigationItem.rightBarButtonItem = doneButton
         instPicker.hidden = false
         
     }

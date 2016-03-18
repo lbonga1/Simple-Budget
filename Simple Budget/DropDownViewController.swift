@@ -43,8 +43,9 @@ class DropDownViewController: UIViewController {
     
     func titleWasTapped() {
         if monthDropDown.hidden == true {
-            self.view.bringSubviewToFront(monthDropDown)
+            view.bringSubviewToFront(monthDropDown)
             monthDropDown.hidden = false
+            
             accessoryView.image = UIImage(named: "AccessoryUp")
             animateDropDown()
         } else {
@@ -54,7 +55,7 @@ class DropDownViewController: UIViewController {
     }
     
     func animateDropDown() {
-        if self.dropDownCanExpand == true {
+        if dropDownCanExpand == true {
             UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
                 self.monthDropDown.center.y = 95
                 }, completion: { _ in
@@ -100,10 +101,11 @@ class DropDownViewController: UIViewController {
     func initCollectionView(dataSource: UICollectionViewDataSource, delegate: UICollectionViewDelegate) {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.itemSize = CGSize(width: 45, height: 45)
         layout.scrollDirection = .Horizontal
         
         monthDropDown = UICollectionView(frame: CGRectMake(0, -30, self.view.frame.width, 60), collectionViewLayout: layout)
+        monthDropDown.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         monthDropDown.dataSource = dataSource
         monthDropDown.delegate = delegate
         monthDropDown.registerClass(CustomMonthCell.self, forCellWithReuseIdentifier: "MonthCell")
@@ -114,7 +116,7 @@ class DropDownViewController: UIViewController {
         view.backgroundColor = UIColor(patternImage:UIImage(named:"Login")!)
         monthDropDown.backgroundView = view
         
-        self.view.addSubview(monthDropDown)
+        view.addSubview(monthDropDown)
         
         monthDropDown.layer.shadowColor = UIColor.blackColor().CGColor
         monthDropDown.layer.shadowOffset = CGSizeMake(0, 1)
@@ -238,6 +240,6 @@ class DropDownViewController: UIViewController {
 //        shapeLayer.lineDashPattern = [6,3]
 //        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).CGPath
 //        
-//        self.layer.addSublayer(shapeLayer)
+//        layer.addSublayer(shapeLayer)
 //    }
 //}

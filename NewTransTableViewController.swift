@@ -31,12 +31,12 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         // Set up navigation items
-        self.navigationItem.leftBarButtonItem = cancelButton
-        self.navigationItem.rightBarButtonItem = addButton
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = addButton
         
         // Set text delegates
-        self.amountTextField.delegate = currencyDelegate
-        self.merchantTextField.delegate = textDelegate
+        amountTextField.delegate = currencyDelegate
+        merchantTextField.delegate = textDelegate
         
         // Set date picker mode
         datePicker.datePickerMode = .Date
@@ -73,7 +73,7 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         
         // Present Category Chooser
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CategoryChooser") as! UINavigationController
-        self.presentViewController(controller, animated: true, completion: nil)
+        presentViewController(controller, animated: true, completion: nil)
     }
     
     // Make only "Choose Budget Category" row selectable
@@ -90,13 +90,13 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
     // Allows user to change the date of the transaction
     @IBAction func changeDate(sender: AnyObject) {
         datePicker.hidden = false
-        self.navigationItem.rightBarButtonItem = doneButton
+        navigationItem.rightBarButtonItem = doneButton
     }
     
     // Dismiss date picker view
     @IBAction func doneAction(sender: AnyObject) {
         datePicker.hidden = true
-        self.navigationItem.rightBarButtonItem = addButton
+        navigationItem.rightBarButtonItem = addButton
     }
     
     // Dismiss NewTrans view to cancel adding a new transaction
@@ -128,7 +128,7 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
                 }
             }
             // Dismiss view controller
-            self.dismissViewControllerAnimated(true, completion: nil)
+            dismissViewControllerAnimated(true, completion: nil)
         } else {
             // Display error alert view
             displayAlert()
@@ -152,7 +152,7 @@ extension NewTransTableViewController {
         let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
 // MARK: - Date Methods

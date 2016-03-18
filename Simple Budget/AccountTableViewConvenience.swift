@@ -17,9 +17,9 @@ extension AccountTableViewController {
             // Successful
         case 200:
             // Sort/categorize downloaded transactions
-            self.createTempTransactions(transactions!)
+            createTempTransactions(transactions!)
             // Hide activity view
-            self.activityView.stopAnimating()
+            activityView.stopAnimating()
             // Return to Budget view
             dispatch_async(dispatch_get_main_queue()) {
                 NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(3), target: self, selector: "dismiss", userInfo: nil, repeats: false)
@@ -57,7 +57,7 @@ extension AccountTableViewController {
     // Check if MFA type is questions or code
     func checkMfaType(mfaType: String?, mfa: String?) {
         if mfaType == "questions" {
-            self.displayResponseAlert(mfa!)
+            displayResponseAlert(mfa!)
         } else {
             // TODO: handle code based mfa
         }
@@ -230,12 +230,12 @@ extension AccountTableViewController {
     func saveAndFetch() {
         // Save core data
         do {
-            try self.sharedContext.save()
+            try sharedContext.save()
         } catch let error as NSError {
             print("Could not save \(error), \(error.userInfo)")
         }
         // Execute fetch request
-        self.executeFetch()
+        executeFetch()
     }
     
     // Error alert
@@ -243,7 +243,7 @@ extension AccountTableViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     // Text field for MFA question response
@@ -260,12 +260,12 @@ extension AccountTableViewController {
             self.submitMfaQuestionsResponse()
         })
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     // Support for dismissing view controller after time interval
     func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     // Get institution type from selected string

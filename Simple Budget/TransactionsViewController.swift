@@ -26,11 +26,11 @@ class TransactionsViewController: UIViewController {
         super.viewDidLoad()
 
         // Sets up navigation buttons.
-        self.navigationItem.rightBarButtonItem = addButton
-        self.navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = addButton
+        navigationItem.leftBarButtonItem = cancelButton
         
         // Fetched Results Controller
-        self.executeFetch()
+        executeFetch()
         fetchedResultsController.delegate = self
         
         // Display no transactions label if there are no fetchedObjects
@@ -74,7 +74,7 @@ class TransactionsViewController: UIViewController {
     @IBAction func addNewTransaction(sender: AnyObject) {
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
         
-        self.presentViewController(controller, animated: true, completion: nil)
+        presentViewController(controller, animated: true, completion: nil)
     }
     
     // Return to budgeting view controllers
@@ -119,7 +119,7 @@ extension TransactionsViewController: UITableViewDelegate {
         cell.amountLabel.text = transaction.amount
         
         // Change date format
-        self.changeDateFormat(transaction.date)
+        changeDateFormat(transaction.date)
         
         // Set date value
         cell.dateLabel.text = newDateString

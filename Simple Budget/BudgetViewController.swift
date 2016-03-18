@@ -330,7 +330,7 @@ extension BudgetViewController {
             self.addNewSubcategory()
         })
         alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     // Execute fetch request

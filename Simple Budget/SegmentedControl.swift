@@ -20,17 +20,17 @@ class SegmentedControl: UISegmentedControl {
         let dividerImage = UIImage(named: "SegmentSeparator")
         let backgroundImageSelected = UIImage(named: "SegmentSelected")
         
-        self.setBackgroundImage(backgroundImage, forState: .Normal, barMetrics: .Default)
-        self.setBackgroundImage(backgroundImageSelected, forState: .Highlighted, barMetrics: .Default)
-        self.setBackgroundImage(backgroundImageSelected, forState: .Selected, barMetrics: .Default)
+        setBackgroundImage(backgroundImage, forState: .Normal, barMetrics: .Default)
+        setBackgroundImage(backgroundImageSelected, forState: .Highlighted, barMetrics: .Default)
+        setBackgroundImage(backgroundImageSelected, forState: .Selected, barMetrics: .Default)
         
-        self.setDividerImage(dividerImage, forLeftSegmentState: .Normal, rightSegmentState: .Selected, barMetrics: .Default)
-        self.setDividerImage(dividerImage, forLeftSegmentState: .Selected, rightSegmentState: .Normal, barMetrics: .Default)
-        self.setDividerImage(dividerImage, forLeftSegmentState: .Normal, rightSegmentState: .Normal, barMetrics: .Default)
+        setDividerImage(dividerImage, forLeftSegmentState: .Normal, rightSegmentState: .Selected, barMetrics: .Default)
+        setDividerImage(dividerImage, forLeftSegmentState: .Selected, rightSegmentState: .Normal, barMetrics: .Default)
+        setDividerImage(dividerImage, forLeftSegmentState: .Normal, rightSegmentState: .Normal, barMetrics: .Default)
     }
     
     func setupFonts(){
-        let font = UIFont(name: "Avenir-Book", size: 17)!
+        let font = UIFont(name: "Avenir-Book", size: 12)!
         let color = UIColor.blackColor()
         
         let normalTextAttributes = [
@@ -38,8 +38,8 @@ class SegmentedControl: UISegmentedControl {
             NSFontAttributeName: font
         ]
         
-        self.setTitleTextAttributes(normalTextAttributes, forState: .Normal)
-        self.setTitleTextAttributes(normalTextAttributes, forState: .Highlighted)
-        self.setTitleTextAttributes(normalTextAttributes, forState: .Selected)
+        setTitleTextAttributes(normalTextAttributes, forState: .Normal)
+        setTitleTextAttributes(normalTextAttributes, forState: .Highlighted)
+        setTitleTextAttributes(normalTextAttributes, forState: .Selected)
     }
 }
