@@ -29,7 +29,7 @@ class CreateUserViewController: UIViewController {
 // MARK: - Actions
     
     // Create user button tapped
-    @IBAction func createUser(sender: AnyObject) {
+    @IBAction func createUser(_ sender: AnyObject) {
         if usernameField.text!.isEmpty {
             // Display error message
             displayAlert()
@@ -42,22 +42,22 @@ class CreateUserViewController: UIViewController {
             let newPassword = passwordField.text
             
             // Save to NSUserDefaults
-            NSUserDefaults.standardUserDefaults().setValue(newUsername, forKey: "username")
-            NSUserDefaults.standardUserDefaults().setValue(newPassword, forKey: "password")
+            UserDefaults.standard.setValue(newUsername, forKey: "username")
+            UserDefaults.standard.setValue(newPassword, forKey: "password")
         }
         
         // Continue to Budget View Controller via navigation controller
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
-        presentViewController(controller, animated: true, completion: nil)
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "BudgetNavController") as! UINavigationController
+        present(controller, animated: true, completion: nil)
     }
     
 // MARK: - Methods
     
     // Alert view for missing inputs.
     func displayAlert() {
-        let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil)
         alertController.addAction(okAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }

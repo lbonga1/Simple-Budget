@@ -23,19 +23,19 @@ class SpentViewController: DropDownViewController {
         super.viewDidLoad()
 
         // Sets the add button on the right side of the navigation toolbar.
-        parentViewController!.navigationItem.rightBarButtonItem = addButton
+        parent!.navigationItem.rightBarButtonItem = addButton
         
         // Fetched Results Controller
         executeFetch()
         fetchedResultsController.delegate = self
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         // Saved categories label is hidden if there are categories to display.
         if fetchedResultsController.fetchedObjects!.count == 0 {
-            savedLabel.hidden = false
+            savedLabel.isHidden = false
         } else {
-            savedLabel.hidden = true
+            savedLabel.isHidden = true
         }
         
         // Reload data in case transactions are added from another tab.
@@ -48,9 +48,9 @@ class SpentViewController: DropDownViewController {
     lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    lazy var fetchedResultsController: NSFetchedResultsController<Subcategory> = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let fetchRequest = NSFetchRequest<Subcategory>(entityName: "Subcategory")
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
         let subSortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor, subSortDescriptor]
@@ -67,11 +67,11 @@ class SpentViewController: DropDownViewController {
 // MARK: - Actions
     
     // Presents NewTransTableViewController to add a new transaction.
-    @IBAction func addNewTransaction(sender: AnyObject) {
-        dispatch_async(dispatch_get_main_queue()) {
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
+    @IBAction func addNewTransaction(_ sender: AnyObject) {
+        DispatchQueue.main.async {
+            let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewTransaction") as! UINavigationController
         
-            self.presentViewController(controller, animated: true, completion: nil)
+            self.present(controller, animated: true, completion: nil)
         }
     }
 }
@@ -81,7 +81,7 @@ class SpentViewController: DropDownViewController {
 extension SpentViewController: UITableViewDataSource {
     
     // Returns the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
@@ -89,7 +89,7 @@ extension SpentViewController: UITableViewDataSource {
     }
     
     // Returns the number of rows in each section.
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
@@ -103,11 +103,11 @@ extension SpentViewController: UITableViewDataSource {
 extension SpentViewController: UITableViewDelegate {
     
     // Defines the budget item cells.
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpentSubcatCell", forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpentSubcatCell", for: indexPath)
     
         // Define subcategory as Subcategory object
-        let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+        let subcategory = fetchedResultsController.object(at: indexPath) 
         
         // Set title value
         cell.textLabel!.text = subcategory.subTitle
@@ -121,8 +121,8 @@ extension SpentViewController: UITableViewDelegate {
             let transaction = transaction as Transaction
             let amountString = transaction.amount
             // Remove the "$" and ","
-            let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
-            let editedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
+            let dropCommaInString = amountString.replacingOccurrences(of: ",", with: "")
+            let editedString = dropCommaInString.replacingOccurrences(of: "$", with: "")
             // Convert to Float
             let amountFloat = Float(editedString)
             
@@ -133,10 +133,10 @@ extension SpentViewController: UITableViewDelegate {
             let sum = amountArray.sum()
             
             //Format the sum back into a string
-            let formatter = NSNumberFormatter()
-            formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-            formatter.locale = NSLocale(localeIdentifier: "en_US")
-            let sumAmountString = formatter.stringFromNumber(sum)
+            let formatter = NumberFormatter()
+            formatter.numberStyle = NumberFormatter.Style.currency
+            formatter.locale = Locale(identifier: "en_US")
+            let sumAmountString = formatter.string(from: NSNumber(value:sum))
             
             // Set amount label value
             cell.detailTextLabel!.text = sumAmountString
@@ -149,20 +149,20 @@ extension SpentViewController: UITableViewDelegate {
     }
     
     // Customize header text label before view is displayed
-    func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
+    func tableView(_ tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
         if let headerView: CustomHeaderView = view as? CustomHeaderView {
             headerView.configureTextLabel()
         }
     }
     
     // Defines the custom header cells.
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerViewReuseIdentifier) as? CustomHeaderView
         
         if (headerView == nil) {
             // Customize background color and text color
             let textColor = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0)
-            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: textColor)
+            headerView = CustomHeaderView(backgroundColor: UIColor.white, textColor: textColor)
         }
         
         // Set title label text
@@ -175,22 +175,22 @@ extension SpentViewController: UITableViewDelegate {
     }
     
     // Headerview height
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
     }
     
     // Defines the footer view.
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         // Create footer view
-        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 20))
         footerView.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.1)
         
         return footerView
     }
     
     // Footerview height
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 25
     }
@@ -198,7 +198,7 @@ extension SpentViewController: UITableViewDelegate {
 
 extension SpentViewController: UICollectionViewDataSource {
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         return monthArray.count
     }
@@ -206,19 +206,19 @@ extension SpentViewController: UICollectionViewDataSource {
 
 extension SpentViewController: UICollectionViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MonthCell", for: indexPath) as! CustomMonthCell
         
         configureCell(cell, indexPath: indexPath, monthArray: monthArray, currentYear: currentYear)
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if selectedIndex != nil {
-            collectionView.deselectItemAtIndexPath(selectedIndex!, animated: true)
+            collectionView.deselectItem(at: selectedIndex! as IndexPath, animated: true)
         }
         
         changeVisualSelection(selectedIndex, indexPath: indexPath, collectionView: collectionView, titleView: titleView)
@@ -226,9 +226,9 @@ extension SpentViewController: UICollectionViewDelegate {
         adjustTitleView(titleView, accessoryView: accessoryView, parentView: self.view)
     }
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         
-        let cellToDeselect = collectionView.cellForItemAtIndexPath(indexPath)
+        let cellToDeselect = collectionView.cellForItem(at: indexPath)
         cellToDeselect?.alpha = 0.75
     }
 }
@@ -238,7 +238,7 @@ extension SpentViewController: UICollectionViewDelegate {
 
 extension SpentViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) { }
 }
 
 // MARK: - Additional Methods

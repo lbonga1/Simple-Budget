@@ -14,7 +14,7 @@ let headerViewReuseIdentifier: String = "HeaderView"
 
 class CustomHeaderView: UITableViewHeaderFooterView {
     
-    private var textColor: UIColor?
+    fileprivate var textColor: UIColor?
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

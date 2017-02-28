@@ -15,27 +15,27 @@ extension PlaidClient {
         static var clientId: String!
         static var secret: String!
         
-        static func initializePlaid(clientId: String, secret: String, appStatus: BaseURL) {
+        static func initializePlaid(_ clientId: String, secret: String, appStatus: BaseURL) {
             Plaid.clientId = clientId
             Plaid.secret = secret
             switch appStatus {
-            case .Production:
+            case .production:
                 baseURL = "https://api.plaid.com/"
-            case .Testing:
+            case .testing:
                 baseURL = "https://tartan.plaid.com/"
             }
         }
     }
     
     enum BaseURL {
-        case Production
-        case Testing
+        case production
+        case testing
     }
     
-    enum Type {
-        case Auth
-        case Connect
-        case Balance
+    enum `Type` {
+        case auth
+        case connect
+        case balance
     }
     
     enum Institution {

@@ -11,34 +11,34 @@ import UIKit
 class CurrencyTextDelegate: NSObject, UITextFieldDelegate {
 
     // Change characters of user's input into currency string
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         // Construct the text that will be in the field if this change is accepted
         let oldText = textField.text! as NSString
-        var newText = oldText.stringByReplacingCharactersInRange(range, withString: string) as NSString!
-        var newTextString = String(newText)
+        var newText = oldText.replacingCharacters(in: range, with: string) as NSString!
+        var newTextString = String(describing: newText)
         
-        let digits = NSCharacterSet.decimalDigitCharacterSet()
+        let digits = CharacterSet.decimalDigits
         var digitText = ""
         for c in newTextString.unicodeScalars {
-            if digits.longCharacterIsMember(c.value) {
-                digitText.append(c)
+            if digits.contains(UnicodeScalar(c.value)!) {
+                digitText.append(String(c))
             }
         }
         // Format to US currency
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        let formatter = NumberFormatter()
+        formatter.numberStyle = NumberFormatter.Style.currency
+        formatter.locale = Locale(identifier: "en_US")
         let numberFromField = (NSString(string: digitText).doubleValue)/100
-        newText = formatter.stringFromNumber(numberFromField)
+        newText = formatter.string(from: NSNumber(value:numberFromField)) as NSString?
         
-        textField.text = newText as String
+        textField.text = newText as? String
         
         return false
     }
     
     // Dismisses keyboard when user taps "return".
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         return true

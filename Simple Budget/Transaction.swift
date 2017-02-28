@@ -22,15 +22,15 @@ class Transaction: NSManagedObject {
     @NSManaged var notes: String
     
     // Core Data init method
-    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
     
     init(subcategory: Subcategory, date: String, title: String, amount: String, notes: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Transaction" type.
-        let entity =  NSEntityDescription.entityForName("Transaction", inManagedObjectContext: context)!
+        let entity =  NSEntityDescription.entity(forEntityName: "Transaction", in: context)!
         // Inherited init method
-        super.init(entity: entity,insertIntoManagedObjectContext: context)
+        super.init(entity: entity,insertInto: context)
         // Init properties
         self.subcategory = subcategory
         self.date = date

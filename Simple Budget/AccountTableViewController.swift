@@ -43,7 +43,7 @@ class AccountTableViewController: UITableViewController {
         navigationItem.leftBarButtonItem = cancelButton
         
         // Insitution Picker View
-        instPicker.hidden = true
+        instPicker.isHidden = true
         instPicker.dataSource = self
         instPicker.delegate = self
         
@@ -62,9 +62,9 @@ class AccountTableViewController: UITableViewController {
     lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    lazy var fetchedResultsController: NSFetchedResultsController<Subcategory> = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let fetchRequest = NSFetchRequest<Subcategory>(entityName: "Subcategory")
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -79,12 +79,12 @@ class AccountTableViewController: UITableViewController {
 // MARK: - Actions
     
     // Dismiss AccountTableViewController
-    @IBAction func cancelAction(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelAction(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // Save new account
-    @IBAction func saveAction(sender: AnyObject) {
+    @IBAction func saveAction(_ sender: AnyObject) {
         if usernameTextField.text != nil && passwordTextField.text != nil && institutionLabel.text != "Choose Institution" {
             if institutionLabel.text == "USAA" && pinTextField.text == "" {
                 displayAlert("Missing Credential(s)", message: "Please enter your pin.")
@@ -96,19 +96,19 @@ class AccountTableViewController: UITableViewController {
                 institutionFromString(institutionLabel.text!)
         
                 // Submit add user request
-                PlaidClient.sharedInstance().PS_addUser(.Connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
+                PlaidClient.sharedInstance().PS_addUser(.connect, username: usernameTextField.text!, password: passwordTextField.text!, pin: pinTextField.text, institution: institution!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
             
                     // Set access token
                     self.accessToken = accessToken
             
                     // Check response code
                     if response != nil {
-                        let response = response as! NSHTTPURLResponse
+                        let response = response as! HTTPURLResponse
                         // Check response code and give solution
                         self.checkResponseCode(response, transactions: transactions, mfaType: mfaType, mfa: mfa)
                     // Network error
                     } else {
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             // Hide activity view
                             self.activityView.stopAnimating()
                             // Display alert
@@ -128,17 +128,17 @@ class AccountTableViewController: UITableViewController {
 // MARK: - Tableview Delegate
     
     // Presents CatChooserTableViewController to make a category selection
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Deselect row to make it visually reselectable.
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         //navigationItem.rightBarButtonItem = doneButton
-        instPicker.hidden = false
+        instPicker.isHidden = false
         
     }
     
     // Make only "Choose Institution" row selectable
-    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         if indexPath.row != 0 {
             return false
         } else {
@@ -152,12 +152,12 @@ class AccountTableViewController: UITableViewController {
 extension AccountTableViewController: UIPickerViewDataSource {
     
     // Return number of components in picker view.
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
     // Return number of rows.
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return instData.count
     }
 }
@@ -167,14 +167,14 @@ extension AccountTableViewController: UIPickerViewDataSource {
 extension AccountTableViewController: UIPickerViewDelegate {
    
     // Return row title.
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return instData[row]
     }
     
     // Change Institution label text based on seleced row.
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         institutionLabel.text = instData[row]
-        instPicker.hidden = true
+        instPicker.isHidden = true
     }
 }
 
@@ -182,5 +182,5 @@ extension AccountTableViewController: UIPickerViewDelegate {
 
 extension AccountTableViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) { }
 }

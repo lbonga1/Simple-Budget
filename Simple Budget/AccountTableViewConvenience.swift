@@ -12,7 +12,7 @@ import CoreData
 extension AccountTableViewController {
     
     // Check response code and provide proper solution
-    func checkResponseCode(response: NSHTTPURLResponse, transactions: [PlaidClient.Transactions]?, mfaType: String?, mfa: String?) {
+    func checkResponseCode(_ response: HTTPURLResponse, transactions: [PlaidClient.Transactions]?, mfaType: String?, mfa: String?) {
         switch response.statusCode {
             // Successful
         case 200:
@@ -21,13 +21,13 @@ extension AccountTableViewController {
             // Hide activity view
             activityView.stopAnimating()
             // Return to Budget view
-            dispatch_async(dispatch_get_main_queue()) {
-                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(3), target: self, selector: "dismiss", userInfo: nil, repeats: false)
+            DispatchQueue.main.async {
+                Timer.scheduledTimer(timeInterval: TimeInterval(3), target: self, selector: #selector(AccountTableViewController.dismiss as (AccountTableViewController) -> () -> ()), userInfo: nil, repeats: false)
             }
             
             // MFA response needed
         case 201:
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 // Hide activity view
                 self.activityView.stopAnimating()
                 // Submit MFA responses
@@ -35,7 +35,7 @@ extension AccountTableViewController {
             }
             // User error
         case 400...404:
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 // Hide activity view
                 self.activityView.stopAnimating()
                 // Display alert
@@ -44,7 +44,7 @@ extension AccountTableViewController {
             }
             // Server error
         default:
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 // Hide activity view
                 self.activityView.stopAnimating()
                 // Display alert
@@ -55,7 +55,7 @@ extension AccountTableViewController {
     }
     
     // Check if MFA type is questions or code
-    func checkMfaType(mfaType: String?, mfa: String?) {
+    func checkMfaType(_ mfaType: String?, mfa: String?) {
         if mfaType == "questions" {
             displayResponseAlert(mfa!)
         } else {
@@ -68,12 +68,12 @@ extension AccountTableViewController {
         PlaidClient.sharedInstance().PS_submitMFAResponse(self.accessToken!, code: false, response: responseTextField!.text!) { (response, accessToken, mfaType, mfa, accounts, transactions, error) -> () in
             // Check response code
             if response != nil {
-                let response = response as! NSHTTPURLResponse
+                let response = response as! HTTPURLResponse
                 // Check response code and give solution
                 self.checkResponseCode(response, transactions: transactions!, mfaType: mfaType!, mfa: mfa!)
                 // Network error
             } else {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     // Hide activity view
                     self.activityView.stopAnimating()
                     // Display alert
@@ -85,8 +85,8 @@ extension AccountTableViewController {
     }
     
     // Categorize transactions, and create array of temporary transactions
-    func createTempTransactions(transactions: [PlaidClient.Transactions]) {
-        dispatch_async(dispatch_get_main_queue()) {
+    func createTempTransactions(_ transactions: [PlaidClient.Transactions]) {
+        DispatchQueue.main.async {
             // Iterate through transactions
             for transaction in transactions {
                 // Format the transaction amount into a currency string
@@ -129,8 +129,8 @@ extension AccountTableViewController {
     
     // Sort temporary transactions into their correct category/subcategory
     func sortTempTransactions() {
-        dispatch_async(dispatch_get_main_queue()){
-            let subcategories = self.fetchedResultsController.fetchedObjects as! [Subcategory]
+        DispatchQueue.main.async{
+            let subcategories = self.fetchedResultsController.fetchedObjects! as [Subcategory]
             let categories = subcategories.map { $0.category }
             // Iterate through temporary transactions
             for transaction in self.tempTransactions {
@@ -239,37 +239,37 @@ extension AccountTableViewController {
     }
     
     // Error alert
-    func displayAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+    func displayAlert(_ title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil)
         alertController.addAction(okAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     // Text field for MFA question response
-    func addTextField(textField: UITextField!) {
+    func addTextField(_ textField: UITextField!) {
         responseTextField = textField
         responseTextField!.placeholder = "Enter your response."
     }
     
     // Display alert with text field for MFA question response
-    func displayResponseAlert(message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        alertController.addTextFieldWithConfigurationHandler(addTextField)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
+    func displayResponseAlert(_ message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addTextField(configurationHandler: addTextField)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: { (alertController) -> Void in
             self.submitMfaQuestionsResponse()
         })
         alertController.addAction(okAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     // Support for dismissing view controller after time interval
     func dismiss() {
-        dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     // Get institution type from selected string
-    func institutionFromString(instType: String) {
+    func institutionFromString(_ instType: String) {
         switch instType {
         case "American Express":
             institution = .amex
@@ -301,23 +301,23 @@ extension AccountTableViewController {
 // MARK: - Formatters
     
     // Double to currency style formatter
-    func doubleToCurrency(amount: Double) -> String {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
-        let amountString = formatter.stringFromNumber(amount)
+    func doubleToCurrency(_ amount: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = NumberFormatter.Style.currency
+        formatter.locale = Locale(identifier: "en_US")
+        let amountString = formatter.string(from: NSNumber(value:amount))
         
         return amountString!
     }
     
     // Date formatter to short style
-    func dateFormatter(dateString: String) -> String {
-        let dateFormatter = NSDateFormatter()
+    func dateFormatter(_ dateString: String) -> String {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let newDate = dateFormatter.dateFromString(dateString)
-        let newDateFormatter = NSDateFormatter()
-        newDateFormatter.dateStyle = .ShortStyle
-        let newDateString = newDateFormatter.stringFromDate(newDate!)
+        let newDate = dateFormatter.date(from: dateString)
+        let newDateFormatter = DateFormatter()
+        newDateFormatter.dateStyle = .short
+        let newDateString = newDateFormatter.string(from: newDate!)
         
         return newDateString
     }

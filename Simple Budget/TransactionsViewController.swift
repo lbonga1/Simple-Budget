@@ -35,11 +35,11 @@ class TransactionsViewController: UIViewController {
         
         // Display no transactions label if there are no fetchedObjects
         if fetchedResultsController.fetchedObjects!.count == 0 {
-            noTransactionsLabel.hidden = false
-            tableView.hidden = true
+            noTransactionsLabel.isHidden = false
+            tableView.isHidden = true
         } else {
-            noTransactionsLabel.hidden = true
-            tableView.hidden = false
+            noTransactionsLabel.isHidden = true
+            tableView.isHidden = false
         }
     }
     
@@ -49,10 +49,10 @@ class TransactionsViewController: UIViewController {
     lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    lazy var fetchedResultsController: NSFetchedResultsController<Transaction> = {
         
         // Fetch transactions
-        let fetchRequest = NSFetchRequest(entityName: "Transaction")
+        let fetchRequest = NSFetchRequest<Transaction>(entityName: "Transaction")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -71,15 +71,15 @@ class TransactionsViewController: UIViewController {
 // MARK: - Actions
     
     // Present newTransVC to add a new transaction
-    @IBAction func addNewTransaction(sender: AnyObject) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
+    @IBAction func addNewTransaction(_ sender: AnyObject) {
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewTransaction") as! UINavigationController
         
-        presentViewController(controller, animated: true, completion: nil)
+        present(controller, animated: true, completion: nil)
     }
     
     // Return to budgeting view controllers
-    @IBAction func cancelAction(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
+    @IBAction func cancelAction(_ sender: AnyObject) {
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -88,7 +88,7 @@ class TransactionsViewController: UIViewController {
 extension TransactionsViewController: UITableViewDataSource {
     
     // Returns the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
@@ -96,7 +96,7 @@ extension TransactionsViewController: UITableViewDataSource {
     }
     
     // Returns the number of rows in each section.
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
@@ -109,12 +109,12 @@ extension TransactionsViewController: UITableViewDataSource {
 
 extension TransactionsViewController: UITableViewDelegate {
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("TransactionCell", forIndexPath: indexPath) as! TransactionCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TransactionCell", for: indexPath) as! TransactionCell
         
         // Set title and amount values
-        let transaction = fetchedResultsController.objectAtIndexPath(indexPath) as! Transaction
+        let transaction = fetchedResultsController.object(at: indexPath) 
         cell.titleLabel.text = transaction.title
         cell.amountLabel.text = transaction.amount
         
@@ -132,7 +132,7 @@ extension TransactionsViewController: UITableViewDelegate {
 
 extension TransactionsViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) { }
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) { }
 }
 
 // MARK: - Additional Methods 
@@ -140,11 +140,11 @@ extension TransactionsViewController: NSFetchedResultsControllerDelegate {
 extension TransactionsViewController {
     
     // Change date format to short style
-    func changeDateFormat(dateString: String) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        let newDate = dateFormatter.dateFromString(dateString)
-        newDateString = dateFormatter.stringFromDate(newDate!)
+    func changeDateFormat(_ dateString: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        let newDate = dateFormatter.date(from: dateString)
+        newDateString = dateFormatter.string(from: newDate!)
     }
     
     // Execute fetch request

@@ -23,13 +23,13 @@ class CustomMonthCell: UICollectionViewCell {
         // Configure Month label
         monthLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height*2/3))
         monthLabel.font = UIFont(name: "Avenir-Book", size: 17)
-        monthLabel.textAlignment = .Center
+        monthLabel.textAlignment = .center
         contentView.addSubview(monthLabel)
         
         // Configure Year label
         yearLabel = UILabel(frame: CGRect(x: 0, y: monthLabel.frame.size.height, width: frame.size.width, height: frame.size.height/3))
         yearLabel.font = UIFont(name: "Avenir-Book", size: 12)
-        yearLabel.textAlignment = .Center
+        yearLabel.textAlignment = .center
         contentView.addSubview(yearLabel)
         
     }

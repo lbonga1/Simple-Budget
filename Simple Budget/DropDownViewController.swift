@@ -16,7 +16,7 @@ class DropDownViewController: UIViewController {
     var monthArray: [Int] = []
     var currentMonth: String!
     var currentYear: Int!
-    var selectedIndex: NSIndexPath?
+    var selectedIndex: IndexPath?
     var dropDownCanExpand: Bool = true
     var accessoryView = UIImageView()
     let titleView = UILabel()
@@ -26,25 +26,25 @@ class DropDownViewController: UIViewController {
     func initNavigationItemTitleView() {
         titleView.text = getFullMonthString(currentMonth)
         titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 17)
-        let width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width + 15
-        titleView.frame = CGRect(origin:CGPointZero, size:CGSizeMake(width, 40))
+        let width = titleView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).width + 15
+        titleView.frame = CGRect(origin:CGPoint.zero, size:CGSize(width: width, height: 40))
         titleView.center.x = self.view.center.x
         navigationItem.titleView = titleView
         
-        accessoryView = UIImageView(frame: CGRectMake(width - 3, 16, 11, 11))
+        accessoryView = UIImageView(frame: CGRect(x: width - 3, y: 16, width: 11, height: 11))
         accessoryView.image = UIImage(named: "AccessoryDown")
         titleView.addSubview(accessoryView)
         
-        let recognizer = UITapGestureRecognizer(target: self, action: "titleWasTapped")
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(DropDownViewController.titleWasTapped))
         recognizer.numberOfTapsRequired = 1
-        titleView.userInteractionEnabled = true
+        titleView.isUserInteractionEnabled = true
         titleView.addGestureRecognizer(recognizer)
     }
     
     func titleWasTapped() {
-        if monthDropDown.hidden == true {
-            view.bringSubviewToFront(monthDropDown)
-            monthDropDown.hidden = false
+        if monthDropDown.isHidden == true {
+            view.bringSubview(toFront: monthDropDown)
+            monthDropDown.isHidden = false
             
             accessoryView.image = UIImage(named: "AccessoryUp")
             animateDropDown()
@@ -56,33 +56,34 @@ class DropDownViewController: UIViewController {
     
     func animateDropDown() {
         if dropDownCanExpand == true {
-            UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
+            UIView.animate (withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions(), animations: {
                 self.monthDropDown.center.y = 95
                 }, completion: { _ in
                     self.dropDownCanExpand = false
             })
         } else {
-            UIView.animateWithDuration (0.3, delay: 0.0, options: .CurveEaseInOut, animations: {
+            UIView.animate (withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions(), animations: {
                 self.monthDropDown.center.y = -30
                 }, completion: { _ in
                     self.dropDownCanExpand = true
-                    self.monthDropDown.hidden = true
+                    self.monthDropDown.isHidden = true
             })
         }
     }
     
-    func changeVisualSelection(var selectedIndex: NSIndexPath?, indexPath: NSIndexPath, collectionView: UICollectionView, titleView: UILabel) {
+    func changeVisualSelection(_ selectedIndex: IndexPath?, indexPath: IndexPath, collectionView: UICollectionView, titleView: UILabel) {
+        var selectedIndex = selectedIndex
         
-        let selectedCell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomMonthCell
+        let selectedCell = collectionView.cellForItem(at: indexPath) as! CustomMonthCell
         selectedIndex = indexPath
         selectedCell.alpha = 0.95
-        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: true)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         titleView.text = getFullMonthString(selectedCell.monthLabel.text!)
     }
     
-    func adjustTitleView(titleView: UILabel, accessoryView: UIImageView, parentView: UIView) {
+    func adjustTitleView(_ titleView: UILabel, accessoryView: UIImageView, parentView: UIView) {
         var newTitleFrame = titleView.frame
-        newTitleFrame.size.width = titleView.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max)).width + 15
+        newTitleFrame.size.width = titleView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).width + 15
         print(newTitleFrame.size.width)
         newTitleFrame.size.height = 40
         titleView.frame = newTitleFrame
@@ -92,44 +93,44 @@ class DropDownViewController: UIViewController {
         print(titleView.center.x)
         
         var newAccessoryFrame = accessoryView.frame
-        newAccessoryFrame = CGRectMake(newTitleFrame.size.width - 3, 16, 11, 11)
+        newAccessoryFrame = CGRect(x: newTitleFrame.size.width - 3, y: 16, width: 11, height: 11)
         accessoryView.frame = newAccessoryFrame
     }
     
 // MARK: - Collection View functions
     
-    func initCollectionView(dataSource: UICollectionViewDataSource, delegate: UICollectionViewDelegate) {
+    func initCollectionView(_ dataSource: UICollectionViewDataSource, delegate: UICollectionViewDelegate) {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         layout.itemSize = CGSize(width: 45, height: 45)
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         
-        monthDropDown = UICollectionView(frame: CGRectMake(0, -30, self.view.frame.width, 60), collectionViewLayout: layout)
+        monthDropDown = UICollectionView(frame: CGRect(x: 0, y: -30, width: self.view.frame.width, height: 60), collectionViewLayout: layout)
         monthDropDown.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         monthDropDown.dataSource = dataSource
         monthDropDown.delegate = delegate
-        monthDropDown.registerClass(CustomMonthCell.self, forCellWithReuseIdentifier: "MonthCell")
-        monthDropDown.backgroundColor = UIColor.whiteColor()
+        monthDropDown.register(CustomMonthCell.self, forCellWithReuseIdentifier: "MonthCell")
+        monthDropDown.backgroundColor = UIColor.white
         monthDropDown.showsHorizontalScrollIndicator = false
         
-        let view = UIView(frame: CGRectMake(0, -30, self.view.frame.width, 60))
+        let view = UIView(frame: CGRect(x: 0, y: -30, width: self.view.frame.width, height: 60))
         view.backgroundColor = UIColor(patternImage:UIImage(named:"Login")!)
         monthDropDown.backgroundView = view
         
         view.addSubview(monthDropDown)
         
-        monthDropDown.layer.shadowColor = UIColor.blackColor().CGColor
-        monthDropDown.layer.shadowOffset = CGSizeMake(0, 1)
+        monthDropDown.layer.shadowColor = UIColor.black.cgColor
+        monthDropDown.layer.shadowOffset = CGSize(width: 0, height: 1)
         monthDropDown.layer.shadowOpacity = 0.8
         monthDropDown.layer.shadowRadius = 1.0
         monthDropDown.clipsToBounds = false
         monthDropDown.layer.masksToBounds = false
     }
     
-    func configureCell(cell: CustomMonthCell, indexPath: NSIndexPath, monthArray: [Int], currentYear: Int) {
+    func configureCell(_ cell: CustomMonthCell, indexPath: IndexPath, monthArray: [Int], currentYear: Int) {
         
         cell.layer.cornerRadius = 7.0
-        cell.backgroundColor = UIColor.whiteColor()
+        cell.backgroundColor = UIColor.white
         cell.alpha = 0.75
         
         cell.monthLabel.text = intToString(monthArray[indexPath.row])
@@ -146,22 +147,22 @@ class DropDownViewController: UIViewController {
 // MARK: - Helper functions
     
     func getCurrentMonthYear() {
-        let calendar = NSCalendar.currentCalendar()
-        let date = NSDate()
-        let currentMonth = calendar.component(.Month, fromDate: date) + 12
+        let calendar = Calendar.current
+        let date = Date()
+        let currentMonth = (calendar as NSCalendar).component(.month, from: date) + 12
         let currentMonthString = intToString(currentMonth)
-        let currentYear = calendar.component(.Year, fromDate: date)
+        let currentYear = (calendar as NSCalendar).component(.year, from: date)
         
         let newMonthRange = (currentMonth - 12)...(currentMonth + 12)
         let newMonthArray = [Int](newMonthRange)
         
         // Save to NSUserDefaults
-        NSUserDefaults.standardUserDefaults().setObject(newMonthArray, forKey: "monthArray")
-        NSUserDefaults.standardUserDefaults().setValue(currentMonthString, forKey: "currentMonth")
-        NSUserDefaults.standardUserDefaults().setValue(currentYear, forKey: "currentYear")
+        UserDefaults.standard.set(newMonthArray, forKey: "monthArray")
+        UserDefaults.standard.setValue(currentMonthString, forKey: "currentMonth")
+        UserDefaults.standard.setValue(currentYear, forKey: "currentYear")
     }
     
-    func intToString(month: Int) -> String {
+    func intToString(_ month: Int) -> String {
         switch month {
         case 1, 13, 25:
             return "Jan"
@@ -192,7 +193,7 @@ class DropDownViewController: UIViewController {
         }
     }
     
-    func getFullMonthString(month: String) -> String {
+    func getFullMonthString(_ month: String) -> String {
         switch month {
         case "Jan":
             return "January"

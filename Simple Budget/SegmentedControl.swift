@@ -20,26 +20,26 @@ class SegmentedControl: UISegmentedControl {
         let dividerImage = UIImage(named: "SegmentSeparator")
         let backgroundImageSelected = UIImage(named: "SegmentSelected")
         
-        setBackgroundImage(backgroundImage, forState: .Normal, barMetrics: .Default)
-        setBackgroundImage(backgroundImageSelected, forState: .Highlighted, barMetrics: .Default)
-        setBackgroundImage(backgroundImageSelected, forState: .Selected, barMetrics: .Default)
+        setBackgroundImage(backgroundImage, for: UIControlState(), barMetrics: .default)
+        setBackgroundImage(backgroundImageSelected, for: .highlighted, barMetrics: .default)
+        setBackgroundImage(backgroundImageSelected, for: .selected, barMetrics: .default)
         
-        setDividerImage(dividerImage, forLeftSegmentState: .Normal, rightSegmentState: .Selected, barMetrics: .Default)
-        setDividerImage(dividerImage, forLeftSegmentState: .Selected, rightSegmentState: .Normal, barMetrics: .Default)
-        setDividerImage(dividerImage, forLeftSegmentState: .Normal, rightSegmentState: .Normal, barMetrics: .Default)
+        setDividerImage(dividerImage, forLeftSegmentState: UIControlState(), rightSegmentState: .selected, barMetrics: .default)
+        setDividerImage(dividerImage, forLeftSegmentState: .selected, rightSegmentState: UIControlState(), barMetrics: .default)
+        setDividerImage(dividerImage, forLeftSegmentState: UIControlState(), rightSegmentState: UIControlState(), barMetrics: .default)
     }
     
     func setupFonts(){
         let font = UIFont(name: "Avenir-Book", size: 12)!
-        let color = UIColor.blackColor()
+        let color = UIColor.black
         
         let normalTextAttributes = [
             NSForegroundColorAttributeName: color,
             NSFontAttributeName: font
         ]
         
-        setTitleTextAttributes(normalTextAttributes, forState: .Normal)
-        setTitleTextAttributes(normalTextAttributes, forState: .Highlighted)
-        setTitleTextAttributes(normalTextAttributes, forState: .Selected)
+        setTitleTextAttributes(normalTextAttributes, for: UIControlState())
+        setTitleTextAttributes(normalTextAttributes, for: .highlighted)
+        setTitleTextAttributes(normalTextAttributes, for: .selected)
     }
 }

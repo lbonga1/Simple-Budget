@@ -26,15 +26,15 @@ class BudgetViewController: DropDownViewController {
         super.viewDidLoad()
         
         // Sets the add button on the right side of the navigation toolbar.
-        parentViewController!.navigationItem.rightBarButtonItem = addButton
-        parentViewController!.navigationItem.leftBarButtonItem = connectButton
+        parent!.navigationItem.rightBarButtonItem = addButton
+        parent!.navigationItem.leftBarButtonItem = connectButton
         
         // Fetched results controller
         executeFetch()
         fetchedResultsController.delegate = self
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         // Reload data in case a transaction was added manually/downloaded
         tableView.reloadData()
@@ -46,9 +46,9 @@ class BudgetViewController: DropDownViewController {
     lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    lazy var fetchedResultsController: NSFetchedResultsController<Subcategory> = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let fetchRequest = NSFetchRequest<Subcategory>(entityName: "Subcategory")
         let sortDescriptor = NSSortDescriptor(key: "category.catTitle", ascending: true)
         let subSortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor, subSortDescriptor]
@@ -64,16 +64,16 @@ class BudgetViewController: DropDownViewController {
 // MARK: - Actions
     
     // Presents NewTransTableViewController to add a new transaction.
-    @IBAction func addNewTransaction(sender: AnyObject) {
-        dispatch_async(dispatch_get_main_queue()) {
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewTransaction") as! UINavigationController
+    @IBAction func addNewTransaction(_ sender: AnyObject) {
+        DispatchQueue.main.async {
+            let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewTransaction") as! UINavigationController
         
-            self.presentViewController(controller, animated: true, completion: nil)
+            self.present(controller, animated: true, completion: nil)
         }
     }
     
     // Add new Subcategory
-    @IBAction func addItemAction(sender: UIButton) {
+    @IBAction func addItemAction(_ sender: UIButton) {
         // Set current category to selected "add item" button's tag
         currentlyEditingCategory = sender.tag
         
@@ -85,10 +85,10 @@ class BudgetViewController: DropDownViewController {
     }
     
     // Add new bank account
-    @IBAction func connectAction(sender: AnyObject) {
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("NewAccountNavController") as! UINavigationController
+    @IBAction func connectAction(_ sender: AnyObject) {
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewAccountNavController") as! UINavigationController
         
-        presentViewController(controller, animated: true, completion: nil)
+        present(controller, animated: true, completion: nil)
     }
 }
 
@@ -97,7 +97,7 @@ class BudgetViewController: DropDownViewController {
 extension BudgetViewController: UITableViewDataSource {
 
     // Returns the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
@@ -105,7 +105,7 @@ extension BudgetViewController: UITableViewDataSource {
     }
 
     // Returns the number of rows in each section.
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
@@ -119,8 +119,8 @@ extension BudgetViewController: UITableViewDataSource {
 extension BudgetViewController: UITableViewDelegate {
 
     // Defines the budget item cells.
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("BudgetSubcategoryCell", forIndexPath: indexPath) as! BudgetSubcategoryCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BudgetSubcategoryCell", for: indexPath) as! BudgetSubcategoryCell
 
         // Set title and amount values
         if fetchedResultsController.fetchedObjects!.count != 0 {
@@ -129,8 +129,8 @@ extension BudgetViewController: UITableViewDelegate {
         
         // Support for updating the budget amount in core data
         cell.amountUpdateHandler = { [unowned self] (currentCell: BudgetSubcategoryCell) -> Void in
-            guard let path = tableView.indexPathForRowAtPoint(currentCell.center) else { return }
-            let subcategory = self.fetchedResultsController.objectAtIndexPath(path) as! Subcategory
+            guard let path = tableView.indexPathForRow(at: currentCell.center) else { return }
+            let subcategory = self.fetchedResultsController.object(at: path) 
             
             // Set the new amount value
             subcategory.setValue(cell.amountTextField.text!, forKey: "totalAmount")
@@ -147,28 +147,28 @@ extension BudgetViewController: UITableViewDelegate {
      }
     
     // Configure subcategory cells
-    func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
+    func configureCell(_ cell: UITableViewCell, atIndexPath indexPath: IndexPath) {
         let cell = cell as! BudgetSubcategoryCell
-        let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+        let subcategory = fetchedResultsController.object(at: indexPath) 
         cell.subcategoryTitle.text = subcategory.subTitle
         cell.amountTextField.text = subcategory.totalAmount
     }
     
     // Customize header text label before view is displayed
-    func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
+    func tableView(_ tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
         if let headerView: CustomHeaderView = view as? CustomHeaderView {
             headerView.configureTextLabel()
         }
     }
         
     // Defines the custom header view.
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerViewReuseIdentifier) as? CustomHeaderView
 
         if (headerView == nil) {
             // Customize background color and text color
             let textColor = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0)
-            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: textColor)
+            headerView = CustomHeaderView(backgroundColor: UIColor.white, textColor: textColor)
         }
         // Set title label text
         if fetchedResultsController.fetchedObjects!.count != 0 {
@@ -184,18 +184,18 @@ extension BudgetViewController: UITableViewDelegate {
     }
     
     // Header view height
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
     }
      
     // Defines the custom footer cells.
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerCell = tableView.dequeueReusableCellWithIdentifier("FooterCell") as! CustomFooterCell
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerCell = tableView.dequeueReusableCell(withIdentifier: "FooterCell") as! CustomFooterCell
 
         let containerView = UIView(frame: footerCell.frame)
         
-        footerCell.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        footerCell.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         // Set section tag for "add item" button
         footerCell.addItemButton.tag = section
@@ -209,27 +209,27 @@ extension BudgetViewController: UITableViewDelegate {
     }
     
     // Footer cell height
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 25
     }
     
     // Segue to TransactionsViewController upon selecting a cell
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Deselect row to make it visually reselectable.
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         // Set chosenSubcategory to the correct Subcategory object from fetchedResultsController
-        chosenSubcategory = fetchedResultsController.objectAtIndexPath(indexPath) as? Subcategory
+        chosenSubcategory = fetchedResultsController.object(at: indexPath) as Subcategory
         
         // Push TransacationsViewController
-        performSegueWithIdentifier("displayTransactions", sender: chosenSubcategory)
+        performSegue(withIdentifier: "displayTransactions", sender: chosenSubcategory)
     }
     
     // Swipe to delete subcategories
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            subcatToDelete = fetchedResultsController.objectAtIndexPath(indexPath) as? Subcategory
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            subcatToDelete = fetchedResultsController.object(at: indexPath) as Subcategory
             confirmDelete()
         }
     }
@@ -240,39 +240,39 @@ extension BudgetViewController: UITableViewDelegate {
 extension BudgetViewController: NSFetchedResultsControllerDelegate {
     
     // Begin updates
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
     // Changes to rows
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-        case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-        case .Update:
-            configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
-        case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            configureCell(tableView.cellForRow(at: indexPath!)!, atIndexPath: indexPath!)
+        case .move:
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
         }
     }
     
     // Changes to sections
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
-        case .Insert:
-            tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-        case .Delete:
-            tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        case .insert:
+            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
         default:
             return
         }
     }
     
     // End updates
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
     }
 }
@@ -282,9 +282,9 @@ extension BudgetViewController: NSFetchedResultsControllerDelegate {
 extension BudgetViewController {
     
     // Transfer chosen subcategory data to view transactions
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "displayTransactions") {
-            let transactionsVC = segue.destinationViewController as!
+            let transactionsVC = segue.destination as!
             TransactionsViewController
             transactionsVC.chosenSubcategory = self.chosenSubcategory
         }
@@ -293,12 +293,12 @@ extension BudgetViewController {
     // Support for adding a new subcategory
     func addNewSubcategory() {
         // Get Category data from existing subcategory
-        let existingRowIndex = tableView!.numberOfRowsInSection(currentlyEditingCategory) - 1
-        let existingRowIndexPath = NSIndexPath(forRow: existingRowIndex, inSection: currentlyEditingCategory)
-        let existingSubcategory = fetchedResultsController.objectAtIndexPath(existingRowIndexPath) as! Subcategory
+        let existingRowIndex = tableView!.numberOfRows(inSection: currentlyEditingCategory) - 1
+        let existingRowIndexPath = IndexPath(row: existingRowIndex, section: currentlyEditingCategory)
+        let existingSubcategory = fetchedResultsController.object(at: existingRowIndexPath) 
         let category = existingSubcategory.category
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             // Init new subcategory object
             let newSubcategory = Subcategory(category: category, subTitle: self.responseTextField!.text!, totalAmount: "$0.00", context: self.sharedContext)
         
@@ -317,20 +317,20 @@ extension BudgetViewController {
     }
     
     // Text field for subcategory title response
-    func addTextField(textField: UITextField!) {
+    func addTextField(_ textField: UITextField!) {
         responseTextField = textField
         responseTextField!.placeholder = "Enter title here."
     }
     
     // Display alert to set new subcategory title
-    func displayTitleAlert(message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        alertController.addTextFieldWithConfigurationHandler(addTextField)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: { (alertController) -> Void in
+    func displayTitleAlert(_ message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addTextField(configurationHandler: addTextField)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: { (alertController) -> Void in
             self.addNewSubcategory()
         })
         alertController.addAction(okAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     // Execute fetch request
@@ -344,22 +344,22 @@ extension BudgetViewController {
     
     // Request confirmation to delete subcategory
     func confirmDelete() {
-        let alert = UIAlertController(title: "Delete Subcategory", message: "All linked transactions will also be deleted.", preferredStyle: .ActionSheet)
+        let alert = UIAlertController(title: "Delete Subcategory", message: "All linked transactions will also be deleted.", preferredStyle: .actionSheet)
         
-        let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: handleDeleteSubcategory)
-        let CancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: cancelDeleteSubcategory)
+        let DeleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: handleDeleteSubcategory)
+        let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelDeleteSubcategory)
         
         alert.addAction(DeleteAction)
         alert.addAction(CancelAction)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     // Subcategory deletion was confirmed
-    func handleDeleteSubcategory(alertAction: UIAlertAction!) -> Void {
+    func handleDeleteSubcategory(_ alertAction: UIAlertAction!) -> Void {
         // Delete subcategory on the main queue
-        dispatch_async(dispatch_get_main_queue()) {
-            self.sharedContext.deleteObject(self.subcatToDelete!)
+        DispatchQueue.main.async {
+            self.sharedContext.delete(self.subcatToDelete!)
         
             // Save updates
             do {
@@ -371,7 +371,7 @@ extension BudgetViewController {
     }
     
     // Delete Subcategory cancelled
-    func cancelDeleteSubcategory(alertAction: UIAlertAction!) {
+    func cancelDeleteSubcategory(_ alertAction: UIAlertAction!) {
         subcatToDelete = nil
     }
 }

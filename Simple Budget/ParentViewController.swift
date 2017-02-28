@@ -11,9 +11,9 @@ import UIKit
 class ParentViewController: DropDownViewController {
     
     enum TabIndex : Int {
-        case FirstChildTab = 0
-        case SecondChildTab = 1
-        case ThirdChildTab = 2
+        case firstChildTab = 0
+        case secondChildTab = 1
+        case thirdChildTab = 2
     }
     
 // MARK: - Outlets
@@ -26,15 +26,15 @@ class ParentViewController: DropDownViewController {
     var currentViewController: UIViewController?
     
     lazy var firstChildTabVC: UIViewController? = {
-        let firstChildTabVC = self.storyboard?.instantiateViewControllerWithIdentifier("Budget")
+        let firstChildTabVC = self.storyboard?.instantiateViewController(withIdentifier: "Budget")
         return firstChildTabVC
     }()
     lazy var secondChildTabVC : UIViewController? = {
-        let secondChildTabVC = self.storyboard?.instantiateViewControllerWithIdentifier("Spent")
+        let secondChildTabVC = self.storyboard?.instantiateViewController(withIdentifier: "Spent")
         return secondChildTabVC
     }()
     lazy var thirdChildTabVC : UIViewController? = {
-        let thirdChildTabVC = self.storyboard?.instantiateViewControllerWithIdentifier("Remaining")
+        let thirdChildTabVC = self.storyboard?.instantiateViewController(withIdentifier: "Remaining")
         return thirdChildTabVC
     }()
     
@@ -45,13 +45,13 @@ class ParentViewController: DropDownViewController {
         //initBackgroundGradient()
         initBackgroundImage()
         segmentedControl.initUI()
-        segmentedControl.selectedSegmentIndex = TabIndex.FirstChildTab.rawValue
-        displayCurrentTab(TabIndex.FirstChildTab.rawValue)
+        segmentedControl.selectedSegmentIndex = TabIndex.firstChildTab.rawValue
+        displayCurrentTab(TabIndex.firstChildTab.rawValue)
         
         // Set variables from NSUserDefaults data
-        monthArray = NSUserDefaults.standardUserDefaults().objectForKey("monthArray") as! [Int]
-        currentMonth = NSUserDefaults.standardUserDefaults().valueForKey("currentMonth") as! String
-        currentYear = NSUserDefaults.standardUserDefaults().valueForKey("currentYear") as! Int
+        monthArray = UserDefaults.standard.object(forKey: "monthArray") as! [Int]
+        currentMonth = UserDefaults.standard.value(forKey: "currentMonth") as! String
+        currentYear = UserDefaults.standard.value(forKey: "currentYear") as! Int
         
         // Set up title view and month drop down view
         initNavigationItemTitleView()
@@ -59,16 +59,16 @@ class ParentViewController: DropDownViewController {
         monthDropDown.reloadData()
         
         // Initially hide the month drop down
-        monthDropDown.hidden = true
+        monthDropDown.isHidden = true
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         // Scroll to current month collection view cell
-        let indexPath = NSIndexPath(forItem: 12, inSection: 0)
-        monthDropDown.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: false)
+        let indexPath = IndexPath(item: 12, section: 0)
+        monthDropDown.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let currentViewController = currentViewController {
             currentViewController.viewWillDisappear(animated)
@@ -77,7 +77,7 @@ class ParentViewController: DropDownViewController {
     
 // MARK: - Actions
     
-    @IBAction func changeSegmentTab(sender: UISegmentedControl) {
+    @IBAction func changeSegmentTab(_ sender: UISegmentedControl) {
         currentViewController!.view.removeFromSuperview()
         currentViewController!.removeFromParentViewController()
         
@@ -87,7 +87,7 @@ class ParentViewController: DropDownViewController {
 
 extension ParentViewController: UICollectionViewDataSource {
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        
         return monthArray.count
     }
@@ -95,19 +95,19 @@ extension ParentViewController: UICollectionViewDataSource {
 
 extension ParentViewController: UICollectionViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MonthCell", forIndexPath: indexPath) as! CustomMonthCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MonthCell", for: indexPath) as! CustomMonthCell
         
         configureCell(cell, indexPath: indexPath, monthArray: monthArray, currentYear: currentYear)
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if selectedIndex != nil {
-            collectionView.deselectItemAtIndexPath(selectedIndex!, animated: true)
+            collectionView.deselectItem(at: selectedIndex! as IndexPath, animated: true)
         }
         
         changeVisualSelection(selectedIndex, indexPath: indexPath, collectionView: collectionView, titleView: titleView)
@@ -115,9 +115,9 @@ extension ParentViewController: UICollectionViewDelegate {
         adjustTitleView(titleView, accessoryView: accessoryView, parentView: self.view)
     }
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         
-        let cellToDeselect = collectionView.cellForItemAtIndexPath(indexPath)
+        let cellToDeselect = collectionView.cellForItem(at: indexPath)
         cellToDeselect?.alpha = 0.75
     }
 }
@@ -129,31 +129,31 @@ extension ParentViewController {
     
     func initBackgroundGradient() {
         var backgroundGradient: CAGradientLayer
-        let colorTop = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0).CGColor
-        let colorBottom = UIColor.whiteColor().CGColor
+        let colorTop = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0).cgColor
+        let colorBottom = UIColor.white.cgColor
         backgroundGradient = CAGradientLayer()
         backgroundGradient.colors = [colorTop, colorBottom]
         backgroundGradient.locations = [0.0, 1.0]
         backgroundGradient.frame = view.frame
-        view.layer.insertSublayer(backgroundGradient, atIndex: 2)
+        view.layer.insertSublayer(backgroundGradient, at: 2)
     }
     
     func initBackgroundImage() {
-        let titleBackgroundView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 60))
+        let titleBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         titleBackgroundView.backgroundColor = UIColor(patternImage: UIImage(named: "Login")!)
         view.addSubview(titleBackgroundView)
-        view.sendSubviewToBack(titleBackgroundView)
+        view.sendSubview(toBack: titleBackgroundView)
         
-        let tableBackgroundView = UIView(frame: CGRectMake(0, 100, self.view.frame.width, contentView.frame.height))
+        let tableBackgroundView = UIView(frame: CGRect(x: 0, y: 100, width: self.view.frame.width, height: contentView.frame.height))
         tableBackgroundView.backgroundColor = UIColor(patternImage: UIImage(named: "Login")!)
         view.insertSubview(tableBackgroundView, belowSubview: contentView)
     }
     
-    func displayCurrentTab(tabIndex: Int){
+    func displayCurrentTab(_ tabIndex: Int){
         if let vc = viewControllerForSelectedSegmentIndex(tabIndex) {
             
             addChildViewController(vc)
-            vc.didMoveToParentViewController(self)
+            vc.didMove(toParentViewController: self)
             
             vc.view.frame = self.contentView.bounds
             contentView.addSubview(vc.view)
@@ -161,14 +161,14 @@ extension ParentViewController {
         }
     }
     
-    func viewControllerForSelectedSegmentIndex(index: Int) -> UIViewController? {
+    func viewControllerForSelectedSegmentIndex(_ index: Int) -> UIViewController? {
         var vc: UIViewController?
         switch index {
-        case TabIndex.FirstChildTab.rawValue:
+        case TabIndex.firstChildTab.rawValue:
             vc = firstChildTabVC
-        case TabIndex.SecondChildTab.rawValue:
+        case TabIndex.secondChildTab.rawValue:
             vc = secondChildTabVC
-        case TabIndex.ThirdChildTab.rawValue:
+        case TabIndex.thirdChildTab.rawValue:
             vc = thirdChildTabVC
         default:
             return nil

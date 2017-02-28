@@ -13,47 +13,47 @@ extension PlaidClient {
 // MARK: - Formatters
     
     // Double to currency style formatter
-    func doubleToCurrency(amount: Double) -> String {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
-        let amountString = formatter.stringFromNumber(amount)
+    func doubleToCurrency(_ amount: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = NumberFormatter.Style.currency
+        formatter.locale = Locale(identifier: "en_US")
+        let amountString = formatter.string(from: NSNumber(value:amount))
         
         return amountString!
     }
     
     // Date formatter to short style
-    func dateFormatter(dateString: String) -> String {
-        let dateFormatter = NSDateFormatter()
+    func dateFormatter(_ dateString: String) -> String {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let newDate = dateFormatter.dateFromString(dateString)
-        let newDateFormatter = NSDateFormatter()
-        newDateFormatter.dateStyle = .ShortStyle
-        let newDateString = newDateFormatter.stringFromDate(newDate!)
+        let newDate = dateFormatter.date(from: dateString)
+        let newDateFormatter = DateFormatter()
+        newDateFormatter.dateStyle = .short
+        let newDateString = newDateFormatter.string(from: newDate!)
         
         return newDateString
     }
     
 // MARK: - Helper funcs
     
-    enum JsonError:ErrorType {
-        case Writing
-        case Reading
-        case Empty
+    enum JsonError:Error {
+        case writing
+        case reading
+        case empty
     }
     
-    enum PlaidError:ErrorType {
-        case BadAccessToken
-        case CredentialsMissing(String)
-        case InvalidCredentials(String)
-        case IncorrectMfa(String)
-        case InstitutionNotAvailable
+    enum PlaidError:Error {
+        case badAccessToken
+        case credentialsMissing(String)
+        case invalidCredentials(String)
+        case incorrectMfa(String)
+        case institutionNotAvailable
     }
     
-    func dictToString(value: AnyObject) -> NSString {
-        if NSJSONSerialization.isValidJSONObject(value) {
-            if let data = try? NSJSONSerialization.dataWithJSONObject(value, options: []) {
-                if let string = NSString(data: data, encoding: NSUTF8StringEncoding) {
+    func dictToString(_ value: AnyObject) -> NSString {
+        if JSONSerialization.isValidJSONObject(value) {
+            if let data = try? JSONSerialization.data(withJSONObject: value, options: []) {
+                if let string = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
                     return string
                 }
             }
@@ -61,7 +61,7 @@ extension PlaidClient {
         return ""
     }
     
-    func institutionToString(institution: Institution) -> String {
+    func institutionToString(_ institution: Institution) -> String {
         var institutionStr: String {
             switch institution {
             case .amex:
@@ -93,7 +93,7 @@ extension PlaidClient {
     
     
     // Change transaction category details to fit existing categories
-    func changeCatString(catString: String) -> String {
+    func changeCatString(_ catString: String) -> String {
         switch catString {
         case "Food and Drink":
             return "Food"
@@ -111,7 +111,7 @@ extension PlaidClient {
     }
     
     // Regroup subcategories by changing transaction category string
-    func changeSubcatString(subcatString: String) -> String {
+    func changeSubcatString(_ subcatString: String) -> String {
         switch subcatString {
         case "Overdraft", "ATM", "Late Payment", "Fraud Dispute", "Foreign Transaction", "Wire Transfer", "Insufficient Funds", "Cash Advance", "Excess Activity":
             return "Bank Fees"

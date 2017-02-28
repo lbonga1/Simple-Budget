@@ -9,18 +9,18 @@
 import Foundation
 import CoreData
 
-public class DataHelper {
+open class DataHelper {
     var error: NSError?
     
     // Shared context
     lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
-    public func seedDataStore() {
+    open func seedDataStore() {
         seedCategories()
         seedSubcategories()
     }
 
-    private func seedCategories() {
+    fileprivate func seedCategories() {
         let categories = [
             (catTitle: "Savings", totalAmount: "$0.00"),
             (catTitle: "Housing", totalAmount: "$0.00"),
@@ -32,7 +32,7 @@ public class DataHelper {
         ]
         
         for category in categories {
-            let newCategory = NSEntityDescription.insertNewObjectForEntityForName("Category", inManagedObjectContext: sharedContext) as! Category
+            let newCategory = NSEntityDescription.insertNewObject(forEntityName: "Category", into: sharedContext) as! Category
             newCategory.catTitle = category.catTitle
             //newCategory.totalAmount = category.totalAmount
         }
@@ -44,10 +44,10 @@ public class DataHelper {
         }
     }
     
-    private func seedSubcategories() {
+    fileprivate func seedSubcategories() {
         
-        let categoryFetchRequest = NSFetchRequest(entityName: "Category")
-        let allCategories = (try! sharedContext.executeFetchRequest(categoryFetchRequest)) as! [Category]
+        let categoryFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Category")
+        let allCategories = (try! sharedContext.fetch(categoryFetchRequest)) as! [Category]
         
         let savings = allCategories.filter({(c: Category) -> Bool in
             return c.catTitle == "Savings"
@@ -96,7 +96,7 @@ public class DataHelper {
         ]
         
         for subcategory in subcategories {
-            let newSubcategory = NSEntityDescription.insertNewObjectForEntityForName("Subcategory", inManagedObjectContext: sharedContext) as! Subcategory
+            let newSubcategory = NSEntityDescription.insertNewObject(forEntityName: "Subcategory", into: sharedContext) as! Subcategory
             newSubcategory.subTitle = subcategory.subTitle
             newSubcategory.category = subcategory.category
             newSubcategory.totalAmount = subcategory.totalAmount
@@ -109,39 +109,39 @@ public class DataHelper {
         }
     }
     
-    public func printAllCategories() {
-        let categoryFetchRequest = NSFetchRequest(entityName: "Category")
+    open func printAllCategories() {
+        let categoryFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Category")
         let primarySortDescriptor = NSSortDescriptor(key: "catTitle", ascending: true)
         
         categoryFetchRequest.sortDescriptors = [primarySortDescriptor]
         
-        let allCategories = (try! sharedContext.executeFetchRequest(categoryFetchRequest)) as! [Category]
+        let allCategories = (try! sharedContext.fetch(categoryFetchRequest)) as! [Category]
         
         for category in allCategories {
             print("Category Title: \(category.catTitle)", terminator: "")
         }
     }
 
-    public func printAllSubcategories() {
-        let subcategoryFetchRequest = NSFetchRequest(entityName: "Subcategory")
+    open func printAllSubcategories() {
+        let subcategoryFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Subcategory")
         let primarySortDescriptor = NSSortDescriptor(key: "subTitle", ascending: true)
         
         subcategoryFetchRequest.sortDescriptors = [primarySortDescriptor]
         
-        let allSubcategories = (try! sharedContext.executeFetchRequest(subcategoryFetchRequest)) as! [Subcategory]
+        let allSubcategories = (try! sharedContext.fetch(subcategoryFetchRequest)) as! [Subcategory]
         
         for subcategory in allSubcategories {
             print("Subcategory Title: \(subcategory.subTitle)", terminator: "")
         }
     }
     
-    public func printAllTransactions() {
-        let subcategoryFetchRequest = NSFetchRequest(entityName: "Transaction")
+    open func printAllTransactions() {
+        let subcategoryFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
         let primarySortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         
         subcategoryFetchRequest.sortDescriptors = [primarySortDescriptor]
         
-        let allTransactions = (try! sharedContext.executeFetchRequest(subcategoryFetchRequest)) as! [Transaction]
+        let allTransactions = (try! sharedContext.fetch(subcategoryFetchRequest)) as! [Transaction]
         
         for transaction in allTransactions {
             print("Transaction Title: \(transaction.title)", terminator: "")

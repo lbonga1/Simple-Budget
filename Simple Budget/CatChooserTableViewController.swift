@@ -18,7 +18,7 @@ class CatChooserTableViewController: UITableViewController {
 // MARK: - Variables
     var selectedSubcategory: Subcategory?
     var selectedIndexArray: NSMutableArray = []
-    var selectedIndexPath: NSIndexPath?
+    var selectedIndexPath: IndexPath?
     var amountArray: [Float] = []
     
     override func viewDidLoad() {
@@ -33,7 +33,7 @@ class CatChooserTableViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         // Sets up navigation bar items
         navigationItem.rightBarButtonItem = doneButton
@@ -46,9 +46,9 @@ class CatChooserTableViewController: UITableViewController {
     lazy var sharedContext = {CoreDataStackManager.sharedInstance().managedObjectContext}()
     
     // Fetched results controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    lazy var fetchedResultsController: NSFetchedResultsController<Subcategory> = {
         
-        let fetchRequest = NSFetchRequest(entityName: "Subcategory")
+        let fetchRequest = NSFetchRequest<Subcategory>(entityName: "Subcategory")
         
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.catTitle", ascending: true)]
         
@@ -63,21 +63,21 @@ class CatChooserTableViewController: UITableViewController {
 // MARK: - Actions
     
     // Dismiss view controller to cancel selection
-    @IBAction func cancelAction(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelAction(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
     }
     
     // Segue back to NewTransTableViewController with selectedSubcategory data
-    @IBAction func doneSelecting(sender: AnyObject) {
+    @IBAction func doneSelecting(_ sender: AnyObject) {
         
         // Unwind segue to NewTransTableViewController
-        performSegueWithIdentifier("returnToNewTrans", sender: self)
+        performSegue(withIdentifier: "returnToNewTrans", sender: self)
     }
     
 // MARK: - Table view data source
 
     // Number of sections
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if let sections = fetchedResultsController.sections {
             return sections.count
         }
@@ -85,7 +85,7 @@ class CatChooserTableViewController: UITableViewController {
     }
 
     // Number of rows in section
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchedResultsController.sections {
             let currentSection: AnyObject = sections[section]
             return currentSection.numberOfObjects
@@ -96,11 +96,11 @@ class CatChooserTableViewController: UITableViewController {
 // MARK: - Table view delegate
 
     // Defines subcategory cells.
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChooserSubcategory", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChooserSubcategory", for: indexPath)
         
         // Set title value
-        let subcategory = fetchedResultsController.objectAtIndexPath(indexPath) as! Subcategory
+        let subcategory = fetchedResultsController.object(at: indexPath) 
         cell.textLabel!.text = subcategory.subTitle
         
         // Cast transactions NSSet as an array
@@ -112,8 +112,8 @@ class CatChooserTableViewController: UITableViewController {
             let transaction = transaction as Transaction
             let amountString = transaction.amount
             // Remove the "," and "$"
-            let dropCommaInString = amountString.stringByReplacingOccurrencesOfString(",", withString: "")
-            let editedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
+            let dropCommaInString = amountString.replacingOccurrences(of: ",", with: "")
+            let editedString = dropCommaInString.replacingOccurrences(of: "$", with: "")
             // Convert to Float
             let amountFloat = Float(editedString)
             
@@ -127,18 +127,18 @@ class CatChooserTableViewController: UITableViewController {
             
             // Convert Subcategory budget amount to float
             let subcatAmountString = subcategory.totalAmount
-            let dropCommaInString = subcatAmountString.stringByReplacingOccurrencesOfString(",", withString: "")
-            let subcatEditedString = dropCommaInString.stringByReplacingOccurrencesOfString("$", withString: "")
+            let dropCommaInString = subcatAmountString.replacingOccurrences(of: ",", with: "")
+            let subcatEditedString = dropCommaInString.replacingOccurrences(of: "$", with: "")
             let subcatAmountFloat = Float(subcatEditedString)
             
             // Find the remaining amount
             let remainingAmount = (subcatAmountFloat! - sum)
             
             // Format the remaining amount back into a string
-            let formatter = NSNumberFormatter()
-            formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-            formatter.locale = NSLocale(localeIdentifier: "en_US")
-            let remAmountString = formatter.stringFromNumber(remainingAmount)
+            let formatter = NumberFormatter()
+            formatter.numberStyle = NumberFormatter.Style.currency
+            formatter.locale = Locale(identifier: "en_US")
+            let remAmountString = formatter.string(from: NSNumber(value:remainingAmount))
             
             // Set amount label value
             cell.detailTextLabel!.text = remAmountString
@@ -154,20 +154,20 @@ class CatChooserTableViewController: UITableViewController {
     
     
     // Customize header text label before view is displayed
-    override func tableView(tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
+    override func tableView(_ tableView:UITableView, willDisplayHeaderView view:UIView, forSection section:Int) {
         if let headerView: CustomHeaderView = view as? CustomHeaderView {
             headerView.configureTextLabel()
         }
     }
     
     // Defines the custom header view.
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerViewReuseIdentifier) as? CustomHeaderView
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var headerView: CustomHeaderView? = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerViewReuseIdentifier) as? CustomHeaderView
         
         if (headerView == nil) {
             // Customize background color and text color
             let textColor = UIColor(red: 0, green: 0.4, blue: 0.4, alpha: 1.0)
-            headerView = CustomHeaderView(backgroundColor: UIColor.whiteColor(), textColor: textColor)
+            headerView = CustomHeaderView(backgroundColor: UIColor.white, textColor: textColor)
         }
         // Set title label text
         if let sections = fetchedResultsController.sections {
@@ -179,41 +179,41 @@ class CatChooserTableViewController: UITableViewController {
     }
     
     // Height for headerview
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
     }
     
     // Defines the footer view.
-    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         // Create footer view
-        let footerView = UIView(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 20))
         footerView.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.1)
         
         return footerView
     }
     
     // Height for footerview
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         return 25
     }
     
     // Saves selectedSubcategory data when row is selected
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         /* Allow only one subcategory selection, despite multiple selection enabled */
         // Keep track of selected cell
         if selectedIndexArray.count == 0 {
             // Add selected indexPath to array
-            selectedIndexArray.addObject(indexPath)
+            selectedIndexArray.add(indexPath)
             // Store the indexPath
             selectedIndexPath = indexPath
         } else {
             // Remove previously selected indexPath from array and deselect
             selectedIndexArray.removeLastObject()
-            tableView.deselectRowAtIndexPath(selectedIndexPath!, animated: true)
+            tableView.deselectRow(at: selectedIndexPath!, animated: true)
             // Add new indexPath to array
-            selectedIndexArray.addObject(indexPath)
+            selectedIndexArray.add(indexPath)
             // Store the new indexPath
             selectedIndexPath = indexPath
         }
@@ -222,7 +222,7 @@ class CatChooserTableViewController: UITableViewController {
         let selectedSubcategoryIndex = tableView.indexPathForSelectedRow
         
         // Set selectedSubcategory to the correct value using fetchedResultsController
-        selectedSubcategory = fetchedResultsController.objectAtIndexPath(selectedSubcategoryIndex!) as? Subcategory
+        selectedSubcategory = fetchedResultsController.object(at: selectedSubcategoryIndex!) as Subcategory
     }
 }
 
@@ -230,7 +230,7 @@ class CatChooserTableViewController: UITableViewController {
 
 extension CatChooserTableViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {   }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {   }
 }
 
 // MARK: - Additional Methods 

@@ -27,26 +27,27 @@ class LoginViewController: UIViewController {
         passwordField.delegate = textDelegate
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         // Redirect to CreateUserVC if app is being launched for the first time
-        if NSUserDefaults.standardUserDefaults().valueForKey("username") == nil {
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CreateUser") as! CreateUserViewController
+        if UserDefaults.standard.value(forKey: "username") == nil {
+            let controller = self.storyboard?.instantiateViewController(withIdentifier: "CreateUser") as! CreateUserViewController
             
-            presentViewController(controller, animated: true, completion: nil)
+            present(controller, animated: true, completion: nil)
         }
     }
 
 // MARK: - Actions
     
     // Login button tapped
-    @IBAction func userLogin(sender: AnyObject) {
-        let checkUser = NSUserDefaults.standardUserDefaults().stringForKey("username")
-        let checkPassword = NSUserDefaults.standardUserDefaults().stringForKey("password")
+    @IBAction func userLogin(_ sender: AnyObject) {
+        let checkUser = UserDefaults.standard.string(forKey: "username")
+        let checkPassword = UserDefaults.standard.string(forKey: "password")
         
         // Present BudgetVC if username and password are correct
         if usernameField.text == checkUser && passwordField.text == checkPassword {
-            let controller = self.storyboard?.instantiateViewControllerWithIdentifier("BudgetNavController") as! UINavigationController
-            presentViewController(controller, animated: true, completion: nil)
+//            let controller = self.storyboard?.instantiateViewController(withIdentifier: "BudgetNavController") as! UINavigationController
+            let controller = self.storyboard?.instantiateViewController(withIdentifier: "TempNavController") as! UINavigationController
+            present(controller, animated: true, completion: nil)
         } else {
             // Otherwise display error message
             displayAlert()
@@ -57,10 +58,10 @@ class LoginViewController: UIViewController {
     
     // Alert view for incorrect user inputs.
     func displayAlert() {
-        let alertController = UIAlertController(title: "Username/password incorrect", message: "Please try again.", preferredStyle: .Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        let alertController = UIAlertController(title: "Username/password incorrect", message: "Please try again.", preferredStyle: .alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil)
         alertController.addAction(okAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }
 

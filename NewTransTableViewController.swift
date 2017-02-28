@@ -39,19 +39,19 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
         merchantTextField.delegate = textDelegate
         
         // Set date picker mode
-        datePicker.datePickerMode = .Date
+        datePicker.datePickerMode = .date
 
         // Set date picker action target
-        datePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        datePicker.addTarget(self, action: #selector(NewTransTableViewController.datePickerChanged(_:)), for: UIControlEvents.valueChanged)
         
         // Date Picker is initially hidden
-        datePicker.hidden = true
+        datePicker.isHidden = true
         
         // Defaults dateButton title to current date
         setCurrentDate()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         // Set categoryLabel to subcategory title if a subcategory has been selected.
         if selectedSubcategory != nil {
             categoryLabel.text = selectedSubcategory.subTitle
@@ -67,17 +67,17 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
 // MARK: - Tableview Delegate
     
     // Presents CatChooserTableViewController to make a category selection
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Deselect row to make it visually reselectable.
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         // Present Category Chooser
-        let controller = self.storyboard?.instantiateViewControllerWithIdentifier("CategoryChooser") as! UINavigationController
-        presentViewController(controller, animated: true, completion: nil)
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "CategoryChooser") as! UINavigationController
+        present(controller, animated: true, completion: nil)
     }
     
     // Make only "Choose Budget Category" row selectable
-    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         if indexPath.row != 2 {
             return false
         } else {
@@ -88,28 +88,28 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
 // MARK: - Actions
     
     // Allows user to change the date of the transaction
-    @IBAction func changeDate(sender: AnyObject) {
-        datePicker.hidden = false
+    @IBAction func changeDate(_ sender: AnyObject) {
+        datePicker.isHidden = false
         navigationItem.rightBarButtonItem = doneButton
     }
     
     // Dismiss date picker view
-    @IBAction func doneAction(sender: AnyObject) {
-        datePicker.hidden = true
+    @IBAction func doneAction(_ sender: AnyObject) {
+        datePicker.isHidden = true
         navigationItem.rightBarButtonItem = addButton
     }
     
     // Dismiss NewTrans view to cancel adding a new transaction
-    @IBAction func cancelAction(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelAction(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
     }
     
     // Save new transaction and dismiss view controller
-    @IBAction func addAction(sender: AnyObject) {
+    @IBAction func addAction(_ sender: AnyObject) {
         // Check to make sure required fields have been completed
         if amountTextField.text != nil && merchantTextField.text != nil && categoryLabel.text != "Choose Budget Category" {
             
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 // Init transaction object
                 let newTransaction = Transaction(subcategory: self.selectedSubcategory,
                     date: self.dateButton.titleLabel!.text!,
@@ -128,7 +128,7 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
                 }
             }
             // Dismiss view controller
-            dismissViewControllerAnimated(true, completion: nil)
+            dismiss(animated: true, completion: nil)
         } else {
             // Display error alert view
             displayAlert()
@@ -136,8 +136,8 @@ class NewTransTableViewController: UITableViewController, UITextFieldDelegate {
     }
     
     // Set up unwind segue to transition selected subcategory object data
-    @IBAction func unwindSegue(unwindSegue: UIStoryboardSegue) {
-        if let catChooser = unwindSegue.sourceViewController as? CatChooserTableViewController {
+    @IBAction func unwindSegue(_ unwindSegue: UIStoryboardSegue) {
+        if let catChooser = unwindSegue.source as? CatChooserTableViewController {
             selectedSubcategory = catChooser.selectedSubcategory
         }
     }
@@ -149,30 +149,30 @@ extension NewTransTableViewController {
     
     // Alert view for missing inputs.
     func displayAlert() {
-        let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .Alert)
-        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+        let alertController = UIAlertController(title: "Missing input", message: "Please complete all fields.", preferredStyle: .alert)
+        let okAction = UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil)
         alertController.addAction(okAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
 // MARK: - Date Methods
     
     // Changes dateButton title to user selected date
-    func datePickerChanged(datePicker:UIDatePicker) {
+    func datePickerChanged(_ datePicker:UIDatePicker) {
         setDate(datePicker.date)
     }
     
     // Retrieves current date
     func setCurrentDate() {
-        let currentDate = NSDate()
+        let currentDate = Date()
         setDate(currentDate)
     }
     
     // Creates a string from NSDate to change dateButton title
-    func setDate(newDate: NSDate) {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        let strDate = dateFormatter.stringFromDate(newDate)
-        dateButton.setTitle(strDate, forState: .Normal)
+    func setDate(_ newDate: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.medium
+        let strDate = dateFormatter.string(from: newDate)
+        dateButton.setTitle(strDate, for: UIControlState())
     }
 }

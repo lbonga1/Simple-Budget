@@ -19,15 +19,15 @@ class Category: NSManagedObject {
     @NSManaged var subcategory: NSSet
     
     // Core Data init method
-    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
     
     init(catTitle: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Categories" type.
-        let entity =  NSEntityDescription.entityForName("Category", inManagedObjectContext: context)!
+        let entity =  NSEntityDescription.entity(forEntityName: "Category", in: context)!
         // Inherited init method
-        super.init(entity: entity,insertIntoManagedObjectContext: context)
+        super.init(entity: entity,insertInto: context)
         // Init properties
         self.catTitle = catTitle
     }

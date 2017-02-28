@@ -21,15 +21,15 @@ class Subcategory: NSManagedObject {
     @NSManaged var transactions: NSSet
     
     // Core Data init method
-    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
     
     init(category: Category, subTitle: String, totalAmount: String, context: NSManagedObjectContext) {
         // Get the entity associated with "Subcategory" type.
-        let entity =  NSEntityDescription.entityForName("Subcategory", inManagedObjectContext: context)!
+        let entity =  NSEntityDescription.entity(forEntityName: "Subcategory", in: context)!
         // Inherited init method
-        super.init(entity: entity,insertIntoManagedObjectContext: context)
+        super.init(entity: entity,insertInto: context)
         // Init properties
         self.category = category
         self.subTitle = subTitle

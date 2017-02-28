@@ -11,7 +11,7 @@ import UIKit
 class TextFieldDelegate: NSObject, UITextFieldDelegate {
     
     // Dismisses keyboard when user taps "return".
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         return true;
