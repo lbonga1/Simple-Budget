@@ -32,14 +32,14 @@ Like the category chooser, the remaining tab shows the budget amount for each su
 
 Finally, the user can link their own bank account by tapping "connect" to the left of the navigation bar. This will present
 a view for the user to select their banking institution, and enter their banking login credentials. Not all banks have been
-tested at this time. 
+tested at this time. For test purposes, the username 'plaid_test' and password 'plaid_good' can be used.
 
 ![image](https://cloud.githubusercontent.com/assets/11247733/11554188/a8cd01fe-994a-11e5-9c92-abcd32f13c16.png)
 
 By tapping "save", the app utilizes the Plaid API to connect to the user's bank and download transactions from the past
 30 days. The user is then returned to the budgeting view. Downloaded and manually saved transactions can be viewed by
 tapping on the desired subcategory. They are displayed in a new view, in a table, with the date the transaction was 
-completed, the merchant or description, and the total.
+completed, the merchant or description, and the total. If using the test login credentials, downloaded transactions can be found under the "Other" and "Transfer" categories.
 
 ![image](https://cloud.githubusercontent.com/assets/11247733/11554189/aa243cac-994a-11e5-91b5-492bd336d77d.png)
 
