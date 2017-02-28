@@ -32,7 +32,7 @@ Like the category chooser, the remaining tab shows the budget amount for each su
 
 Finally, the user can link their own bank account by tapping "connect" to the left of the navigation bar. This will present
 a view for the user to select their banking institution, and enter their banking login credentials. Not all banks have been
-tested at this time. For test purposes, the username 'plaid_test' and password 'plaid_good' can be used.
+tested at this time. For test purposes, use username 'plaid_test' and password 'plaid_good' with Chase as the banking institution.
 
 ![image](https://cloud.githubusercontent.com/assets/11247733/11554188/a8cd01fe-994a-11e5-9c92-abcd32f13c16.png)
 
